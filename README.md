@@ -1,8 +1,9 @@
-# YOUR PROJECT NAME
+# Settlers of Catan
 
 ## Contributors
-- PERSON
-- PERSON
+- Omar Coleman
+- Ryan Rosu
+- Daniel Shoshin
 
 ## Dependencies
 - JDK 11
