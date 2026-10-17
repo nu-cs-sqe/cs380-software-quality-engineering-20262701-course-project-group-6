@@ -1,3 +1,4 @@
+![Gradle Build](https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/actions/workflows/main.yml/badge.svg)
 # Settlers of Catan
 
 ## Contributors
