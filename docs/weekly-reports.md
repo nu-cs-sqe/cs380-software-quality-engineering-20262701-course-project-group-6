@@ -2,9 +2,7 @@
 **Planning and Progress Tracking**:
 1. [done] Omar: Set up project README, GitHub Actions, Management Tool, and Gradle build badge (no links to PR, just pushed to main instead since we could not set up branch protection)
 2. [done] Ryan: Scheduled team meeting with professor for Friday, 10/23/2026 at 10:00 AM (no links to PR)
-3. [not started] All of us: Set up branch protection rules once we are able to (steps 3, 4, and 6)
-4. [80% done] Person: Task (Links to PR)
-5. etc.
+3. [done] Omar: Set up branch protection rules (steps 3, 4, and 6) in GitHub Settings (no PR, configured in repo settings).
 
 # Week 4 (10/19/2026-10/25/2026)
 **Planning and Progress Tracking**:
