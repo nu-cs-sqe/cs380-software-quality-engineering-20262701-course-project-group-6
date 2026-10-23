@@ -6,7 +6,7 @@
 
 # Week 4 (10/19/2026-10/25/2026)
 **Planning and Progress Tracking**:
-1. [done] Person: Task (Links to PR)
+1. [done] Ryan: Drafted a setup phase design document and added link to game-rules document (Links to PR)
 2. [not started] Person: Task (Links to PR)
 3. [80% done] Person: Task (Links to PR)
 4. etc.
