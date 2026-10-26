@@ -2,7 +2,7 @@ This folder should include the system design. It can be in the form of design di
 
 It is optional for the team to document the design in this folder. A popular alternative is to document the design in the Project Management Board.
 
-## GUI Library: Java Swing
+## GUI Library: Java FX
 
 # Catan: Game Design Document
 
@@ -92,9 +92,9 @@ Encapsulates individual player state, remaining structural pieces, and in-hand c
   * Holds dictionary specifying quantities of each resource card (`Map<ResourceType, Integer>`).
   * Holds list of unplayed and played development cards.
 * **`PlayerInventory` Key Methods:**
-  * `public void addResource(ResourceType type, int amount)`
-  * `public void addDevCard(DevCardType type, int amount)`
-  * `public void removeResource(ResourceType type, int amount)`
+  * `public void collectResource(ResourceCardType type, int amount)`
+  * `public void collectDevCard(DevCardType type, int amount)`
+  * `public void useResource(ResourceCardType type, int amount)`
   * `public void useDevCard(DevCardType type, int amount)`
   * `public int getTotalResourceCount()`: When robber is rolled, check if >7
   * `public int getResourceCount(ResourceType type)`
@@ -132,12 +132,11 @@ Encapsulates Catan's hexagonal board topology using an intersection/edge graph r
 ### 3.4 Bank, Deck, and Card Model
 Handles game card reserves and initial resource payouts.
 
-* **`Card` Hierarchy:**
-  * `public abstract class Card`
-  * `ResourceCard extends Card`: Holds `ResourceType` (`LUMBER`, `WOOL`, `GRAIN`, `BRICK`, `ORE`, `DESERT`).
-  * `DevelopmentCard extends Card`: Holds `DevCardType` (`KNIGHT`, `VICTORY_POINT`, `ROAD_BUILDING`, `YEAR_OF_PLENTY`, `MONOPOLY`).
-* **`Deck<T extends Card>`:**
-  * `public void shuffle(Random random)`
+* **Cards (Resource and development):**
+  * `ResourceCardType` (Enum): (`LUMBER`, `WOOL`, `GRAIN`, `BRICK`, `ORE`, `DESERT`).
+  * `DevCardType` (Enum): (`KNIGHT`, `VICTORY_POINT`, `ROAD_BUILDING`, `YEAR_OF_PLENTY`, `MONOPOLY`)
+* **`DevelopemtDeck<DevCardType>` Stack of development cards, shuffled upon initialization:**
+  * Contains 14 knights, 5 victory points, 2 road building, 2 year of plenty, and 2 monopoly
   * `public T draw()`: Removes and returns top card; throws exception if depleted.
   * `public int remainingCount()`
 * **`Bank` Responsibilities:**
@@ -145,6 +144,6 @@ Handles game card reserves and initial resource payouts.
   * Maintain the 25-card development card deck.
   * Execute initial resource payouts based on tiles surrounding a player's second settlement.
 * **`Bank` Key Methods:**
-  * `public ResourceCard withdrawResource(ResourceType type)`: Removes one resource card from the respective pile.
-  * `public DevelopmentCard withdrawDevelopmentCard()`: Removes one development card from the top of the pile.
+  * `public void withdrawResource(ResourceCardType type)`: Removes one resource card from the respective pile.
+  * `public DevCardType withdrawDevelopmentCard()`: Removes and returns one development card from the top of the pile.
 
