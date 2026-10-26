@@ -73,14 +73,20 @@ Encapsulates individual player state, remaining structural pieces, and in-hand c
 
 * **`Player` Responsibilities:**
   * Maintain immutable metadata (ID, display name, assigned piece color).
-  * Maintain counts of unplaced physical pieces available (starts at 5 settlements, 4 cities, 15 roads).
+  * Maintain counts of placed pieces (max 5 settlements, max 4 cities, max 15 roads).
+  * Maintain counts from other sources of victory points (longest road length, army size, number of victory point dev cards)
+  * Maintain count of longest road
   * Expose methods to manipulate resource/development card holdings, and development card usages via `PlayerInventory`.
 * **`Player` Key Fields:**
   * `private final int id`
   * `private final String name`
   * `private final PlayerColor color`
-  * `private int remainingSettlements` (init: 5)
-  * `private int remainingRoads` (init: 15)
+  * `private int settlementsPlaced`
+  * `private int citiesPlaced`
+  * `private int roadsPlaced` 
+  * `private int longestRoadLength`
+  * `private int armySize`
+  * `private int victoryPointDevCards`
   * `private final PlayerInventory inventory`
 * **`Player` Key Methods:**
   * `public void deductSettlementPiece()`: Decrements `remainingSettlements`; throws `IllegalStateException` if 0.
