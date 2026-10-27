@@ -128,7 +128,7 @@ Encapsulates Catan's hexagonal board topology using an intersection/edge graph r
   * `public void moveRobber(int tileId)`: Moves robber to different tile.
 
 * **Board Subcomponents:**
-  * `Tile`: Holds `ResourceType` (`LUMBER`, `WOOL`, `GRAIN`, `BRICK`, `ORE`, `DESERT`), `int diceNumber`, `int tileId`, and bounded `Node` references.
+  * `Tile`: Holds `ResourceCardType` (`LUMBER`, `WOOL`, `GRAIN`, `BRICK`, `ORE`) or `null`, `int diceNumber`, `int tileId`,  and bounded `Node` references.
   * **`BuildingType` (Enum)**: `NONE`, `SETTLEMENT`, `CITY`.
   * **`HarborType` (Enum)**: `NONE`, `GENERIC_THREE_FOR_ONE`, `LUMBER_TWO_FOR_ONE`, `WOOL_TWO_FOR_ONE`, `GRAIN_TWO_FOR_ONE`, `BRICK_TWO_FOR_ONE`, `ORE_TWO_FOR_ONE`.
   * **`Node` (Intersections)**: Holds `int nodeId`, incident `Edge` references, neighboring `Tile` references, `BuildingType buildingType` (default `NONE`), `Integer ownerPlayerId` (`null` when vacant, or the integer ID of the player who owns the settlement/city), and `HarborType harborType` (default `NONE`).
@@ -139,7 +139,7 @@ Encapsulates Catan's hexagonal board topology using an intersection/edge graph r
 Handles game card reserves and initial resource payouts.
 
 * **Cards (Resource and development):**
-  * `ResourceCardType` (Enum): (`LUMBER`, `WOOL`, `GRAIN`, `BRICK`, `ORE`, `DESERT`).
+  * `ResourceCardType` (Enum): (`LUMBER`, `WOOL`, `GRAIN`, `BRICK`, `ORE`).
   * `DevCardType` (Enum): (`KNIGHT`, `VICTORY_POINT`, `ROAD_BUILDING`, `YEAR_OF_PLENTY`, `MONOPOLY`)
 * **`DevelopemtDeck<DevCardType>` Stack of development cards, shuffled upon initialization:**
   * Contains 14 knights, 5 victory points, 2 road building, 2 year of plenty, and 2 monopoly
