@@ -1,5 +1,16 @@
 plugins {
     id("java")
+    id("application")
+    id("org.openjfx.javafxplugin") version "0.1.0"
+}
+
+javafx {
+    version = "17.0.18"
+    modules("javafx.controls")
+}
+
+application {
+    mainClass.set("ui.Main")
 }
 
 group = "nu.csse.sqe"

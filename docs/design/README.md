@@ -15,7 +15,7 @@ The Game Setup Phase encompasses:
 2. Generating and laying out the 19 hexagonal board tiles, resource types, and dice roll number tokens.
 3. Establishing the game bank, resource card decks, and development card deck.
 4. Initializing starting set-up for beginners (found on page 13 of rule book).
-6. Handing off state to the turn manager ready for Player 1's first standard turn.
+5. Handing off state to the turn manager ready for Player 1's first standard turn.
 
 ---
 
@@ -39,7 +39,7 @@ v               v              v                            v
                 |                   |                        |
                 v                   v                        v
             +------+          +-----------+             +----------+
-            | Edge |          | Inventory |------------>|   Card   |
+            | Edge |          | Inventory |------------>| CardType |
             +------+          +-----------+             +----------+
 
 ---
@@ -91,11 +91,10 @@ Encapsulates individual player state, remaining structural pieces, and in-hand c
 * **`Player` Key Methods:**
   * `public void deductSettlementPiece()`: Decrements `remainingSettlements`; throws `IllegalStateException` if 0.
   * `public void deductRoadPiece()`: Decrements `remainingRoads`; throws `IllegalStateException` if 0.
-  * `public void addCard(Card card)`: Delegates directly to `inventory.add(card)`.
   * `public PlayerInventory getInventory()`: Returns card collection reference.
 
 * **`PlayerInventory` Responsibilities:**
-  * Holds dictionary specifying quantities of each resource card (`Map<ResourceType, Integer>`).
+  * Holds dictionary specifying quantities of each resource card (`Map<ResourceCardType, Integer>`).
   * Holds list of unplayed and played development cards.
 * **`PlayerInventory` Key Methods:**
   * `public void collectResource(ResourceCardType type, int amount)`
@@ -103,7 +102,7 @@ Encapsulates individual player state, remaining structural pieces, and in-hand c
   * `public void useResource(ResourceCardType type, int amount)`
   * `public void useDevCard(DevCardType type, int amount)`
   * `public int getTotalResourceCount()`: When robber is rolled, check if >7
-  * `public int getResourceCount(ResourceType type)`
+  * `public int getResourceCount(ResourceCardType type)`
   * `public int getDevCardCount()`
 
 ---
@@ -128,7 +127,7 @@ Encapsulates Catan's hexagonal board topology using an intersection/edge graph r
   * `public void moveRobber(int tileId)`: Moves robber to different tile.
 
 * **Board Subcomponents:**
-  * `Tile`: Holds `ResourceCardType` (`LUMBER`, `WOOL`, `GRAIN`, `BRICK`, `ORE`) or `null`, `int diceNumber`, `int tileId`,  and bounded `Node` references.
+  * `Tile`: Holds `ResourceCardType` (`LUMBER`, `WOOL`, `GRAIN`, `BRICK`, `ORE`, `NONE`), `int diceNumber`, `int tileId`,  and bounded `Node` references.
   * **`BuildingType` (Enum)**: `NONE`, `SETTLEMENT`, `CITY`.
   * **`HarborType` (Enum)**: `NONE`, `GENERIC_THREE_FOR_ONE`, `LUMBER_TWO_FOR_ONE`, `WOOL_TWO_FOR_ONE`, `GRAIN_TWO_FOR_ONE`, `BRICK_TWO_FOR_ONE`, `ORE_TWO_FOR_ONE`.
   * **`Node` (Intersections)**: Holds `int nodeId`, incident `Edge` references, neighboring `Tile` references, `BuildingType buildingType` (default `NONE`), `Integer ownerPlayerId` (`null` when vacant, or the integer ID of the player who owns the settlement/city), and `HarborType harborType` (default `NONE`).
@@ -136,14 +135,14 @@ Encapsulates Catan's hexagonal board topology using an intersection/edge graph r
 ---
 
 ### 3.4 Bank, Deck, and Card Model
-Handles game card reserves and initial resource payouts.
+Handles game card reserves and initial resource payouts. 
 
 * **Cards (Resource and development):**
   * `ResourceCardType` (Enum): (`LUMBER`, `WOOL`, `GRAIN`, `BRICK`, `ORE`).
   * `DevCardType` (Enum): (`KNIGHT`, `VICTORY_POINT`, `ROAD_BUILDING`, `YEAR_OF_PLENTY`, `MONOPOLY`)
-* **`DevelopemtDeck<DevCardType>` Stack of development cards, shuffled upon initialization:**
+* **`DevelopmentDeck`: Stack of `DevCardType` values, shuffled upon initialization:**
   * Contains 14 knights, 5 victory points, 2 road building, 2 year of plenty, and 2 monopoly
-  * `public T draw()`: Removes and returns top card; throws exception if depleted.
+  * `public DevCardType draw()`: Removes and returns top card; throws exception if depleted.
   * `public int remainingCount()`
 * **`Bank` Responsibilities:**
   * Maintain resource card supply stacks (19 of each type: Lumber, Wool, Grain, Brick, Ore).
