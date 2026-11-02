@@ -5,5 +5,6 @@ public enum ResourceCardType {
     WOOL,
     GRAIN,
     BRICK,
-    ORE
+    ORE,
+    NONE
 }
