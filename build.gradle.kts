@@ -1,7 +1,13 @@
+import com.github.spotbugs.snom.Confidence
+import com.github.spotbugs.snom.Effort
+import com.github.spotbugs.snom.SpotBugsTask
+
 plugins {
     id("java")
     id("application")
+    id("checkstyle")
     id("org.openjfx.javafxplugin") version "0.1.0"
+    id("com.github.spotbugs") version "6.0.26"
 }
 
 javafx {
@@ -37,4 +43,20 @@ tasks.compileJava {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+checkstyle {
+    toolVersion = "10.12.5"
+    maxWarnings = 0
+}
+
+spotbugs {
+    effort.set(Effort.MAX)
+    reportLevel.set(Confidence.MEDIUM)
+}
+
+tasks.withType<SpotBugsTask>().configureEach {
+    reports.create("html") {
+        required.set(true)
+    }
 }
