@@ -13,11 +13,22 @@ error handling, BVA, and TDD, and the Google Java Style Guide.
 |---|---|---|
 | Checkstyle 10.12.5 | Formatting, naming, Clean Code size limits | `config/checkstyle/checkstyle.xml` |
 | SpotBugs | Likely bugs (null problems, bad equals, exposed internals, ...) | `build.gradle.kts` |
+| JaCoCo | Line and branch coverage of `domain` (the `ui` package is exempt) | `build.gradle.kts` |
+| PIT | Mutation testing of `domain`: changes the code and checks a test fails | `build.gradle.kts` |
+| EasyMock 5.4.0 | Mocks for tests that must verify an interaction | `build.gradle.kts` |
 
-- Run everything locally before pushing: `./gradlew check`
-- Reports: `build/reports/checkstyle/main.html` and `build/reports/spotbugs/main.html`
-- CI runs `./gradlew build`, which includes `check`, so a PR cannot merge with violations.
+- Run everything locally before pushing: `./gradlew build`. Tests, coverage, mutation testing, Checkstyle,
+  and SpotBugs all run. To skip PIT for a quick run: `./gradlew test -x pitest`
+- Reports (overwritten each run):
+  - `build/reports/jacoco/index.html`
+  - `build/reports/pitest/index.html`
+  - `build/reports/checkstyle/main.html`
+  - `build/reports/spotbugs/main.html`
+- CI runs `./gradlew build`, so a PR cannot merge with violations or failing tests.
 - Checkstyle allows **0 warnings**. SpotBugs must report **no bugs** at medium confidence or higher.
+- **100% of mutants killed** in `domain` **(enforced)**: one surviving mutant fails the build.
+- 100% cyclomatic (JaCoCo "Cxty") coverage in `domain`, except enums. Check the JaCoCo report before marking a
+  PR ready for review.
 
 ## 2. Formatting
 
