@@ -1,4 +1,4 @@
-# Team 6 Coding Standard
+# Team 09 Coding Standard
 
 This is the standard every PR is reviewed against. Rules marked **(enforced)** are checked by
 Checkstyle or SpotBugs, and the build fails if they are broken. The rest are checked by the reviewer
