@@ -1,10 +1,9 @@
 package domain;
 
 public enum ResourceCardType {
-    LUMBAR,
+    LUMBER,
     WOOL,
     GRAIN,
     BRICK,
-    ORE,
-    NONE
+    ORE
 }
