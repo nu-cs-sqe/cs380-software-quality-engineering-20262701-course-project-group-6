@@ -4,7 +4,7 @@
         "https://checkstyle.org/dtds/configuration_1_3.dtd">
 
 <!--
-  Team 6 Checkstyle rules. Based on the Google Java Style checks with these team changes
+  Team 09 Checkstyle rules. Based on the Google Java Style checks with these team changes
   (see docs/coding-standard.md):
     - 4-space indentation and 120-character lines instead of 2 and 100
     - Javadoc is only checked when it is written, not required on every method
