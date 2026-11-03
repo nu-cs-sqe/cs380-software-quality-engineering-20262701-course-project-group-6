@@ -69,7 +69,7 @@ Coordinates session lifecycle, game initialization, setup phase, turn taking, an
 ---
 
 ### 3.2 Player & PlayerInventory
-Encapsulates individual player state, remaining structural pieces, and in-hand cards.
+Encapsulates individual player state, placed structural pieces, and in-hand cards.
 
 * **`Player` Responsibilities:**
   * Maintain immutable metadata (ID, display name, assigned piece color).
@@ -86,12 +86,15 @@ Encapsulates individual player state, remaining structural pieces, and in-hand c
   * `private int roadsPlaced` 
   * `private int longestRoadLength`
   * `private int armySize`
+  * `private boolean hasLongestRoad`
+  * `private boolean hasLargestArmy`
   * `private int victoryPointDevCards`
   * `private final PlayerInventory inventory`
 * **`Player` Key Methods:**
-  * `public void deductSettlementPiece()`: Decrements `remainingSettlements`; throws `IllegalStateException` if 0.
-  * `public void deductRoadPiece()`: Decrements `remainingRoads`; throws `IllegalStateException` if 0.
-  * `public PlayerInventory getInventory()`: Returns card collection reference.
+  * `public void placeSettlementPiece()`: Increments `settlementsPlaced`; throws `IllegalStateException` if already 5.
+  * `public void placeCityPiece()`: Increments `citiesPlaced` and decrements `settlementsPlaces`; throws `IllegalStateException` if already 4.
+  * `public void placeRoadPiece()`: Increments `roadsPlaced`; throws `IllegalStateException` if already 15.
+  * `public int getVictoryPointCount()`: Totals up victory points for win condition check.
 
 * **`PlayerInventory` Responsibilities:**
   * Holds dictionary specifying quantities of each resource card (`Map<ResourceCardType, Integer>`).
