@@ -59,17 +59,23 @@ error handling, BVA, and TDD, and the Google Java Style Guide.
 ## 4. Functions and classes (Clean Code ch. 3, 6, ch. 17 F1–F4, G5–G36)
 
 - Methods are at most 30 lines **(enforced)**. Aim for under 10.
-- At most 3 parameters **(enforced)**. If you need more, group them into an object.
+- At most 4 parameters **(enforced)**. This is the instructor's hard limit for the A grade. Aim for 3 or fewer,
+  and if you need more than 4, group them into an object.
 - At most one level of nested `if` and one level of nested `for` **(enforced)**
 - Cyclomatic complexity at most 10 per method **(enforced)**
-- No magic numbers in domain code. Use named constants **(enforced)**: `MAX_ROADS = 15`, not `15`.
+- No magic numbers in any code, including the UI **(enforced)**. Use named constants: `MAX_ROADS = 15`, not
+  `15`, and `BUTTON_HEIGHT = 46`, not `46`. The instructor confirmed this applies to View and Main classes too.
 - A method does one thing at one level of abstraction.
 - No flag (boolean) arguments. Write two methods instead.
 - No output arguments. Return the result.
-- Command-query separation: a method either changes state or returns information, not both.
+- Command-query separation: a method either changes state or returns information, not both. Exception: a
+  method that removes an item and returns it, such as `DevelopmentDeck.draw()`, counts as one command (confirmed
+  by the instructor).
 - No duplication (DRY). Repeated `switch` on a type usually means it should be polymorphism or an enum method.
 - Prefer enums to `int` or `String` constants (J3).
 - Hide data: fields are `private`. Expose behavior, not blind getters and setters.
+- Never return an internal collection. Return a copy, for example `return List.copyOf(nodeIds);`
+  **(enforced by SpotBugs `EI_EXPOSE_REP`)**.
 - Law of Demeter: talk to your direct collaborators, not `a.getB().getC().doThing()`.
 - No dead code or commented-out code.
 - Inject dependencies that are random or external, such as dice (`Random`), so tests can stub them.

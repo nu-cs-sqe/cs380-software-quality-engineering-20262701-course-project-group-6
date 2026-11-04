@@ -138,8 +138,9 @@
             <property name="max" value="30"/>
             <property name="countEmpty" value="false"/>
         </module>
+        <!-- 4 is the instructor's hard limit for the A grade; aim for 3 or fewer. -->
         <module name="ParameterNumber">
-            <property name="max" value="3"/>
+            <property name="max" value="4"/>
             <property name="ignoreOverriddenMethods" value="true"/>
         </module>
         <module name="NestedIfDepth">
