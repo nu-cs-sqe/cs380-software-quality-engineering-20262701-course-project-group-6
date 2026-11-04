@@ -75,7 +75,6 @@ Encapsulates individual player state, placed structural pieces, and in-hand card
   * Maintain immutable metadata (ID, display name, assigned piece color).
   * Maintain counts of placed pieces (max 5 settlements, max 4 cities, max 15 roads).
   * Maintain counts from other sources of victory points (longest road length, army size, number of victory point dev cards)
-  * Maintain count of longest road
   * Expose methods to manipulate resource/development card holdings, and development card usages via `PlayerInventory`.
 * **`Player` Key Fields:**
   * `private final int id`
@@ -92,7 +91,7 @@ Encapsulates individual player state, placed structural pieces, and in-hand card
   * `private final PlayerInventory inventory`
 * **`Player` Key Methods:**
   * `public void placeSettlementPiece()`: Increments `settlementsPlaced`; throws `IllegalStateException` if already 5.
-  * `public void placeCityPiece()`: Increments `citiesPlaced` and decrements `settlementsPlaces`; throws `IllegalStateException` if already 4.
+  * `public void placeCityPiece()`: Increments `citiesPlaced` and decrements `settlementsPlaced`; throws `IllegalStateException` if already 4.
   * `public void placeRoadPiece()`: Increments `roadsPlaced`; throws `IllegalStateException` if already 15.
   * `public int getVictoryPointCount()`: Totals up victory points for win condition check.
 
@@ -130,7 +129,7 @@ Encapsulates Catan's hexagonal board topology using an intersection/edge graph r
   * `public void moveRobber(int tileId)`: Moves robber to different tile.
 
 * **Board Subcomponents:**
-  * `Tile`: Holds `ResourceCardType` (`LUMBER`, `WOOL`, `GRAIN`, `BRICK`, `ORE`, `NONE`), `int diceNumber`, `int tileId`,  and bounded `Node` references.
+  * `Tile`: Holds `ResourceCardType` (`LUMBER`, `WOOL`, `GRAIN`, `BRICK`, `ORE`) or unassigned (`null`) for the desert tile, `int diceNumber`, `int tileId`,  and bounded `Node` references.
   * **`BuildingType` (Enum)**: `NONE`, `SETTLEMENT`, `CITY`.
   * **`HarborType` (Enum)**: `NONE`, `GENERIC_THREE_FOR_ONE`, `LUMBER_TWO_FOR_ONE`, `WOOL_TWO_FOR_ONE`, `GRAIN_TWO_FOR_ONE`, `BRICK_TWO_FOR_ONE`, `ORE_TWO_FOR_ONE`.
   * **`Node` (Intersections)**: Holds `int nodeId`, incident `Edge` references, neighboring `Tile` references, `BuildingType buildingType` (default `NONE`), `Integer ownerPlayerId` (`null` when vacant, or the integer ID of the player who owns the settlement/city), and `HarborType harborType` (default `NONE`).
