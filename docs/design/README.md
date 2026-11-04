@@ -69,23 +69,31 @@ Coordinates session lifecycle, game initialization, setup phase, turn taking, an
 ---
 
 ### 3.2 Player & PlayerInventory
-Encapsulates individual player state, remaining structural pieces, and in-hand cards.
+Encapsulates individual player state, placed structural pieces, and in-hand cards.
 
 * **`Player` Responsibilities:**
   * Maintain immutable metadata (ID, display name, assigned piece color).
-  * Maintain counts of unplaced physical pieces available (starts at 5 settlements, 4 cities, 15 roads).
+  * Maintain counts of placed pieces (max 5 settlements, max 4 cities, max 15 roads).
+  * Maintain counts from other sources of victory points (longest road length, army size, number of victory point dev cards)
   * Expose methods to manipulate resource/development card holdings, and development card usages via `PlayerInventory`.
 * **`Player` Key Fields:**
   * `private final int id`
   * `private final String name`
   * `private final PlayerColor color`
-  * `private int remainingSettlements` (init: 5)
-  * `private int remainingRoads` (init: 15)
+  * `private int settlementsPlaced`
+  * `private int citiesPlaced`
+  * `private int roadsPlaced` 
+  * `private int longestRoadLength`
+  * `private int armySize`
+  * `private boolean hasLongestRoad`
+  * `private boolean hasLargestArmy`
+  * `private int victoryPointDevCards`
   * `private final PlayerInventory inventory`
 * **`Player` Key Methods:**
-  * `public void deductSettlementPiece()`: Decrements `remainingSettlements`; throws `IllegalStateException` if 0.
-  * `public void deductRoadPiece()`: Decrements `remainingRoads`; throws `IllegalStateException` if 0.
-  * `public PlayerInventory getInventory()`: Returns card collection reference.
+  * `public void placeSettlementPiece()`: Increments `settlementsPlaced`; throws `IllegalStateException` if already 5.
+  * `public void placeCityPiece()`: Increments `citiesPlaced` and decrements `settlementsPlaced`; throws `IllegalStateException` if already 4.
+  * `public void placeRoadPiece()`: Increments `roadsPlaced`; throws `IllegalStateException` if already 15.
+  * `public int getVictoryPointCount()`: Totals up victory points for win condition check.
 
 * **`PlayerInventory` Responsibilities:**
   * Holds dictionary specifying quantities of each resource card (`Map<ResourceCardType, Integer>`).
@@ -121,8 +129,7 @@ Encapsulates Catan's hexagonal board topology using an intersection/edge graph r
   * `public void moveRobber(int tileId)`: Moves robber to different tile.
 
 * **Board Subcomponents:**
-  * `Tile`: Holds `TerrainType`, `int diceNumber`, `int tileId`, and bounded `Node` references.
-  * **`TerrainType` (Enum)**: `FOREST`, `PASTURE`, `FIELDS`, `HILLS`, `MOUNTAINS`, `DESERT`. Each terrain except `DESERT` produces one `ResourceCardType` (forest → lumber, pasture → wool, fields → grain, hills → brick, mountains → ore); the desert produces nothing.
+  * `Tile`: Holds `ResourceCardType` (`LUMBER`, `WOOL`, `GRAIN`, `BRICK`, `ORE`) or unassigned (`null`) for the desert tile, `int diceNumber`, `int tileId`,  and bounded `Node` references.
   * **`BuildingType` (Enum)**: `NONE`, `SETTLEMENT`, `CITY`.
   * **`HarborType` (Enum)**: `NONE`, `GENERIC_THREE_FOR_ONE`, `LUMBER_TWO_FOR_ONE`, `WOOL_TWO_FOR_ONE`, `GRAIN_TWO_FOR_ONE`, `BRICK_TWO_FOR_ONE`, `ORE_TWO_FOR_ONE`.
   * **`Node` (Intersections)**: Holds `int nodeId`, incident `Edge` references, neighboring `Tile` references, `BuildingType buildingType` (default `NONE`), `Integer ownerPlayerId` (`null` when vacant, or the integer ID of the player who owns the settlement/city), and `HarborType harborType` (default `NONE`).
