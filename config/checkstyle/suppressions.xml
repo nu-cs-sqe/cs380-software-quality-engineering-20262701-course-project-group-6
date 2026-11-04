@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC
+        "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+        "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+
+<suppressions>
+    <!-- Test names use Feature_StateUnderTest_ExpectedBehavior, and tests use literal expected values. -->
+    <suppress checks="MethodName|MagicNumber" files="[\\/]src[\\/]test[\\/]"/>
+</suppressions>
