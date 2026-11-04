@@ -27,6 +27,14 @@ error handling, BVA, and TDD, and the Google Java Style Guide.
 - CI runs `./gradlew build`, so a PR cannot merge with violations or failing tests.
 - Checkstyle allows **0 warnings**. SpotBugs must report **no bugs** at medium confidence or higher.
 - **100% of mutants killed** in `domain` **(enforced)**: one surviving mutant fails the build.
+- If a mutant survives:
+  1. Assume a test is missing first. Find the boundary or branch it changed, add the BVA row, and add its test.
+  2. If the mutant is truly equivalent (it changes the code but not what the code does), refactor so it goes
+     away, for example by removing a redundant check.
+  3. Only if refactoring is not possible, exclude that one method in the `pitest` block of `build.gradle.kts`
+     with a comment, for example `excludedMethods = setOf("methodName") // equivalent mutant, see PR #NN`.
+     Explain why the mutant is equivalent in the PR description and in the class's BVA file. The instructor
+     approved this approach.
 - 100% cyclomatic (JaCoCo "Cxty") coverage in `domain`, except enums. Check the JaCoCo report before marking a
   PR ready for review.
 
