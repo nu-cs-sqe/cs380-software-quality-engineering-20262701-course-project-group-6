@@ -109,4 +109,17 @@ public class PlayerTest {
         assertEquals(4, player.getCitiesPlaced());
         assertEquals(1, player.getSettlementsPlaced());
     }
+
+    @Test
+    public void PlaceCityPiece_NoSettlementsPlaced_ThrowsIllegalStateException() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.placeCityPiece();
+        player.placeCityPiece();
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, player::placeCityPiece);
+
+        assertEquals("Player BLUE has no settlement to upgrade to a city", exception.getMessage());
+        assertEquals(2, player.getCitiesPlaced());
+        assertEquals(0, player.getSettlementsPlaced());
+    }
 }

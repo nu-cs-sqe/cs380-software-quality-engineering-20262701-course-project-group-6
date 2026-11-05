@@ -33,6 +33,9 @@ public class Player {
             throw new IllegalStateException(
                     "Player " + color + " has no cities left to place (max " + MAX_CITIES + ")");
         }
+        if (settlementsPlaced == 0) {
+            throw new IllegalStateException("Player " + color + " has no settlement to upgrade to a city");
+        }
         citiesPlaced++;
         settlementsPlaced--;
     }
