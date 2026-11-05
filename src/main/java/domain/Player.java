@@ -7,6 +7,7 @@ public class Player {
 
     private final PlayerColor color;
     private int settlementsPlaced;
+    private int citiesPlaced;
     private int roadsPlaced;
 
     public Player(PlayerColor color) {
@@ -26,12 +27,21 @@ public class Player {
         settlementsPlaced++;
     }
 
+    public void placeCityPiece() {
+        citiesPlaced++;
+        settlementsPlaced--;
+    }
+
     public PlayerColor getColor() {
         return color;
     }
 
     public int getSettlementsPlaced() {
         return settlementsPlaced;
+    }
+
+    public int getCitiesPlaced() {
+        return citiesPlaced;
     }
 
     public int getRoadsPlaced() {

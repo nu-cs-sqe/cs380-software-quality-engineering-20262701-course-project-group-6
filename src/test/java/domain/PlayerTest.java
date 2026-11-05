@@ -54,4 +54,14 @@ public class PlayerTest {
         assertEquals("Player BLUE has no settlements left to place (max 5)", exception.getMessage());
         assertEquals(5, player.getSettlementsPlaced());
     }
+
+    @Test
+    public void PlaceCityPiece_TwoSettlementsNoCities_OneCityOneSettlement() {
+        Player player = new Player(PlayerColor.BLUE);
+
+        player.placeCityPiece();
+
+        assertEquals(1, player.getCitiesPlaced());
+        assertEquals(1, player.getSettlementsPlaced());
+    }
 }
