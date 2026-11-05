@@ -41,4 +41,17 @@ public class PlayerTest {
 
         assertEquals(5, player.getSettlementsPlaced());
     }
+
+    @Test
+    public void PlaceSettlementPiece_FivePlaced_ThrowsIllegalStateException() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.placeSettlementPiece();
+        player.placeSettlementPiece();
+        player.placeSettlementPiece();
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, player::placeSettlementPiece);
+
+        assertEquals("Player BLUE has no settlements left to place (max 5)", exception.getMessage());
+        assertEquals(5, player.getSettlementsPlaced());
+    }
 }

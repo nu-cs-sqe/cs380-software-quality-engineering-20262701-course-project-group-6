@@ -3,6 +3,7 @@ package domain;
 public class Player {
     private static final int STARTING_SETTLEMENTS = 2;
     private static final int STARTING_ROADS = 2;
+    private static final int MAX_SETTLEMENTS = 5;
 
     private final PlayerColor color;
     private int settlementsPlaced;
@@ -18,6 +19,10 @@ public class Player {
     }
 
     public void placeSettlementPiece() {
+        if (settlementsPlaced == MAX_SETTLEMENTS) {
+            throw new IllegalStateException(
+                    "Player " + color + " has no settlements left to place (max " + MAX_SETTLEMENTS + ")");
+        }
         settlementsPlaced++;
     }
 
