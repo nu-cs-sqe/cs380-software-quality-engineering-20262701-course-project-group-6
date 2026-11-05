@@ -77,4 +77,18 @@ public class PlayerTest {
         assertEquals(1, player.getCitiesPlaced());
         assertEquals(1, player.getSettlementsPlaced());
     }
+
+    @Test
+    public void PlaceCityPiece_ThreeCitiesPlaced_CitiesPlacedIsFour() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.placeSettlementPiece();
+        player.placeSettlementPiece();
+        player.placeCityPiece();
+        player.placeCityPiece();
+        player.placeCityPiece();
+
+        player.placeCityPiece();
+
+        assertEquals(4, player.getCitiesPlaced());
+    }
 }
