@@ -52,7 +52,7 @@ Coordinates session lifecycle, game initialization, setup phase, turn taking, an
 * **Responsibilities:**
   * Validate player registration count (enforcing 3–4 players) and instantiate `Player` models.
   * Initializes beginners' map set-up including pre-placed settlements and roads
-  * Coordinates board, bank, and player inventory updates during setup actions and gameplay.
+  * Coordinates board, bank, and player updates during setup actions and gameplay.
   * Trigger initial resource card payouts after starting settlement placements conclude.
 * **Key Fields:**
   * `private final GameBoard board`
@@ -68,43 +68,44 @@ Coordinates session lifecycle, game initialization, setup phase, turn taking, an
 
 ---
 
-### 3.2 Player & PlayerInventory
-Encapsulates individual player state, placed structural pieces, and in-hand cards.
+### 3.2 Player
+Encapsulates one color's state: placed structural pieces, victory points, and in-hand cards. One `Player` is created
+for each color in play during setup (Story 1); in Story 2, picking a color means taking that color's `Player`.
+`PlayerInventory` was merged into `Player` (team decision 11/04).
 
 * **`Player` Responsibilities:**
-  * Maintain immutable metadata (ID, display name, assigned piece color).
-  * Maintain counts of placed pieces (max 5 settlements, max 4 cities, max 15 roads).
-  * Maintain counts from other sources of victory points (longest road length, army size, number of victory point dev cards)
-  * Expose methods to manipulate resource/development card holdings, and development card usages via `PlayerInventory`.
+  * Identified by its assigned piece color (no separate id or display name).
+  * Maintain counts of placed pieces (max 5 settlements, max 4 cities, max 15 roads). Starts with the 2 beginner
+    settlements and 2 beginner roads already placed.
+  * Maintain counts from other sources of victory points (longest road length, army size, number of victory point dev cards).
+  * Hold resource and development card counts. The card maps are never returned directly; other classes use the
+    methods below or get a read-only copy.
 * **`Player` Key Fields:**
-  * `private final int id`
-  * `private final String name`
   * `private final PlayerColor color`
-  * `private int settlementsPlaced`
-  * `private int citiesPlaced`
-  * `private int roadsPlaced` 
+  * `private int settlementsPlaced` (init: 2)
+  * `private int citiesPlaced` (init: 0)
+  * `private int roadsPlaced` (init: 2)
   * `private int longestRoadLength`
   * `private int armySize`
   * `private boolean hasLongestRoad`
   * `private boolean hasLargestArmy`
   * `private int victoryPointDevCards`
-  * `private final PlayerInventory inventory`
+  * `private final Map<ResourceCardType, Integer> resources`
+  * `private final Map<DevCardType, Integer> devCards`
 * **`Player` Key Methods:**
+  * `public Player(PlayerColor color)`: Throws `IllegalArgumentException` if `color` is `null`.
   * `public void placeSettlementPiece()`: Increments `settlementsPlaced`; throws `IllegalStateException` if already 5.
-  * `public void placeCityPiece()`: Increments `citiesPlaced` and decrements `settlementsPlaced`; throws `IllegalStateException` if already 4.
+  * `public void placeCityPiece()`: Increments `citiesPlaced` and decrements `settlementsPlaced` (the settlement piece
+    returns to the supply); throws `IllegalStateException` if already 4 cities or if there is no settlement to upgrade.
   * `public void placeRoadPiece()`: Increments `roadsPlaced`; throws `IllegalStateException` if already 15.
-  * `public int getVictoryPointCount()`: Totals up victory points for win condition check.
-
-* **`PlayerInventory` Responsibilities:**
-  * Holds dictionary specifying quantities of each resource card (`Map<ResourceCardType, Integer>`).
-  * Holds list of unplayed and played development cards.
-* **`PlayerInventory` Key Methods:**
+  * `public int getVictoryPointCount()`: Totals up victory points for win condition check (settlements 1, cities 2).
   * `public void collectResource(ResourceCardType type, int amount)`
-  * `public void collectDevCard(DevCardType type, int amount)`
-  * `public void useResource(ResourceCardType type, int amount)`
-  * `public void useDevCard(DevCardType type, int amount)`
-  * `public int getTotalResourceCount()`: When robber is rolled, check if >7
+  * `public void useResource(ResourceCardType type, int amount)`: Throws `IllegalStateException` if the player does
+    not have enough.
   * `public int getResourceCount(ResourceCardType type)`
+  * `public int getTotalResourceCount()`: When robber is rolled, check if >7
+  * `public void collectDevCard(DevCardType type, int amount)`
+  * `public void useDevCard(DevCardType type, int amount)`
   * `public int getDevCardCount()`
 
 ---
