@@ -156,4 +156,13 @@ public class PlayerTest {
         assertEquals("Player BLUE has no roads left to place (max 15)", exception.getMessage());
         assertEquals(15, player.getRoadsPlaced());
     }
+
+    @Test
+    public void GetVictoryPointCount_NewPlayer_ReturnsTwo() {
+        Player player = new Player(PlayerColor.BLUE);
+
+        int victoryPoints = player.getVictoryPointCount();
+
+        assertEquals(2, victoryPoints);
+    }
 }

@@ -49,6 +49,10 @@ public class Player {
         roadsPlaced++;
     }
 
+    public int getVictoryPointCount() {
+        return settlementsPlaced;
+    }
+
     public PlayerColor getColor() {
         return color;
     }
