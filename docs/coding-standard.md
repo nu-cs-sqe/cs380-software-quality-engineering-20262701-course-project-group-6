@@ -26,6 +26,9 @@ error handling, BVA, and TDD, and the Google Java Style Guide.
   - `build/reports/spotbugs/main.html`
 - CI runs `./gradlew build`, so a PR cannot merge with violations or failing tests.
 - Checkstyle allows **0 warnings**. SpotBugs must report **no bugs** at medium confidence or higher.
+- One SpotBugs rule is turned off in `config/spotbugs/exclude.xml`: `CT_CONSTRUCTOR_THROW`. It warns about a
+  finalizer attack whenever a constructor throws, which conflicts with our rule that constructors validate their
+  arguments (section 5). Making classes `final` would also silence it, but then EasyMock could not mock them.
 - **100% of mutants killed** in `domain` **(enforced)**: one surviving mutant fails the build.
 - If a mutant survives:
   1. Assume a test is missing first. Find the boundary or branch it changed, add the BVA row, and add its test.

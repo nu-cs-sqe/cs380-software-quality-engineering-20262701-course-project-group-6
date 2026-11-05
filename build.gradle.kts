@@ -92,6 +92,7 @@ checkstyle {
 spotbugs {
     effort.set(Effort.MAX)
     reportLevel.set(Confidence.MEDIUM)
+    excludeFilter.set(file("config/spotbugs/exclude.xml"))
 }
 
 tasks.withType<SpotBugsTask>().configureEach {
