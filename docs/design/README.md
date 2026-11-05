@@ -99,6 +99,8 @@ for each color in play during setup (Story 1); in Story 2, picking a color means
     returns to the supply); throws `IllegalStateException` if already 4 cities or if there is no settlement to upgrade.
   * `public void placeRoadPiece()`: Increments `roadsPlaced`; throws `IllegalStateException` if already 15.
   * `public int getVictoryPointCount()`: Totals up victory points for win condition check (settlements 1, cities 2).
+  * `public int getSettlementsRemaining()`, `getCitiesRemaining()`, `getRoadsRemaining()`: Pieces left in the
+    supply (max − placed), for the UI. The placed counts themselves are not exposed.
   * `public void collectResource(ResourceCardType type, int amount)`
   * `public void useResource(ResourceCardType type, int amount)`: Throws `IllegalStateException` if the player does
     not have enough.

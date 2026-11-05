@@ -12,8 +12,9 @@ public class PlayerTest {
         Player player = new Player(PlayerColor.BLUE);
 
         assertEquals(PlayerColor.BLUE, player.getColor());
-        assertEquals(2, player.getSettlementsPlaced());
-        assertEquals(2, player.getRoadsPlaced());
+        assertEquals(3, player.getSettlementsRemaining());
+        assertEquals(4, player.getCitiesRemaining());
+        assertEquals(13, player.getRoadsRemaining());
     }
 
     @Test
@@ -24,26 +25,26 @@ public class PlayerTest {
     }
 
     @Test
-    public void PlaceSettlementPiece_TwoPlaced_SettlementsPlacedIsThree() {
+    public void PlaceSettlementPiece_ThreeRemaining_TwoRemaining() {
         Player player = new Player(PlayerColor.BLUE);
 
         player.placeSettlementPiece();
 
-        assertEquals(3, player.getSettlementsPlaced());
+        assertEquals(2, player.getSettlementsRemaining());
     }
 
     @Test
-    public void PlaceSettlementPiece_FourPlaced_SettlementsPlacedIsFive() {
+    public void PlaceSettlementPiece_OneRemaining_NoneRemaining() {
         Player player = new Player(PlayerColor.BLUE);
         player.placeSettlementPiece();
         player.placeSettlementPiece();
         player.placeSettlementPiece();
 
-        assertEquals(5, player.getSettlementsPlaced());
+        assertEquals(0, player.getSettlementsRemaining());
     }
 
     @Test
-    public void PlaceSettlementPiece_FivePlaced_ThrowsIllegalStateException() {
+    public void PlaceSettlementPiece_NoneRemaining_ThrowsIllegalStateException() {
         Player player = new Player(PlayerColor.BLUE);
         player.placeSettlementPiece();
         player.placeSettlementPiece();
@@ -52,11 +53,11 @@ public class PlayerTest {
         IllegalStateException exception = assertThrows(IllegalStateException.class, player::placeSettlementPiece);
 
         assertEquals("Player BLUE has no settlements left to place (max 5)", exception.getMessage());
-        assertEquals(5, player.getSettlementsPlaced());
+        assertEquals(0, player.getSettlementsRemaining());
     }
 
     @Test
-    public void PlaceSettlementPiece_FivePlacedThenOneUpgraded_SettlementsPlacedIsFiveAgain() {
+    public void PlaceSettlementPiece_NoneRemainingThenOneUpgraded_NoneRemainingAgain() {
         Player player = new Player(PlayerColor.BLUE);
         player.placeSettlementPiece();
         player.placeSettlementPiece();
@@ -65,21 +66,21 @@ public class PlayerTest {
 
         player.placeSettlementPiece();
 
-        assertEquals(5, player.getSettlementsPlaced());
+        assertEquals(0, player.getSettlementsRemaining());
     }
 
     @Test
-    public void PlaceCityPiece_TwoSettlementsNoCities_OneCityOneSettlement() {
+    public void PlaceCityPiece_NewPlayer_OneCityUsedOneSettlementReturned() {
         Player player = new Player(PlayerColor.BLUE);
 
         player.placeCityPiece();
 
-        assertEquals(1, player.getCitiesPlaced());
-        assertEquals(1, player.getSettlementsPlaced());
+        assertEquals(3, player.getCitiesRemaining());
+        assertEquals(4, player.getSettlementsRemaining());
     }
 
     @Test
-    public void PlaceCityPiece_ThreeCitiesPlaced_CitiesPlacedIsFour() {
+    public void PlaceCityPiece_OneCityRemaining_NoCitiesRemaining() {
         Player player = new Player(PlayerColor.BLUE);
         player.placeSettlementPiece();
         player.placeSettlementPiece();
@@ -89,11 +90,11 @@ public class PlayerTest {
 
         player.placeCityPiece();
 
-        assertEquals(4, player.getCitiesPlaced());
+        assertEquals(0, player.getCitiesRemaining());
     }
 
     @Test
-    public void PlaceCityPiece_FourCitiesPlaced_ThrowsIllegalStateException() {
+    public void PlaceCityPiece_NoCitiesRemaining_ThrowsIllegalStateException() {
         Player player = new Player(PlayerColor.BLUE);
         player.placeSettlementPiece();
         player.placeSettlementPiece();
@@ -106,8 +107,8 @@ public class PlayerTest {
         IllegalStateException exception = assertThrows(IllegalStateException.class, player::placeCityPiece);
 
         assertEquals("Player BLUE has no cities left to place (max 4)", exception.getMessage());
-        assertEquals(4, player.getCitiesPlaced());
-        assertEquals(1, player.getSettlementsPlaced());
+        assertEquals(0, player.getCitiesRemaining());
+        assertEquals(4, player.getSettlementsRemaining());
     }
 
     @Test
@@ -119,21 +120,21 @@ public class PlayerTest {
         IllegalStateException exception = assertThrows(IllegalStateException.class, player::placeCityPiece);
 
         assertEquals("Player BLUE has no settlement to upgrade to a city", exception.getMessage());
-        assertEquals(2, player.getCitiesPlaced());
-        assertEquals(0, player.getSettlementsPlaced());
+        assertEquals(2, player.getCitiesRemaining());
+        assertEquals(5, player.getSettlementsRemaining());
     }
 
     @Test
-    public void PlaceRoadPiece_TwoPlaced_RoadsPlacedIsThree() {
+    public void PlaceRoadPiece_ThirteenRemaining_TwelveRemaining() {
         Player player = new Player(PlayerColor.BLUE);
 
         player.placeRoadPiece();
 
-        assertEquals(3, player.getRoadsPlaced());
+        assertEquals(12, player.getRoadsRemaining());
     }
 
     @Test
-    public void PlaceRoadPiece_FourteenPlaced_RoadsPlacedIsFifteen() {
+    public void PlaceRoadPiece_OneRemaining_NoneRemaining() {
         Player player = new Player(PlayerColor.BLUE);
         for (int roadsPlaced = 2; roadsPlaced < 14; roadsPlaced++) {
             player.placeRoadPiece();
@@ -141,11 +142,11 @@ public class PlayerTest {
 
         player.placeRoadPiece();
 
-        assertEquals(15, player.getRoadsPlaced());
+        assertEquals(0, player.getRoadsRemaining());
     }
 
     @Test
-    public void PlaceRoadPiece_FifteenPlaced_ThrowsIllegalStateException() {
+    public void PlaceRoadPiece_NoneRemaining_ThrowsIllegalStateException() {
         Player player = new Player(PlayerColor.BLUE);
         for (int roadsPlaced = 2; roadsPlaced < 15; roadsPlaced++) {
             player.placeRoadPiece();
@@ -154,7 +155,7 @@ public class PlayerTest {
         IllegalStateException exception = assertThrows(IllegalStateException.class, player::placeRoadPiece);
 
         assertEquals("Player BLUE has no roads left to place (max 15)", exception.getMessage());
-        assertEquals(15, player.getRoadsPlaced());
+        assertEquals(0, player.getRoadsRemaining());
     }
 
     @Test

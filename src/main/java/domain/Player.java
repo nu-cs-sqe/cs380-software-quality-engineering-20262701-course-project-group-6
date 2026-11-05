@@ -58,15 +58,15 @@ public class Player {
         return color;
     }
 
-    public int getSettlementsPlaced() {
-        return settlementsPlaced;
+    public int getSettlementsRemaining() {
+        return MAX_SETTLEMENTS - settlementsPlaced;
     }
 
-    public int getCitiesPlaced() {
-        return citiesPlaced;
+    public int getCitiesRemaining() {
+        return MAX_CITIES - citiesPlaced;
     }
 
-    public int getRoadsPlaced() {
-        return roadsPlaced;
+    public int getRoadsRemaining() {
+        return MAX_ROADS - roadsPlaced;
     }
 }
