@@ -42,7 +42,7 @@ settlement is upgraded (its location) is tracked by the board.
 |------|---------------------|-----------------|--------------|
 | TC7  | settlements placed = 2, cities placed = 0 (new player) | cities placed = 1, settlements placed = 1 | :white_check_mark: |
 | TC8  | cities placed = 3, settlements placed ≥ 1 | cities placed = 4 (max reached) | :white_check_mark: |
-| TC9  | cities placed = 4 (max), settlements placed ≥ 1 | `IllegalStateException` with a message naming the color and the max of 4; counts unchanged | :x: |
+| TC9  | cities placed = 4 (max), settlements placed ≥ 1 | `IllegalStateException` with a message naming the color and the max of 4; counts unchanged | :white_check_mark: |
 | TC10 | new player, then `placeCityPiece()` twice (settlements placed = 0, cities placed = 2) | `IllegalStateException` with a message saying there is no settlement to upgrade; counts unchanged | :x: |
 
 ### Method under test: `placeRoadPiece()`

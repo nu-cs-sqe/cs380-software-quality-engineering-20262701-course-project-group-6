@@ -91,4 +91,22 @@ public class PlayerTest {
 
         assertEquals(4, player.getCitiesPlaced());
     }
+
+    @Test
+    public void PlaceCityPiece_FourCitiesPlaced_ThrowsIllegalStateException() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.placeSettlementPiece();
+        player.placeSettlementPiece();
+        player.placeSettlementPiece();
+        player.placeCityPiece();
+        player.placeCityPiece();
+        player.placeCityPiece();
+        player.placeCityPiece();
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, player::placeCityPiece);
+
+        assertEquals("Player BLUE has no cities left to place (max 4)", exception.getMessage());
+        assertEquals(4, player.getCitiesPlaced());
+        assertEquals(1, player.getSettlementsPlaced());
+    }
 }

@@ -4,6 +4,7 @@ public class Player {
     private static final int STARTING_SETTLEMENTS = 2;
     private static final int STARTING_ROADS = 2;
     private static final int MAX_SETTLEMENTS = 5;
+    private static final int MAX_CITIES = 4;
 
     private final PlayerColor color;
     private int settlementsPlaced;
@@ -28,6 +29,10 @@ public class Player {
     }
 
     public void placeCityPiece() {
+        if (citiesPlaced == MAX_CITIES) {
+            throw new IllegalStateException(
+                    "Player " + color + " has no cities left to place (max " + MAX_CITIES + ")");
+        }
         citiesPlaced++;
         settlementsPlaced--;
     }
