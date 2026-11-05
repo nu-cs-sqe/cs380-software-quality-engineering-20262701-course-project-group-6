@@ -34,7 +34,7 @@ settlement is upgraded (its location) is tracked by the board.
 | TC3  | settlements placed = 2 (new player) | settlements placed = 3 | :white_check_mark: |
 | TC4  | settlements placed = 4 | settlements placed = 5 (max reached) | :white_check_mark: |
 | TC5  | settlements placed = 5 (max) | `IllegalStateException` with a message naming the color and the max of 5; settlements placed stays 5 | :white_check_mark: |
-| TC6  | settlements placed = 5, then `placeCityPiece()` once (settlements placed = 4) | placing a settlement succeeds again; settlements placed = 5 | :x: |
+| TC6  | settlements placed = 5, then `placeCityPiece()` once (settlements placed = 4) | placing a settlement succeeds again; settlements placed = 5 | :white_check_mark: |
 
 ### Method under test: `placeCityPiece()`
 

@@ -56,6 +56,19 @@ public class PlayerTest {
     }
 
     @Test
+    public void PlaceSettlementPiece_FivePlacedThenOneUpgraded_SettlementsPlacedIsFiveAgain() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.placeSettlementPiece();
+        player.placeSettlementPiece();
+        player.placeSettlementPiece();
+        player.placeCityPiece();
+
+        player.placeSettlementPiece();
+
+        assertEquals(5, player.getSettlementsPlaced());
+    }
+
+    @Test
     public void PlaceCityPiece_TwoSettlementsNoCities_OneCityOneSettlement() {
         Player player = new Player(PlayerColor.BLUE);
 
