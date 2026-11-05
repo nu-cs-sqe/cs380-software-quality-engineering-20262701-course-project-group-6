@@ -6,6 +6,7 @@ public class Player {
     private static final int MAX_SETTLEMENTS = 5;
     private static final int MAX_CITIES = 4;
     private static final int MAX_ROADS = 15;
+    private static final int CITY_VICTORY_POINTS = 2;
 
     private final PlayerColor color;
     private int settlementsPlaced;
@@ -50,7 +51,7 @@ public class Player {
     }
 
     public int getVictoryPointCount() {
-        return settlementsPlaced;
+        return settlementsPlaced + citiesPlaced * CITY_VICTORY_POINTS;
     }
 
     public PlayerColor getColor() {
