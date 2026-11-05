@@ -22,4 +22,13 @@ public class PlayerTest {
 
         assertEquals("Player color is required", exception.getMessage());
     }
+
+    @Test
+    public void PlaceSettlementPiece_TwoPlaced_SettlementsPlacedIsThree() {
+        Player player = new Player(PlayerColor.BLUE);
+
+        player.placeSettlementPiece();
+
+        assertEquals(3, player.getSettlementsPlaced());
+    }
 }

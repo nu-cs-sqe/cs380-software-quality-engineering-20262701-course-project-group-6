@@ -17,6 +17,10 @@ public class Player {
         this.roadsPlaced = STARTING_ROADS;
     }
 
+    public void placeSettlementPiece() {
+        settlementsPlaced++;
+    }
+
     public PlayerColor getColor() {
         return color;
     }
