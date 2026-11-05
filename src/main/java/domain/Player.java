@@ -9,6 +9,9 @@ public class Player {
     private int roadsPlaced;
 
     public Player(PlayerColor color) {
+        if (color == null) {
+            throw new IllegalArgumentException("Player color is required");
+        }
         this.color = color;
         this.settlementsPlaced = STARTING_SETTLEMENTS;
         this.roadsPlaced = STARTING_ROADS;

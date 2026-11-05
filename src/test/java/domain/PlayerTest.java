@@ -1,6 +1,7 @@
 package domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -13,5 +14,12 @@ public class PlayerTest {
         assertEquals(PlayerColor.BLUE, player.getColor());
         assertEquals(2, player.getSettlementsPlaced());
         assertEquals(2, player.getRoadsPlaced());
+    }
+
+    @Test
+    public void Constructor_NullColor_ThrowsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new Player(null));
+
+        assertEquals("Player color is required", exception.getMessage());
     }
 }

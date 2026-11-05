@@ -25,7 +25,7 @@ settlement is upgraded (its location) is tracked by the board.
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
 | TC1  | `color` = `BLUE` | `getColor()` = `BLUE`; settlements placed = 2, roads placed = 2 (cities start at 0, checked by TC7 going 0 → 1) | :white_check_mark: |
-| TC2  | `color` = `null` | `IllegalArgumentException` with a message saying the color is required | :x: |
+| TC2  | `color` = `null` | `IllegalArgumentException` with a message saying the color is required | :white_check_mark: |
 
 ### Method under test: `placeSettlementPiece()`
 
