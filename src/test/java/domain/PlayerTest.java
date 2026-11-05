@@ -131,4 +131,16 @@ public class PlayerTest {
 
         assertEquals(3, player.getRoadsPlaced());
     }
+
+    @Test
+    public void PlaceRoadPiece_FourteenPlaced_RoadsPlacedIsFifteen() {
+        Player player = new Player(PlayerColor.BLUE);
+        for (int roadsPlaced = 2; roadsPlaced < 14; roadsPlaced++) {
+            player.placeRoadPiece();
+        }
+
+        player.placeRoadPiece();
+
+        assertEquals(15, player.getRoadsPlaced());
+    }
 }
