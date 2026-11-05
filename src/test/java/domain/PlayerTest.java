@@ -31,4 +31,14 @@ public class PlayerTest {
 
         assertEquals(3, player.getSettlementsPlaced());
     }
+
+    @Test
+    public void PlaceSettlementPiece_FourPlaced_SettlementsPlacedIsFive() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.placeSettlementPiece();
+        player.placeSettlementPiece();
+        player.placeSettlementPiece();
+
+        assertEquals(5, player.getSettlementsPlaced());
+    }
 }
