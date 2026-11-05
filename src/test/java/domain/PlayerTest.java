@@ -143,4 +143,17 @@ public class PlayerTest {
 
         assertEquals(15, player.getRoadsPlaced());
     }
+
+    @Test
+    public void PlaceRoadPiece_FifteenPlaced_ThrowsIllegalStateException() {
+        Player player = new Player(PlayerColor.BLUE);
+        for (int roadsPlaced = 2; roadsPlaced < 15; roadsPlaced++) {
+            player.placeRoadPiece();
+        }
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, player::placeRoadPiece);
+
+        assertEquals("Player BLUE has no roads left to place (max 15)", exception.getMessage());
+        assertEquals(15, player.getRoadsPlaced());
+    }
 }
