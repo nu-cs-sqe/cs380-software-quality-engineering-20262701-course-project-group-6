@@ -40,6 +40,10 @@ public class Player {
         settlementsPlaced--;
     }
 
+    public void placeRoadPiece() {
+        roadsPlaced++;
+    }
+
     public PlayerColor getColor() {
         return color;
     }

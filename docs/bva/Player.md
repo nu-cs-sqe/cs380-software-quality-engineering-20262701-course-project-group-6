@@ -49,7 +49,7 @@ settlement is upgraded (its location) is tracked by the board.
 
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
-| TC11 | roads placed = 2 (new player) | roads placed = 3 | :x: |
+| TC11 | roads placed = 2 (new player) | roads placed = 3 | :white_check_mark: |
 | TC12 | roads placed = 14 | roads placed = 15 (max reached) | :x: |
 | TC13 | roads placed = 15 (max) | `IllegalStateException` with a message naming the color and the max of 15; roads placed stays 15 | :x: |
 

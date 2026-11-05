@@ -122,4 +122,13 @@ public class PlayerTest {
         assertEquals(2, player.getCitiesPlaced());
         assertEquals(0, player.getSettlementsPlaced());
     }
+
+    @Test
+    public void PlaceRoadPiece_TwoPlaced_RoadsPlacedIsThree() {
+        Player player = new Player(PlayerColor.BLUE);
+
+        player.placeRoadPiece();
+
+        assertEquals(3, player.getRoadsPlaced());
+    }
 }
