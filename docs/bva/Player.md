@@ -62,7 +62,7 @@ in a later story.
 |------|---------------------|-----------------|--------------|
 | TC14 | new player (2 settlements, 0 cities) | 2 | :white_check_mark: |
 | TC15 | new player, then `placeCityPiece()` once (1 settlement, 1 city) | 3 | :white_check_mark: |
-| TC16 | new player, `placeSettlementPiece()` twice, then `placeCityPiece()` 4 times (0 settlements, 4 cities) | 8 | :x: |
+| TC16 | new player, `placeSettlementPiece()` twice, then `placeCityPiece()` 4 times (0 settlements, 4 cities) | 8 | :white_check_mark: |
 
 ### Methods under test: `getColor()`, `getSettlementsPlaced()`, `getCitiesPlaced()`, `getRoadsPlaced()`
 

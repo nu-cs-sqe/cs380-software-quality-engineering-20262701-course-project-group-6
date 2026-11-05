@@ -175,4 +175,19 @@ public class PlayerTest {
 
         assertEquals(3, victoryPoints);
     }
+
+    @Test
+    public void GetVictoryPointCount_NoSettlementsFourCities_ReturnsEight() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.placeSettlementPiece();
+        player.placeSettlementPiece();
+        player.placeCityPiece();
+        player.placeCityPiece();
+        player.placeCityPiece();
+        player.placeCityPiece();
+
+        int victoryPoints = player.getVictoryPointCount();
+
+        assertEquals(8, victoryPoints);
+    }
 }
