@@ -60,6 +60,10 @@ public class Player {
         resources.merge(type, amount, Integer::sum);
     }
 
+    public void useResource(ResourceCardType type, int amount) {
+        resources.merge(type, -amount, Integer::sum);
+    }
+
     public int getVictoryPointCount() {
         return settlementsPlaced + citiesPlaced * CITY_VICTORY_POINTS;
     }

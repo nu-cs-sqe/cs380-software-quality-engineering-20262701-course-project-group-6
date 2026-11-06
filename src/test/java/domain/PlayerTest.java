@@ -243,4 +243,14 @@ public class PlayerTest {
 
         assertEquals("Resource type is required", exception.getMessage());
     }
+
+    @Test
+    public void UseResource_ThreeBricksUseOne_TwoBricks() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectResource(ResourceCardType.BRICK, 3);
+
+        player.useResource(ResourceCardType.BRICK, 1);
+
+        assertEquals(2, player.getResourceCount(ResourceCardType.BRICK));
+    }
 }
