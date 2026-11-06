@@ -26,7 +26,7 @@ Order matters: the first language in the file is the one selected when the game 
 |     | State of the System | Expected output | Implemented? |
 |-----|---------------------|-----------------|--------------|
 | TC1 | `languages=en` | `[en]` | :white_check_mark: |
-| TC2 | `languages=en,es` | `[en, es]`, in file order | :x: |
+| TC2 | `languages=en,es` | `[en, es]`, in file order | :white_check_mark: |
 | TC3 | `languages=en, es` (space after the comma) | `[en, es]` (spaces are trimmed) | :x: |
 | TC4 | `languages=` (empty) | `IllegalArgumentException` with a message saying at least one language is required | :x: |
 | TC5 | no `languages` entry | `IllegalArgumentException` with a message saying the `languages` entry is missing | :x: |

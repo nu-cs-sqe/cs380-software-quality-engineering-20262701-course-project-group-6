@@ -8,6 +8,7 @@ import java.util.Properties;
 import org.junit.jupiter.api.Test;
 
 public class LanguageOptionsTest {
+    private static final Locale SPANISH = Locale.forLanguageTag("es");
 
     @Test
     public void GetLocales_OneLanguage_ReturnsThatLanguage() {
@@ -16,6 +17,15 @@ public class LanguageOptionsTest {
         List<Locale> locales = options.getLocales();
 
         assertEquals(List.of(Locale.ENGLISH), locales);
+    }
+
+    @Test
+    public void GetLocales_TwoLanguages_ReturnsBothInFileOrder() {
+        LanguageOptions options = new LanguageOptions(languageFile("en,es"));
+
+        List<Locale> locales = options.getLocales();
+
+        assertEquals(List.of(Locale.ENGLISH, SPANISH), locales);
     }
 
     private static Properties languageFile(String languages) {
