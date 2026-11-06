@@ -124,7 +124,7 @@ Used later to check whether a player holds more than 7 cards when a 7 is rolled.
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
 | TC30 | new player | 0 | :white_check_mark: |
-| TC31 | 2 `BRICK` and 1 of each other type | 6 (sum across all types) | :x: |
+| TC31 | 2 `BRICK` and 1 of each other type | 6 (sum across all types) | :white_check_mark: |
 
 ## Next section (to be added before that code is written)
 

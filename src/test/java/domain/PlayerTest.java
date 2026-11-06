@@ -338,4 +338,17 @@ public class PlayerTest {
 
         assertEquals(0, total);
     }
+
+    @Test
+    public void GetTotalResourceCount_TwoBricksOneOfEachOther_ReturnsSix() {
+        Player player = new Player(PlayerColor.BLUE);
+        for (ResourceCardType type : ResourceCardType.values()) {
+            player.collectResource(type, 1);
+        }
+        player.collectResource(ResourceCardType.BRICK, 1);
+
+        int total = player.getTotalResourceCount();
+
+        assertEquals(6, total);
+    }
 }
