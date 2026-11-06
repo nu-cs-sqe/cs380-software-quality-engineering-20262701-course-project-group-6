@@ -61,7 +61,12 @@ public class Player {
     }
 
     public void useResource(ResourceCardType type, int amount) {
-        resources.merge(type, -amount, Integer::sum);
+        int count = getResourceCount(type);
+        if (count < amount) {
+            throw new IllegalStateException(
+                    "Player " + color + " has " + count + " " + type + " but tried to use " + amount);
+        }
+        resources.put(type, count - amount);
     }
 
     public int getVictoryPointCount() {

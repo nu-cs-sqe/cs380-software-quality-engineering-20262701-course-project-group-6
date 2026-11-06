@@ -263,4 +263,16 @@ public class PlayerTest {
 
         assertEquals(0, player.getResourceCount(ResourceCardType.BRICK));
     }
+
+    @Test
+    public void UseResource_TwoBricksUseThree_ThrowsIllegalStateException() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectResource(ResourceCardType.BRICK, 2);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> player.useResource(ResourceCardType.BRICK, 3));
+
+        assertEquals("Player BLUE has 2 BRICK but tried to use 3", exception.getMessage());
+        assertEquals(2, player.getResourceCount(ResourceCardType.BRICK));
+    }
 }
