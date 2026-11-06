@@ -275,4 +275,16 @@ public class PlayerTest {
         assertEquals("Player BLUE has 2 BRICK but tried to use 3", exception.getMessage());
         assertEquals(2, player.getResourceCount(ResourceCardType.BRICK));
     }
+
+    @Test
+    public void UseResource_ZeroAmount_ThrowsIllegalArgumentException() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectResource(ResourceCardType.BRICK, 2);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> player.useResource(ResourceCardType.BRICK, 0));
+
+        assertEquals("Resource amount must be at least 1 (was 0)", exception.getMessage());
+        assertEquals(2, player.getResourceCount(ResourceCardType.BRICK));
+    }
 }

@@ -61,6 +61,7 @@ public class Player {
     }
 
     public void useResource(ResourceCardType type, int amount) {
+        requirePositiveAmount(amount);
         int count = getResourceCount(type);
         if (count < amount) {
             throw new IllegalStateException(
