@@ -191,4 +191,14 @@ public class PlayerTest {
 
         assertEquals(8, victoryPoints);
     }
+
+    @Test
+    public void CollectResource_NewPlayerOneBrick_OneBrickInHand() {
+        Player player = new Player(PlayerColor.BLUE);
+
+        player.collectResource(ResourceCardType.BRICK, 1);
+
+        assertEquals(1, player.getResourceCount(ResourceCardType.BRICK));
+        assertEquals(1, player.getTotalResourceCount());
+    }
 }

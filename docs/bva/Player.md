@@ -93,7 +93,7 @@ enforces that limit.
 
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
-| TC17 | new player, collect 1 `BRICK` | 1 `BRICK`; total 1 | :x: |
+| TC17 | new player, collect 1 `BRICK` | 1 `BRICK`; total 1 | :white_check_mark: |
 | TC18 | 1 `BRICK`, collect 2 `BRICK` | 3 `BRICK` (added, not replaced) | :x: |
 | TC19 | new player, collect 0 `BRICK` | `IllegalArgumentException` with a message saying the amount must be at least 1; still 0 `BRICK` | :x: |
 | TC20 | 1 `BRICK`, collect 1 `ORE` | 1 `BRICK` and 1 `ORE` (other types unchanged) | :x: |
