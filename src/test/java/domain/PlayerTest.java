@@ -329,4 +329,13 @@ public class PlayerTest {
 
         assertEquals("Resource type is required", exception.getMessage());
     }
+
+    @Test
+    public void GetTotalResourceCount_NewPlayer_ReturnsZero() {
+        Player player = new Player(PlayerColor.BLUE);
+
+        int total = player.getTotalResourceCount();
+
+        assertEquals(0, total);
+    }
 }
