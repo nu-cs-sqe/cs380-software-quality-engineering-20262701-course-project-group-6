@@ -14,6 +14,7 @@ public class LanguageOptions {
 
     public LanguageOptions(Properties languageFile) {
         this.locales = Arrays.stream(languageFile.getProperty(LANGUAGES_KEY).split(SEPARATOR))
+                .map(String::trim)
                 .map(Locale::forLanguageTag)
                 .collect(Collectors.toUnmodifiableList());
     }

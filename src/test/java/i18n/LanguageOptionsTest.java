@@ -28,6 +28,15 @@ public class LanguageOptionsTest {
         assertEquals(List.of(Locale.ENGLISH, SPANISH), locales);
     }
 
+    @Test
+    public void GetLocales_SpaceAfterComma_SpacesTrimmed() {
+        LanguageOptions options = new LanguageOptions(languageFile("en, es"));
+
+        List<Locale> locales = options.getLocales();
+
+        assertEquals(List.of(Locale.ENGLISH, SPANISH), locales);
+    }
+
     private static Properties languageFile(String languages) {
         Properties file = new Properties();
         file.setProperty("languages", languages);
