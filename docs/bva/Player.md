@@ -113,7 +113,7 @@ enforces that limit.
 
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
-| TC27 | new player | 0 for every `ResourceCardType` | :x: |
+| TC27 | new player | 0 for every `ResourceCardType` | :white_check_mark: |
 | TC28 | 2 `BRICK` | 0 `ORE` (asking for a type the player has none of) | :x: |
 | TC29 | `type` = `null` | `IllegalArgumentException` with a message saying the resource type is required | :x: |
 

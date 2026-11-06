@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 public class PlayerTest {
 
@@ -296,5 +298,15 @@ public class PlayerTest {
                 () -> player.useResource(null, 1));
 
         assertEquals("Resource type is required", exception.getMessage());
+    }
+
+    @ParameterizedTest
+    @EnumSource(ResourceCardType.class)
+    public void GetResourceCount_NewPlayer_ReturnsZero(ResourceCardType type) {
+        Player player = new Player(PlayerColor.BLUE);
+
+        int count = player.getResourceCount(type);
+
+        assertEquals(0, count);
     }
 }
