@@ -253,4 +253,14 @@ public class PlayerTest {
 
         assertEquals(2, player.getResourceCount(ResourceCardType.BRICK));
     }
+
+    @Test
+    public void UseResource_TwoBricksUseTwo_NoBricks() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectResource(ResourceCardType.BRICK, 2);
+
+        player.useResource(ResourceCardType.BRICK, 2);
+
+        assertEquals(0, player.getResourceCount(ResourceCardType.BRICK));
+    }
 }
