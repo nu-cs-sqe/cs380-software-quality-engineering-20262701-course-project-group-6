@@ -26,6 +26,27 @@
 9. [not started] Omar: Implement Player class with BVA and TDD (no PR yet)
 10. [not started] Ryan: Ask professor about how the desert tile should represent having no resource (no PR, question for professor)
 
+# Week 6 (11/02/2026-11/08/2026)
+**Planning and Progress Tracking**:
+1. [done] Ryan: Reviewed and approved Omar's design document cleanup, then merged it (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/7)
+2. [done] Omar: Filled in the week 4 and 5 reports (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/9)
+3. [done] Ryan: Reviewed and approved Omar's week 4 and 5 reports (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/9)
+4. [done] Ryan: Asked the professor how the desert tile should show it has no resource. She said not to use null, so Tile's getter will return Optional<ResourceCardType> (empty for the desert) and the TerrainType enum was dropped (no PR, question for professor)
+5. [done] Ryan: Fixed the review comments on the enum PR (LUMBER typo, removed NONE and TerrainType) (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/8)
+6. [done] Omar: Reviewed and approved Ryan's enum PR, then merged it (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/8)
+7. [done] Omar: Wrote the team coding standard and set up Checkstyle, SpotBugs, JaCoCo, PIT (100% mutation threshold), and EasyMock in the Gradle build (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/12)
+8. [done] Ryan: Reviewed and approved the coding standard and build tools (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/12)
+9. [done] Omar: Asked the professor about the coding standard. Answers: at most 4 parameters per method is required for an A, a remove-and-return method like DevelopmentDeck.draw() is fine under command-query separation, named constants are required in UI and Main too, and an equivalent mutant can be excluded from PIT. All four were added to the coding standard (no PR, question for professor; standard updated in https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/12)
+10. [done] Omar: Added the tool setup tasks (Checkstyle, SpotBugs, JaCoCo/PIT) and the integration testing and i18n plan tasks to the project board (no PR, added in GitHub Projects)
+11. [done] All of us: Decided to merge PlayerInventory into Player, as long as Player never exposes its card map directly (no PR, team decision)
+12. [done] Omar: Implemented the Player class (piece placement limits and victory points) with BVA and TDD, one commit per test case (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/16)
+13. [done] Ryan: Reviewed Omar's Player PR and requested changes (getters should return pieces remaining instead of pieces placed), then approved after the fix (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/16)
+14. [done] Omar: Reviewed and merged the professor's week 6 code review (no violations found) (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/17)
+15. [not started] Omar: Add resource cards to Player (collect, use, and count) with BVA and TDD (no PR yet)
+16. [not started] Daniel: Build the beginner board layout in the UI (no PR yet)
+17. [not started] Ryan: Implement the Tile, Node, and Edge classes with BVA and TDD (no PR yet)
+18. [not started] Unassigned: Implement Bank and DevelopmentDeck (no PR yet)
+
 # One section per week until the last week of class (the week before the Finals week)
 
 
