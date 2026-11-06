@@ -1,4 +1,4 @@
-package i18n;
+package language;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

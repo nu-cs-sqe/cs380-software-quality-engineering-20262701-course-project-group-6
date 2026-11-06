@@ -68,8 +68,8 @@ tasks.jacocoTestReport {
 }
 
 pitest {
-    targetClasses = setOf("domain.*", "i18n.*")
-    targetTests = setOf("domain.*", "i18n.*")
+    targetClasses = setOf("domain.*", "language.*")
+    targetTests = setOf("domain.*", "language.*")
     junit5PluginVersion = "1.2.1"
     pitestVersion = "1.15.0"
     threads = 4
