@@ -107,7 +107,7 @@ enforces that limit.
 | TC23 | 2 `BRICK`, use 2 `BRICK` | 0 `BRICK` (uses the whole count) | :white_check_mark: |
 | TC24 | 2 `BRICK`, use 3 `BRICK` | `IllegalStateException` with a message naming the color, the type, how many it has, and how many were asked for; still 2 `BRICK` | :white_check_mark: |
 | TC25 | 2 `BRICK`, use 0 `BRICK` | `IllegalArgumentException` with a message saying the amount must be at least 1; still 2 `BRICK` | :white_check_mark: |
-| TC26 | `type` = `null` | `IllegalArgumentException` with a message saying the resource type is required | :x: |
+| TC26 | `type` = `null` | `IllegalArgumentException` with a message saying the resource type is required | :white_check_mark: |
 
 ### Method under test: `getResourceCount(ResourceCardType type)`
 

@@ -61,6 +61,7 @@ public class Player {
     }
 
     public void useResource(ResourceCardType type, int amount) {
+        requireResourceType(type);
         requirePositiveAmount(amount);
         int count = getResourceCount(type);
         if (count < amount) {
