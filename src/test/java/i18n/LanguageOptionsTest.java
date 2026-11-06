@@ -48,6 +48,16 @@ public class LanguageOptionsTest {
         assertEquals("Language file must list at least one language", exception.getMessage());
     }
 
+    @Test
+    public void Constructor_NoLanguagesEntry_ThrowsIllegalArgumentException() {
+        Properties file = new Properties();
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> new LanguageOptions(file));
+
+        assertEquals("Language file is missing the 'languages' entry", exception.getMessage());
+    }
+
     private static Properties languageFile(String languages) {
         Properties file = new Properties();
         file.setProperty("languages", languages);

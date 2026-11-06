@@ -29,6 +29,6 @@ Order matters: the first language in the file is the one selected when the game 
 | TC2 | `languages=en,es` | `[en, es]`, in file order | :white_check_mark: |
 | TC3 | `languages=en, es` (space after the comma) | `[en, es]` (spaces are trimmed) | :white_check_mark: |
 | TC4 | `languages=` (empty) | `IllegalArgumentException` with a message saying at least one language is required | :white_check_mark: |
-| TC5 | no `languages` entry | `IllegalArgumentException` with a message saying the `languages` entry is missing | :x: |
+| TC5 | no `languages` entry | `IllegalArgumentException` with a message saying the `languages` entry is missing | :white_check_mark: |
 | TC6 | `languageFile` = `null` | `IllegalArgumentException` with a message saying the language file is required | :x: |
 | TC7 | `languages=en,es`, then try to add a locale to the list returned by `getLocales()` | `UnsupportedOperationException`; `getLocales()` still returns `[en, es]` | :x: |
