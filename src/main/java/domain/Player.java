@@ -63,7 +63,7 @@ public class Player {
     public void useResource(ResourceCardType type, int amount) {
         requireResourceType(type);
         requirePositiveAmount(amount);
-        int count = getResourceCount(type);
+        int count = countOf(type);
         if (count < amount) {
             throw new IllegalStateException(
                     "Player " + color + " has " + count + " " + type + " but tried to use " + amount);
@@ -92,7 +92,8 @@ public class Player {
     }
 
     public int getResourceCount(ResourceCardType type) {
-        return resources.getOrDefault(type, 0);
+        requireResourceType(type);
+        return countOf(type);
     }
 
     public int getTotalResourceCount() {
@@ -113,5 +114,9 @@ public class Player {
         if (amount < 1) {
             throw new IllegalArgumentException("Resource amount must be at least 1 (was " + amount + ")");
         }
+    }
+
+    private int countOf(ResourceCardType type) {
+        return resources.getOrDefault(type, 0);
     }
 }

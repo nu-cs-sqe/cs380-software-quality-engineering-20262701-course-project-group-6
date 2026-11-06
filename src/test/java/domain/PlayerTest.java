@@ -319,4 +319,14 @@ public class PlayerTest {
 
         assertEquals(0, count);
     }
+
+    @Test
+    public void GetResourceCount_NullType_ThrowsIllegalArgumentException() {
+        Player player = new Player(PlayerColor.BLUE);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> player.getResourceCount(null));
+
+        assertEquals("Resource type is required", exception.getMessage());
+    }
 }
