@@ -1,6 +1,7 @@
 package i18n;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 import java.util.Locale;
@@ -35,6 +36,16 @@ public class LanguageOptionsTest {
         List<Locale> locales = options.getLocales();
 
         assertEquals(List.of(Locale.ENGLISH, SPANISH), locales);
+    }
+
+    @Test
+    public void Constructor_EmptyLanguageList_ThrowsIllegalArgumentException() {
+        Properties file = languageFile("");
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> new LanguageOptions(file));
+
+        assertEquals("Language file must list at least one language", exception.getMessage());
     }
 
     private static Properties languageFile(String languages) {

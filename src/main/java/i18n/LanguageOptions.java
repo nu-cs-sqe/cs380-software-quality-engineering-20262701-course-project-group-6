@@ -13,7 +13,11 @@ public class LanguageOptions {
     private final List<Locale> locales;
 
     public LanguageOptions(Properties languageFile) {
-        this.locales = Arrays.stream(languageFile.getProperty(LANGUAGES_KEY).split(SEPARATOR))
+        String languages = languageFile.getProperty(LANGUAGES_KEY);
+        if (languages.isBlank()) {
+            throw new IllegalArgumentException("Language file must list at least one language");
+        }
+        this.locales = Arrays.stream(languages.split(SEPARATOR))
                 .map(String::trim)
                 .map(Locale::forLanguageTag)
                 .collect(Collectors.toUnmodifiableList());
