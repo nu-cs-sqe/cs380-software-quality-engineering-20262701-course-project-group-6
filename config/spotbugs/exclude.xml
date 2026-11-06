@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+    <!-- Our standard requires constructors to validate their arguments and throw IllegalArgumentException,
+         which this finalizer-attack warning flags on every validating constructor. See docs/coding-standard.md. -->
+    <Match>
+        <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+    </Match>
+</FindBugsFilter>
