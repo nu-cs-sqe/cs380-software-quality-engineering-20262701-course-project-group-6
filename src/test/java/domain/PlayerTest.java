@@ -233,4 +233,14 @@ public class PlayerTest {
         assertEquals(1, player.getResourceCount(ResourceCardType.BRICK));
         assertEquals(1, player.getResourceCount(ResourceCardType.ORE));
     }
+
+    @Test
+    public void CollectResource_NullType_ThrowsIllegalArgumentException() {
+        Player player = new Player(PlayerColor.BLUE);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> player.collectResource(null, 1));
+
+        assertEquals("Resource type is required", exception.getMessage());
+    }
 }

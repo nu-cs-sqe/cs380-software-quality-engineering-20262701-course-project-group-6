@@ -55,9 +55,8 @@ public class Player {
     }
 
     public void collectResource(ResourceCardType type, int amount) {
-        if (amount < 1) {
-            throw new IllegalArgumentException("Resource amount must be at least 1 (was " + amount + ")");
-        }
+        requireResourceType(type);
+        requirePositiveAmount(amount);
         resources.merge(type, amount, Integer::sum);
     }
 
@@ -91,5 +90,17 @@ public class Player {
             total += count;
         }
         return total;
+    }
+
+    private void requireResourceType(ResourceCardType type) {
+        if (type == null) {
+            throw new IllegalArgumentException("Resource type is required");
+        }
+    }
+
+    private void requirePositiveAmount(int amount) {
+        if (amount < 1) {
+            throw new IllegalArgumentException("Resource amount must be at least 1 (was " + amount + ")");
+        }
     }
 }
