@@ -21,6 +21,9 @@ public class LanguageOptions {
     }
 
     private static String readLanguages(Properties languageFile) {
+        if (languageFile == null) {
+            throw new IllegalArgumentException("Language file is required");
+        }
         String languages = languageFile.getProperty(LANGUAGES_KEY);
         if (languages == null) {
             throw new IllegalArgumentException("Language file is missing the '" + LANGUAGES_KEY + "' entry");
