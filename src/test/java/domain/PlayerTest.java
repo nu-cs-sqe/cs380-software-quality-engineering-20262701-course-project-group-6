@@ -222,4 +222,15 @@ public class PlayerTest {
         assertEquals("Resource amount must be at least 1 (was 0)", exception.getMessage());
         assertEquals(0, player.getResourceCount(ResourceCardType.BRICK));
     }
+
+    @Test
+    public void CollectResource_OneBrickCollectOneOre_BrickUnchanged() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectResource(ResourceCardType.BRICK, 1);
+
+        player.collectResource(ResourceCardType.ORE, 1);
+
+        assertEquals(1, player.getResourceCount(ResourceCardType.BRICK));
+        assertEquals(1, player.getResourceCount(ResourceCardType.ORE));
+    }
 }
