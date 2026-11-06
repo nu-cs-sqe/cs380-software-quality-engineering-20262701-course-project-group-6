@@ -17,7 +17,7 @@ public class LanguageOptions {
     }
 
     public List<Locale> getLocales() {
-        return locales;
+        return List.copyOf(locales);
     }
 
     private static String readLanguages(Properties languageFile) {
