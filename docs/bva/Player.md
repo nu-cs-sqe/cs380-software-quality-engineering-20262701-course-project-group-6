@@ -95,7 +95,7 @@ enforces that limit.
 |------|---------------------|-----------------|--------------|
 | TC17 | new player, collect 1 `BRICK` | 1 `BRICK`; total 1 | :white_check_mark: |
 | TC18 | 1 `BRICK`, collect 2 `BRICK` | 3 `BRICK` (added, not replaced) | :white_check_mark: |
-| TC19 | new player, collect 0 `BRICK` | `IllegalArgumentException` with a message saying the amount must be at least 1; still 0 `BRICK` | :x: |
+| TC19 | new player, collect 0 `BRICK` | `IllegalArgumentException` with a message saying the amount must be at least 1; still 0 `BRICK` | :white_check_mark: |
 | TC20 | 1 `BRICK`, collect 1 `ORE` | 1 `BRICK` and 1 `ORE` (other types unchanged) | :x: |
 | TC21 | `type` = `null` | `IllegalArgumentException` with a message saying the resource type is required | :x: |
 

@@ -55,6 +55,9 @@ public class Player {
     }
 
     public void collectResource(ResourceCardType type, int amount) {
+        if (amount < 1) {
+            throw new IllegalArgumentException("Resource amount must be at least 1 (was " + amount + ")");
+        }
         resources.merge(type, amount, Integer::sum);
     }
 
