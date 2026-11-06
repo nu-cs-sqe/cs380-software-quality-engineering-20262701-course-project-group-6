@@ -66,6 +66,16 @@ public class LanguageOptionsTest {
         assertEquals("Language file is required", exception.getMessage());
     }
 
+    @Test
+    public void GetLocales_CallerAddsLocale_ThrowsAndListUnchanged() {
+        LanguageOptions options = new LanguageOptions(languageFile("en,es"));
+        List<Locale> locales = options.getLocales();
+
+        assertThrows(UnsupportedOperationException.class, () -> locales.add(Locale.FRENCH));
+
+        assertEquals(List.of(Locale.ENGLISH, SPANISH), options.getLocales());
+    }
+
     private static Properties languageFile(String languages) {
         Properties file = new Properties();
         file.setProperty("languages", languages);
