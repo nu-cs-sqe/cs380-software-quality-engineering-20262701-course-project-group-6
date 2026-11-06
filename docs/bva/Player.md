@@ -71,7 +71,61 @@ in a later story.
 
 Simple getters. They are checked in every test case above (implemented in TC1–TC13).
 
+## Resource cards
+
+Resource cards were merged in from `PlayerInventory` (team decision 11/04). `Player` keeps a count for each
+`ResourceCardType`. The counts are never returned as a map; callers ask for one count or the total.
+
+### Steps 1–3 summary
+
+| Input / state | Catalog type | Boundary values |
+|---|---|---|
+| `type` | Cases (enum) + Pointer | any `ResourceCardType`; `null` (throws: TC21, TC26, TC29) |
+| `amount` (collect and use) | Count | 0 (throws: TC19, TC25), 1, >1. -1 is in the same invalid partition as 0, so it has no separate test |
+| count of one type | Count | 0, 1, >1 |
+| count of one type vs. `amount` in `useResource` | Interval [0, count] | amount = count (TC23), amount = count + 1 (throws: TC24) |
+| hand (all types) | Collection | empty (TC30), one type (TC17), many types (TC31) |
+
+There is no upper limit in `Player`. The bank holds 19 cards of each type and cannot pay out more, so the bank
+enforces that limit.
+
+### Method under test: `collectResource(ResourceCardType type, int amount)`
+
+|      | State of the System | Expected output | Implemented? |
+|------|---------------------|-----------------|--------------|
+| TC17 | new player, collect 1 `BRICK` | 1 `BRICK`; total 1 | :x: |
+| TC18 | 1 `BRICK`, collect 2 `BRICK` | 3 `BRICK` (added, not replaced) | :x: |
+| TC19 | new player, collect 0 `BRICK` | `IllegalArgumentException` with a message saying the amount must be at least 1; still 0 `BRICK` | :x: |
+| TC20 | 1 `BRICK`, collect 1 `ORE` | 1 `BRICK` and 1 `ORE` (other types unchanged) | :x: |
+| TC21 | `type` = `null` | `IllegalArgumentException` with a message saying the resource type is required | :x: |
+
+### Method under test: `useResource(ResourceCardType type, int amount)`
+
+|      | State of the System | Expected output | Implemented? |
+|------|---------------------|-----------------|--------------|
+| TC22 | 3 `BRICK`, use 1 `BRICK` | 2 `BRICK` | :x: |
+| TC23 | 2 `BRICK`, use 2 `BRICK` | 0 `BRICK` (uses the whole count) | :x: |
+| TC24 | 2 `BRICK`, use 3 `BRICK` | `IllegalStateException` with a message naming the color, the type, how many it has, and how many were asked for; still 2 `BRICK` | :x: |
+| TC25 | 2 `BRICK`, use 0 `BRICK` | `IllegalArgumentException` with a message saying the amount must be at least 1; still 2 `BRICK` | :x: |
+| TC26 | `type` = `null` | `IllegalArgumentException` with a message saying the resource type is required | :x: |
+
+### Method under test: `getResourceCount(ResourceCardType type)`
+
+|      | State of the System | Expected output | Implemented? |
+|------|---------------------|-----------------|--------------|
+| TC27 | new player | 0 for every `ResourceCardType` | :x: |
+| TC28 | 2 `BRICK` | 0 `ORE` (asking for a type the player has none of) | :x: |
+| TC29 | `type` = `null` | `IllegalArgumentException` with a message saying the resource type is required | :x: |
+
+### Method under test: `getTotalResourceCount()`
+
+Used later to check whether a player holds more than 7 cards when a 7 is rolled.
+
+|      | State of the System | Expected output | Implemented? |
+|------|---------------------|-----------------|--------------|
+| TC30 | new player | 0 | :x: |
+| TC31 | 2 `BRICK` and 1 of each other type | 6 (sum across all types) | :x: |
+
 ## Next section (to be added before that code is written)
 
-Resource cards, merged in from `PlayerInventory` (team decision 11/04): `collectResource`, `useResource`,
-`getResourceCount`, `getTotalResourceCount`. The card map is never returned directly.
+Development cards: `collectDevCard`, `useDevCard`, `getDevCardCount`.
