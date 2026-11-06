@@ -55,7 +55,7 @@ public class Player {
     }
 
     public void collectResource(ResourceCardType type, int amount) {
-        resources.put(type, amount);
+        resources.merge(type, amount, Integer::sum);
     }
 
     public int getVictoryPointCount() {

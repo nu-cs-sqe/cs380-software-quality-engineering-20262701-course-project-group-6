@@ -201,4 +201,14 @@ public class PlayerTest {
         assertEquals(1, player.getResourceCount(ResourceCardType.BRICK));
         assertEquals(1, player.getTotalResourceCount());
     }
+
+    @Test
+    public void CollectResource_OneBrickCollectTwo_ThreeBricks() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectResource(ResourceCardType.BRICK, 1);
+
+        player.collectResource(ResourceCardType.BRICK, 2);
+
+        assertEquals(3, player.getResourceCount(ResourceCardType.BRICK));
+    }
 }
