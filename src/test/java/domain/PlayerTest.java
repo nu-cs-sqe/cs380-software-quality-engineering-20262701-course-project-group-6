@@ -309,4 +309,14 @@ public class PlayerTest {
 
         assertEquals(0, count);
     }
+
+    @Test
+    public void GetResourceCount_TwoBricksAskForOre_ReturnsZero() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectResource(ResourceCardType.BRICK, 2);
+
+        int count = player.getResourceCount(ResourceCardType.ORE);
+
+        assertEquals(0, count);
+    }
 }
