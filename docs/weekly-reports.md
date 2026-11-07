@@ -42,10 +42,14 @@
 12. [done] Omar: Implemented the Player class (piece placement limits and victory points) with BVA and TDD, one commit per test case (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/16)
 13. [done] Ryan: Reviewed Omar's Player PR and requested changes (getters should return pieces remaining instead of pieces placed), then approved after the fix (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/16)
 14. [done] Omar: Reviewed and merged the professor's week 6 code review (no violations found) (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/17)
-15. [not started] Omar: Add resource cards to Player (collect, use, and count) with BVA and TDD (no PR yet)
-16. [not started] Daniel: Build the beginner board layout in the UI (no PR yet)
-17. [not started] Ryan: Implement the Tile, Node, and Edge classes with BVA and TDD (no PR yet)
-18. [not started] Unassigned: Implement Bank and DevelopmentDeck (no PR yet)
+15. [done] Omar: Added resource cards to Player (collect, use, and count) with BVA and TDD, one commit per test case (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/18)
+16. [done] Ryan: Reviewed and approved Omar's resource cards PR (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/18)
+17. [done] Omar: Added language support (English and Spanish): a language dropdown on the home screen, all UI text moved into language files, and the LanguageOptions class built with BVA and TDD. A new language can be added with only properties files (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/19)
+18. [done] Ryan: Reviewed and approved Omar's language support PR (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/19)
+19. [in progress] Ryan: Implementing the Tile, Node, and Edge classes with BVA and TDD (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/20)
+20. [not started] Daniel: Build the beginner board layout in the UI (no PR yet)
+21. [not started] Omar: Ask the professor about the language file approach, integration test scope, and null in private fields (no PR, questions for professor)
+22. [not started] Unassigned: Implement Bank and DevelopmentDeck (no PR yet)
 
 # One section per week until the last week of class (the week before the Finals week)
 
