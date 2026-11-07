@@ -158,3 +158,17 @@ Handles game card reserves and initial resource payouts.
   * `public void withdrawResource(ResourceCardType type)`: Removes one resource card from the respective pile.
   * `public DevCardType withdrawDevelopmentCard()`: Removes and returns one development card from the top of the pile.
 
+
+---
+
+### 3.5 Language support (i18n)
+The player picks a language on the home screen. Adding a language needs no Java changes (issue #15).
+
+* **`src/main/resources/languages.properties`**: `languages=en,es`, in menu order. The first language is selected at startup.
+* **`messages_<code>.properties`**: one file per language with every piece of user-visible text (`home.newGameButton=New Game`).
+  `MessageBundlesTest` fails the build if a listed language is missing its file or any key that English has.
+* **`LanguageOptions`** (package `language`): reads the language list and returns it as a read-only `List<Locale>`.
+  Throws `IllegalArgumentException` if the file is `null`, has no `languages` entry, or lists no languages.
+* **UI**: every screen gets its text from the `ResourceBundle` for the chosen `Locale`, never from hardcoded strings.
+  The language menu shows each language in its own language ("English", "Español").
+* **To add a language**: add its code to `languages.properties` and add `messages_<code>.properties` with every key.
