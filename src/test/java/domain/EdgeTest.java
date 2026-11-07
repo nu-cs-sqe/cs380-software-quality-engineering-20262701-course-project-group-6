@@ -2,6 +2,7 @@ package domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
@@ -93,5 +94,13 @@ public class EdgeTest {
         Edge edge = new Edge(0, new Node(), new Node());
 
         assertFalse(edge.isOccupied());
+    }
+
+    @Test
+    public void isOccupied_OwnerAssigned_ReturnsTrue() {
+        Edge edge = new Edge(0, new Node(), new Node());
+        edge.setOwnerColor(PlayerColor.BLUE);
+
+        assertTrue(edge.isOccupied());
     }
 }
