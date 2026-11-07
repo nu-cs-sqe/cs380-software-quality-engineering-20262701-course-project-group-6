@@ -2,6 +2,7 @@ package domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -26,9 +27,18 @@ public class EdgeTest {
     public void Edge_Id71_InitializesCorrectly() {
         Node node1 = new Node();
         Node node2 = new Node();
-
         Edge edge = new Edge(71, node1, node2);
 
         assertEquals(71, edge.getId());
+    }
+
+    @Test
+    public void Edge_IdMinusOne_ThrowsIllegalArgumentException() {
+        Node node1 = new Node();
+        Node node2 = new Node();
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> new Edge(-1, node1, node2));
+
+        assertEquals("ID must be between 0 and 71",  exception.getMessage());
     }
 }

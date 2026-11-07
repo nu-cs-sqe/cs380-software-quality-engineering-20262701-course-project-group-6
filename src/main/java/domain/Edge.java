@@ -9,7 +9,12 @@ public class Edge {
     private PlayerColor ownerColor;
 
     public Edge(int id, Node node1, Node node2) {
-        this.id = id;
+        if (id >= 0 && id <= 71) {
+            this.id = id;
+        }
+        else {
+            throw new IllegalArgumentException("ID must be between 0 and 71");
+        }
         this.node1 = node1;
         this.node2 = node2;
         this.ownerColor = null;
