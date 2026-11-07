@@ -48,6 +48,11 @@ public class Edge {
     }
 
     void setOwnerColor(PlayerColor ownerColor) {
-        this.ownerColor = ownerColor;
+        if  (ownerColor != null) {
+            this.ownerColor = ownerColor;
+        }
+        else {
+            throw new IllegalArgumentException("ownerColor cannot be null");
+        }
     }
 }

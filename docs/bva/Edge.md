@@ -37,7 +37,7 @@ Callers can inspect the topology via getters and check if a road exists via `isO
 |  | State of the System | Expected output | Implemented? | 
 | ----- | ----- | ----- | ----- | 
 | TC7 | new edge (`ownerColor` = `null`), call `setOwnerColor(PlayerColor.BLUE)` | `getOwnerColor()` returns `Optional.of(PlayerColor.BLUE)` | :x: | 
-| TC8 | new edge (`ownerColor` = `null`), call `getOwnerColor()` | `getOwnerColor()` returns `Optional.empty()` | :x: | 
+| TC8 | new edge (`ownerColor` = `null`), call `setOwnerColor(null)` | `IllegalArgumentException` with a message saying `ownerColor` cannot be null | :x: | 
 
 ### Method under test: `isOccupied()`
 

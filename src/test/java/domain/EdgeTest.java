@@ -53,7 +53,7 @@ public class EdgeTest {
     }
 
     @Test
-    public void Edge_Node1Null_ThrowsNullPointerException() {
+    public void Edge_Node1Null_ThrowsIllegalArgumentException() {
         Node node2 = new Node();
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> new Edge(0, null, node2));
@@ -62,7 +62,7 @@ public class EdgeTest {
     }
 
     @Test
-    public void Edge_Node2Null_ThrowsNullPointerException() {
+    public void Edge_Node2Null_ThrowsIllegalArgumentException() {
         Node node1 = new Node();
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> new Edge(0, node1, null));
@@ -77,5 +77,14 @@ public class EdgeTest {
         edge.setOwnerColor(PlayerColor.BLUE);
 
         assertEquals(Optional.of(PlayerColor.BLUE), edge.getOwnerColor());
+    }
+
+    @Test
+    public void setOwnerColor_null_ThrowsIllegalArgumentException() {
+        Edge edge = new Edge(0, new Node(), new Node());
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> edge.setOwnerColor(null));
+
+        assertEquals("ownerColor cannot be null", exception.getMessage());
     }
 }
