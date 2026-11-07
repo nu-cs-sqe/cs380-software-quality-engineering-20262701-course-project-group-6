@@ -101,10 +101,11 @@ for each color in play during setup (Story 1); in Story 2, picking a color means
   * `public int getVictoryPointCount()`: Totals up victory points for win condition check (settlements 1, cities 2).
   * `public int getSettlementsRemaining()`, `getCitiesRemaining()`, `getRoadsRemaining()`: Pieces left in the
     supply (max − placed), for the UI. The placed counts themselves are not exposed.
-  * `public void collectResource(ResourceCardType type, int amount)`
+  * `public void collectResource(ResourceCardType type, int amount)`: Adds to the count for `type`.
   * `public void useResource(ResourceCardType type, int amount)`: Throws `IllegalStateException` if the player does
     not have enough.
-  * `public int getResourceCount(ResourceCardType type)`
+  * `public int getResourceCount(ResourceCardType type)`: 0 if the player has none of that type.
+  * The resource methods throw `IllegalArgumentException` for a `null` type or an `amount` below 1.
   * `public int getTotalResourceCount()`: When robber is rolled, check if >7
   * `public void collectDevCard(DevCardType type, int amount)`
   * `public void useDevCard(DevCardType type, int amount)`

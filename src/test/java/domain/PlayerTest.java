@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 public class PlayerTest {
 
@@ -190,5 +192,163 @@ public class PlayerTest {
         int victoryPoints = player.getVictoryPointCount();
 
         assertEquals(8, victoryPoints);
+    }
+
+    @Test
+    public void CollectResource_NewPlayerOneBrick_OneBrickInHand() {
+        Player player = new Player(PlayerColor.BLUE);
+
+        player.collectResource(ResourceCardType.BRICK, 1);
+
+        assertEquals(1, player.getResourceCount(ResourceCardType.BRICK));
+        assertEquals(1, player.getTotalResourceCount());
+    }
+
+    @Test
+    public void CollectResource_OneBrickCollectTwo_ThreeBricks() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectResource(ResourceCardType.BRICK, 1);
+
+        player.collectResource(ResourceCardType.BRICK, 2);
+
+        assertEquals(3, player.getResourceCount(ResourceCardType.BRICK));
+    }
+
+    @Test
+    public void CollectResource_ZeroAmount_ThrowsIllegalArgumentException() {
+        Player player = new Player(PlayerColor.BLUE);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> player.collectResource(ResourceCardType.BRICK, 0));
+
+        assertEquals("Resource amount must be at least 1 (was 0)", exception.getMessage());
+        assertEquals(0, player.getResourceCount(ResourceCardType.BRICK));
+    }
+
+    @Test
+    public void CollectResource_OneBrickCollectOneOre_BrickUnchanged() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectResource(ResourceCardType.BRICK, 1);
+
+        player.collectResource(ResourceCardType.ORE, 1);
+
+        assertEquals(1, player.getResourceCount(ResourceCardType.BRICK));
+        assertEquals(1, player.getResourceCount(ResourceCardType.ORE));
+    }
+
+    @Test
+    public void CollectResource_NullType_ThrowsIllegalArgumentException() {
+        Player player = new Player(PlayerColor.BLUE);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> player.collectResource(null, 1));
+
+        assertEquals("Resource type is required", exception.getMessage());
+    }
+
+    @Test
+    public void UseResource_ThreeBricksUseOne_TwoBricks() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectResource(ResourceCardType.BRICK, 3);
+
+        player.useResource(ResourceCardType.BRICK, 1);
+
+        assertEquals(2, player.getResourceCount(ResourceCardType.BRICK));
+    }
+
+    @Test
+    public void UseResource_TwoBricksUseTwo_NoBricks() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectResource(ResourceCardType.BRICK, 2);
+
+        player.useResource(ResourceCardType.BRICK, 2);
+
+        assertEquals(0, player.getResourceCount(ResourceCardType.BRICK));
+    }
+
+    @Test
+    public void UseResource_TwoBricksUseThree_ThrowsIllegalStateException() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectResource(ResourceCardType.BRICK, 2);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> player.useResource(ResourceCardType.BRICK, 3));
+
+        assertEquals("Player BLUE has 2 BRICK but tried to use 3", exception.getMessage());
+        assertEquals(2, player.getResourceCount(ResourceCardType.BRICK));
+    }
+
+    @Test
+    public void UseResource_ZeroAmount_ThrowsIllegalArgumentException() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectResource(ResourceCardType.BRICK, 2);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> player.useResource(ResourceCardType.BRICK, 0));
+
+        assertEquals("Resource amount must be at least 1 (was 0)", exception.getMessage());
+        assertEquals(2, player.getResourceCount(ResourceCardType.BRICK));
+    }
+
+    @Test
+    public void UseResource_NullType_ThrowsIllegalArgumentException() {
+        Player player = new Player(PlayerColor.BLUE);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> player.useResource(null, 1));
+
+        assertEquals("Resource type is required", exception.getMessage());
+    }
+
+    @ParameterizedTest
+    @EnumSource(ResourceCardType.class)
+    public void GetResourceCount_NewPlayer_ReturnsZero(ResourceCardType type) {
+        Player player = new Player(PlayerColor.BLUE);
+
+        int count = player.getResourceCount(type);
+
+        assertEquals(0, count);
+    }
+
+    @Test
+    public void GetResourceCount_TwoBricksAskForOre_ReturnsZero() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectResource(ResourceCardType.BRICK, 2);
+
+        int count = player.getResourceCount(ResourceCardType.ORE);
+
+        assertEquals(0, count);
+    }
+
+    @Test
+    public void GetResourceCount_NullType_ThrowsIllegalArgumentException() {
+        Player player = new Player(PlayerColor.BLUE);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> player.getResourceCount(null));
+
+        assertEquals("Resource type is required", exception.getMessage());
+    }
+
+    @Test
+    public void GetTotalResourceCount_NewPlayer_ReturnsZero() {
+        Player player = new Player(PlayerColor.BLUE);
+
+        int total = player.getTotalResourceCount();
+
+        assertEquals(0, total);
+    }
+
+    @Test
+    public void GetTotalResourceCount_TwoBricksOneOfEachOther_ReturnsSix() {
+        Player player = new Player(PlayerColor.BLUE);
+        for (ResourceCardType type : ResourceCardType.values()) {
+            player.collectResource(type, 1);
+        }
+        player.collectResource(ResourceCardType.BRICK, 1);
+
+        int total = player.getTotalResourceCount();
+
+        assertEquals(6, total);
     }
 }
