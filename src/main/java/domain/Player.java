@@ -1,5 +1,8 @@
 package domain;
 
+import java.util.EnumMap;
+import java.util.Map;
+
 public class Player {
     private static final int STARTING_SETTLEMENTS = 2;
     private static final int STARTING_ROADS = 2;
@@ -12,6 +15,7 @@ public class Player {
     private int settlementsPlaced;
     private int citiesPlaced;
     private int roadsPlaced;
+    private final Map<ResourceCardType, Integer> resources = new EnumMap<>(ResourceCardType.class);
 
     public Player(PlayerColor color) {
         if (color == null) {
@@ -50,6 +54,23 @@ public class Player {
         roadsPlaced++;
     }
 
+    public void collectResource(ResourceCardType type, int amount) {
+        requireResourceType(type);
+        requirePositiveAmount(amount);
+        resources.merge(type, amount, Integer::sum);
+    }
+
+    public void useResource(ResourceCardType type, int amount) {
+        requireResourceType(type);
+        requirePositiveAmount(amount);
+        int count = countOf(type);
+        if (count < amount) {
+            throw new IllegalStateException(
+                    "Player " + color + " has " + count + " " + type + " but tried to use " + amount);
+        }
+        resources.put(type, count - amount);
+    }
+
     public int getVictoryPointCount() {
         return settlementsPlaced + citiesPlaced * CITY_VICTORY_POINTS;
     }
@@ -68,5 +89,34 @@ public class Player {
 
     public int getRoadsRemaining() {
         return MAX_ROADS - roadsPlaced;
+    }
+
+    public int getResourceCount(ResourceCardType type) {
+        requireResourceType(type);
+        return countOf(type);
+    }
+
+    public int getTotalResourceCount() {
+        int total = 0;
+        for (int count : resources.values()) {
+            total += count;
+        }
+        return total;
+    }
+
+    private void requireResourceType(ResourceCardType type) {
+        if (type == null) {
+            throw new IllegalArgumentException("Resource type is required");
+        }
+    }
+
+    private void requirePositiveAmount(int amount) {
+        if (amount < 1) {
+            throw new IllegalArgumentException("Resource amount must be at least 1 (was " + amount + ")");
+        }
+    }
+
+    private int countOf(ResourceCardType type) {
+        return resources.getOrDefault(type, 0);
     }
 }

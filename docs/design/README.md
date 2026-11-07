@@ -101,10 +101,11 @@ for each color in play during setup (Story 1); in Story 2, picking a color means
   * `public int getVictoryPointCount()`: Totals up victory points for win condition check (settlements 1, cities 2).
   * `public int getSettlementsRemaining()`, `getCitiesRemaining()`, `getRoadsRemaining()`: Pieces left in the
     supply (max − placed), for the UI. The placed counts themselves are not exposed.
-  * `public void collectResource(ResourceCardType type, int amount)`
+  * `public void collectResource(ResourceCardType type, int amount)`: Adds to the count for `type`.
   * `public void useResource(ResourceCardType type, int amount)`: Throws `IllegalStateException` if the player does
     not have enough.
-  * `public int getResourceCount(ResourceCardType type)`
+  * `public int getResourceCount(ResourceCardType type)`: 0 if the player has none of that type.
+  * The resource methods throw `IllegalArgumentException` for a `null` type or an `amount` below 1.
   * `public int getTotalResourceCount()`: When robber is rolled, check if >7
   * `public void collectDevCard(DevCardType type, int amount)`
   * `public void useDevCard(DevCardType type, int amount)`
@@ -157,3 +158,17 @@ Handles game card reserves and initial resource payouts.
   * `public void withdrawResource(ResourceCardType type)`: Removes one resource card from the respective pile.
   * `public DevCardType withdrawDevelopmentCard()`: Removes and returns one development card from the top of the pile.
 
+
+---
+
+### 3.5 Language support (i18n)
+The player picks a language on the home screen. Adding a language needs no Java changes (issue #15).
+
+* **`src/main/resources/languages.properties`**: `languages=en,es`, in menu order. The first language is selected at startup.
+* **`messages_<code>.properties`**: one file per language with every piece of user-visible text (`home.newGameButton=New Game`).
+  `MessageBundlesTest` fails the build if a listed language is missing its file or any key that English has.
+* **`LanguageOptions`** (package `language`): reads the language list and returns it as a read-only `List<Locale>`.
+  Throws `IllegalArgumentException` if the file is `null`, has no `languages` entry, or lists no languages.
+* **UI**: every screen gets its text from the `ResourceBundle` for the chosen `Locale`, never from hardcoded strings.
+  The language menu shows each language in its own language ("English", "Español").
+* **To add a language**: add its code to `languages.properties` and add `messages_<code>.properties` with every key.
