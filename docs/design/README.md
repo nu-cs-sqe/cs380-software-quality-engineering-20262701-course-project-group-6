@@ -138,8 +138,8 @@ Encapsulates Catan's hexagonal board topology using an intersection/edge graph r
   * **`Node` (Intersections)**: Holds `int nodeId`, incident `Edge` references, neighboring `Tile` references, `BuildingType buildingType` (default `NONE`), `PlayerColor owner` (`null` when vacant), and `HarborType harborType` (default `NONE`).
 
 * **`Edge` Subcomponent (Paths):**
-  * State: Holds `int id`, the two fixed endpoint `Node` references (node1, node2), and `PlayerColor ownerColor` (`null` when no road is built).   
-  * Encapsulation Strategy: The `setOwnerColor` mutator is package-private to restrict placement logic exclusively to `GameBoard`.
+  * State: Holds `int id`, the two fixed endpoint `Node` references (node1, node2), and `PlayerColor roadColor` (`null` when no road is built).   
+  * Encapsulation Strategy: The `setRoadColor` mutator is package-private to restrict placement logic exclusively to `GameBoard`.
   * Accessors: Exposes public getters for its fields and provides topological helper method `public boolean isOccupied()`.
 
 ---

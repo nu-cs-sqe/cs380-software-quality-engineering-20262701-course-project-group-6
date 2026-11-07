@@ -20,7 +20,7 @@ public class EdgeTest {
         assertEquals(0, edge.getId());
         assertEquals(node1, edge.getNode1());
         assertEquals(node2, edge.getNode2());
-        assertEquals(Optional.empty(), edge.getOwnerColor());
+        assertEquals(Optional.empty(), edge.getRoadColor());
         assertFalse(edge.isOccupied());
     }
 
@@ -72,34 +72,34 @@ public class EdgeTest {
     }
 
     @Test
-    public void setOwnerColor_ValidColor_UpdatesOwner() {
+    public void setRoadColor_ValidColor_UpdatesRoadColor() {
         Edge edge = new Edge(0, new Node(), new Node());
 
-        edge.setOwnerColor(PlayerColor.BLUE);
+        edge.setRoadColor(PlayerColor.BLUE);
 
-        assertEquals(Optional.of(PlayerColor.BLUE), edge.getOwnerColor());
+        assertEquals(Optional.of(PlayerColor.BLUE), edge.getRoadColor());
     }
 
     @Test
-    public void setOwnerColor_null_ThrowsIllegalArgumentException() {
+    public void setRoadColor_null_ThrowsIllegalArgumentException() {
         Edge edge = new Edge(0, new Node(), new Node());
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> edge.setOwnerColor(null));
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> edge.setRoadColor(null));
 
-        assertEquals("ownerColor cannot be null", exception.getMessage());
+        assertEquals("roadColor cannot be null", exception.getMessage());
     }
 
     @Test
-    public void isOccupied_OwnerNull_ReturnsFalse() {
+    public void isOccupied_RoadColorNull_ReturnsFalse() {
         Edge edge = new Edge(0, new Node(), new Node());
 
         assertFalse(edge.isOccupied());
     }
 
     @Test
-    public void isOccupied_OwnerAssigned_ReturnsTrue() {
+    public void isOccupied_RoadColorAssigned_ReturnsTrue() {
         Edge edge = new Edge(0, new Node(), new Node());
-        edge.setOwnerColor(PlayerColor.BLUE);
+        edge.setRoadColor(PlayerColor.BLUE);
 
         assertTrue(edge.isOccupied());
     }

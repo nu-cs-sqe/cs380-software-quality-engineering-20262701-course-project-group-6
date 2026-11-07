@@ -14,10 +14,10 @@ its `id` falls within the valid physical bounds of a standard Catan board.
 | `id` (constructor) | Interval \[0, 71\] | \-1 (throws: TC3), 0, 71, 72 (throws: TC4) | 
 | `node1` (constructor) | Pointer | `null` (throws: TC5), valid `Node` object | 
 | `node2` (constructor) | Pointer | `null` (throws: TC6), valid `Node` object | 
-| `ownerColor` | Cases (enum) + Pointer | `null` (unoccupied / returns `Optional.empty()`), any valid `PlayerColor` (e.g., `BLUE` / returns `Optional.of(PlayerColor)`) | 
+| `roadColor` | Cases (enum) + Pointer | `null` (unoccupied / returns `Optional.empty()`), any valid `PlayerColor` (e.g., `BLUE` / returns `Optional.of(PlayerColor)`) | 
 
 Callers can inspect the topology via getters and check if a road exists via `isOccupied()`. Only package-private classes
-(like `GameBoard`) can mutate the `ownerColor` state via `setOwnerColor()`. Once set, the ownerColor assignment is final.
+(like `GameBoard`) can mutate the `roadColor` state via `setRoadColor()`. Once set, the roadColor assignment is final.
 
 ## Step 4: Test cases
 
@@ -25,26 +25,26 @@ Callers can inspect the topology via getters and check if a road exists via `isO
 
 |  | State of the System | Expected output | Implemented? | 
 | ----- | ----- | ----- | ----- | 
-| TC1 | `id` = 0, `node1` = valid `Node`, `node2` = valid `Node` | `getEdgeId()` = 0, endpoints match inputs, `getOwnerColor()` = `Optional.empty()`, `isOccupied()` = `false` | :x: | 
-| TC2 | `id` = 71, `node1` = valid `Node`, `node2` = valid `Node` | `getEdgeId()` = 71, endpoints match inputs, `getOwnerColor()` = `Optional.empty()`, `isOccupied()` = `false` | :x: | 
+| TC1 | `id` = 0, `node1` = valid `Node`, `node2` = valid `Node` | `getEdgeId()` = 0, endpoints match inputs, `getRoadColor()` = `Optional.empty()`, `isOccupied()` = `false` | :x: | 
+| TC2 | `id` = 71, `node1` = valid `Node`, `node2` = valid `Node` | `getEdgeId()` = 71, endpoints match inputs, `getRoadColor()` = `Optional.empty()`, `isOccupied()` = `false` | :x: | 
 | TC3 | `id` = -1, `node1` = valid `Node`, `node2` = valid `Node` | `IllegalArgumentException` with a message saying id is out of bounds | :x: | 
 | TC4 | `id` = 72, `node1` = valid `Node`, `node2` = valid `Node` | `IllegalArgumentException` with a message saying id is out of bounds | :x: | 
 | TC5 | `id` = 0, `node1` = `null`, `node2` = valid `Node` | `IllegalArgumentException` with a message saying endpoint `node1` cannot be null | :x: | 
 | TC6 | `id` = 0, `node1` = valid `Node`, `node2` = `null` | `IllegalArgumentException` with a message saying endpoint `node2` cannot be null | :x: | 
 
-### Method under test: `setOwnerColor(PlayerColor ownerColor)` & `getOwnerColor()`
+### Method under test: `setRoadColor(PlayerColor roadColor)` & `getRoadColor()`
 
 |  | State of the System | Expected output | Implemented? | 
 | ----- | ----- | ----- | ----- | 
-| TC7 | new edge (`ownerColor` = `null`), call `setOwnerColor(PlayerColor.BLUE)` | `getOwnerColor()` returns `Optional.of(PlayerColor.BLUE)` | :x: | 
-| TC8 | new edge (`ownerColor` = `null`), call `setOwnerColor(null)` | `IllegalArgumentException` with a message saying `ownerColor` cannot be null | :x: | 
+| TC7 | new edge (`roadColor` = `null`), call `setRoadColor(PlayerColor.BLUE)` | `getRoadColor()` returns `Optional.of(PlayerColor.BLUE)` | :x: | 
+| TC8 | new edge (`roadColor` = `null`), call `setRoadColor(null)` | `IllegalArgumentException` with a message saying `roadColor` cannot be null | :x: | 
 
 ### Method under test: `isOccupied()`
 
 |  | State of the System | Expected output | Implemented? | 
 | ----- | ----- | ----- | ----- | 
-| TC9 | `ownerColor` = `null` (default state) | `false` | :x: | 
-| TC10 | `ownerColor` = `PlayerColor.BLUE` | `true` | :x: | 
+| TC9 | `roadColor` = `null` (default state) | `false` | :x: | 
+| TC10 | `roadColor` = `PlayerColor.BLUE` | `true` | :x: | 
 
 ### Methods under test: `getEdgeId()`, `getNode1()`, `getNode2()`
 

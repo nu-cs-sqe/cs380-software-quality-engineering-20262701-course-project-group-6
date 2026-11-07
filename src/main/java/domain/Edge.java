@@ -6,7 +6,7 @@ public class Edge {
     private final int id;
     private final Node node1;
     private final Node node2;
-    private PlayerColor ownerColor;
+    private PlayerColor roadColor;
 
     public Edge(int id, Node node1, Node node2) {
         if (id >= 0 && id <= 71) {
@@ -24,7 +24,7 @@ public class Edge {
             throw new IllegalArgumentException("Node cannot be null");
         }
 
-        this.ownerColor = null;
+        this.roadColor = null;
     }
 
     public int getId() {
@@ -39,20 +39,20 @@ public class Edge {
         return node2;
     }
 
-    public Optional<PlayerColor> getOwnerColor() {
-        return Optional.ofNullable(ownerColor);
+    public Optional<PlayerColor> getRoadColor() {
+        return Optional.ofNullable(roadColor);
     }
 
     public boolean isOccupied() {
-        return ownerColor != null;
+        return roadColor != null;
     }
 
-    void setOwnerColor(PlayerColor ownerColor) {
-        if  (ownerColor != null) {
-            this.ownerColor = ownerColor;
+    void setRoadColor(PlayerColor roadColor) {
+        if  (roadColor != null) {
+            this.roadColor = roadColor;
         }
         else {
-            throw new IllegalArgumentException("ownerColor cannot be null");
+            throw new IllegalArgumentException("roadColor cannot be null");
         }
     }
 }
