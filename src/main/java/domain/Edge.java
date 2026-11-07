@@ -16,14 +16,14 @@ public class Edge {
             throw new IllegalArgumentException("ID must be between 0 and 71");
         }
 
-        if (node1 == null) {
-            throw new IllegalArgumentException("Node cannot be null");
+        if (node1 != null && node2 != null) {
+            this.node1 = node1;
+            this.node2 = node2;
         }
         else {
-            this.node1 = node1;
+            throw new IllegalArgumentException("Node cannot be null");
         }
 
-        this.node2 = node2;
         this.ownerColor = null;
     }
 

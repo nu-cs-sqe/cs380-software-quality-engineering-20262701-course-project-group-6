@@ -60,4 +60,13 @@ public class EdgeTest {
 
         assertEquals("Node cannot be null", exception.getMessage());
     }
+
+    @Test
+    public void Edge_Node2Null_ThrowsNullPointerException() {
+        Node node1 = new Node();
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> new Edge(0, node1, null));
+
+        assertEquals("Node cannot be null", exception.getMessage());
+    }
 }
