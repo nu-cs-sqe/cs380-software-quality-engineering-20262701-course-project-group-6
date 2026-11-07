@@ -87,4 +87,11 @@ public class EdgeTest {
 
         assertEquals("ownerColor cannot be null", exception.getMessage());
     }
+
+    @Test
+    public void isOccupied_OwnerNull_ReturnsFalse() {
+        Edge edge = new Edge(0, new Node(), new Node());
+
+        assertFalse(edge.isOccupied());
+    }
 }
