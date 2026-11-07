@@ -46,4 +46,8 @@ public class Edge {
     public boolean isOccupied() {
         return ownerColor != null;
     }
+
+    void setOwnerColor(PlayerColor ownerColor) {
+        this.ownerColor = ownerColor;
+    }
 }

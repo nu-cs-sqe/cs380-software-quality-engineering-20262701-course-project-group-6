@@ -69,4 +69,13 @@ public class EdgeTest {
 
         assertEquals("Node cannot be null", exception.getMessage());
     }
+
+    @Test
+    public void setOwnerColor_ValidColor_UpdatesOwner() {
+        Edge edge = new Edge(0, new Node(), new Node());
+
+        edge.setOwnerColor(PlayerColor.BLUE);
+
+        assertEquals(Optional.of(PlayerColor.BLUE), edge.getOwnerColor());
+    }
 }
