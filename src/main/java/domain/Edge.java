@@ -3,24 +3,23 @@ package domain;
 import java.util.Optional;
 
 public class Edge {
+    private static final int MAX_EDGE_ID = 71; // Total of 72 edges on Catan board
     private final int id;
     private final Node node1;
     private final Node node2;
     private PlayerColor roadColor;
 
     public Edge(int id, Node node1, Node node2) {
-        if (id >= 0 && id <= 71) {
+        if (id >= 0 && id <= MAX_EDGE_ID) {
             this.id = id;
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("ID must be between 0 and 71");
         }
 
         if (node1 != null && node2 != null) {
             this.node1 = node1;
             this.node2 = node2;
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("Node cannot be null");
         }
 
@@ -50,8 +49,7 @@ public class Edge {
     void setRoadColor(PlayerColor roadColor) {
         if  (roadColor != null) {
             this.roadColor = roadColor;
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("roadColor cannot be null");
         }
     }
