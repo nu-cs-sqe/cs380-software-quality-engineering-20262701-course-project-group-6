@@ -21,4 +21,14 @@ public class EdgeTest {
         assertEquals(Optional.empty(), edge.getOwnerColor());
         assertFalse(edge.isOccupied());
     }
+
+    @Test
+    public void Edge_Id71_InitializesCorrectly() {
+        Node node1 = new Node();
+        Node node2 = new Node();
+
+        Edge edge = new Edge(71, node1, node2);
+
+        assertEquals(71, edge.getId());
+    }
 }
