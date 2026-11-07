@@ -135,8 +135,13 @@ Encapsulates Catan's hexagonal board topology using an intersection/edge graph r
   * `Tile`: Holds `ResourceCardType` (`LUMBER`, `WOOL`, `GRAIN`, `BRICK`, `ORE`) or unassigned (`null`) for the desert tile, `int diceNumber`, `int tileId`,  and bounded `Node` references.
   * **`BuildingType` (Enum)**: `NONE`, `SETTLEMENT`, `CITY`.
   * **`HarborType` (Enum)**: `NONE`, `GENERIC_THREE_FOR_ONE`, `LUMBER_TWO_FOR_ONE`, `WOOL_TWO_FOR_ONE`, `GRAIN_TWO_FOR_ONE`, `BRICK_TWO_FOR_ONE`, `ORE_TWO_FOR_ONE`.
-  * **`Node` (Intersections)**: Holds `int nodeId`, incident `Edge` references, neighboring `Tile` references, `BuildingType buildingType` (default `NONE`), `Integer ownerPlayerId` (`null` when vacant, or the integer ID of the player who owns the settlement/city), and `HarborType harborType` (default `NONE`).
-  * **`Edge` (Paths)**: Holds `int edgeId`, the two endpoint `Node` references, and `Integer roadOwnerPlayerId` (`null` when no road is built, or the integer ID of the player who owns the road).
+  * **`Node` (Intersections)**: Holds `int nodeId`, incident `Edge` references, neighboring `Tile` references, `BuildingType buildingType` (default `NONE`), `PlayerColor owner` (`null` when vacant), and `HarborType harborType` (default `NONE`).
+
+* **`Edge` Subcomponent (Paths):**
+  * State: Holds `int edgeId`, the two fixed endpoint `Node` references (node1, node2), and `PlayerColor owner` (`null` when no road is built).   
+  * Encapsulation Strategy: The `setOwner` mutator is package-private to restrict placement logic exclusively to `GameBoard`.
+  * Accessors: Exposes public getters for its fields and provides topological helper method `public boolean isOccupied()`.
+
 ---
 
 ### 3.4 Bank, Deck, and Card Model
