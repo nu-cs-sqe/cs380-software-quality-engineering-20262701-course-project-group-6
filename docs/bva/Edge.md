@@ -29,8 +29,8 @@ Callers can inspect the topology via getters and check if a road exists via `isO
 | TC2 | `id` = 71, `node1` = valid `Node`, `node2` = valid `Node` | `getEdgeId()` = 71, endpoints match inputs, `getOwnerColor()` = `Optional.empty()`, `isOccupied()` = `false` | :x: | 
 | TC3 | `id` = -1, `node1` = valid `Node`, `node2` = valid `Node` | `IllegalArgumentException` with a message saying id is out of bounds | :x: | 
 | TC4 | `id` = 72, `node1` = valid `Node`, `node2` = valid `Node` | `IllegalArgumentException` with a message saying id is out of bounds | :x: | 
-| TC5 | `id` = 0, `node1` = `null`, `node2` = valid `Node` | `NullPointerException` with a message saying endpoint `node1` cannot be null | :x: | 
-| TC6 | `id` = 0, `node1` = valid `Node`, `node2` = `null` | `NullPointerException` with a message saying endpoint `node2` cannot be null | :x: | 
+| TC5 | `id` = 0, `node1` = `null`, `node2` = valid `Node` | `IllegalArgumentException` with a message saying endpoint `node1` cannot be null | :x: | 
+| TC6 | `id` = 0, `node1` = valid `Node`, `node2` = `null` | `IllegalArgumentException` with a message saying endpoint `node2` cannot be null | :x: | 
 
 ### Method under test: `setOwnerColor(PlayerColor ownerColor)` & `getOwnerColor()`
 

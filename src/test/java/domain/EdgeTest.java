@@ -39,7 +39,7 @@ public class EdgeTest {
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> new Edge(-1, node1, node2));
 
-        assertEquals("ID must be between 0 and 71",  exception.getMessage());
+        assertEquals("ID must be between 0 and 71", exception.getMessage());
     }
 
     @Test
@@ -49,6 +49,15 @@ public class EdgeTest {
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> new Edge(72, node1, node2));
 
-        assertEquals("ID must be between 0 and 71",  exception.getMessage());
+        assertEquals("ID must be between 0 and 71", exception.getMessage());
+    }
+
+    @Test
+    public void Edge_Node1Null_ThrowsNullPointerException() {
+        Node node2 = new Node();
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> new Edge(0, null, node2));
+
+        assertEquals("Node cannot be null", exception.getMessage());
     }
 }
