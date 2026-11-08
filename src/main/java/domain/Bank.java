@@ -28,6 +28,7 @@ public class Bank {
     }
 
     public void depositResource(ResourceCardType type, int amount) {
+        requireResourceType(type);
         requirePositiveAmount(amount);
         int count = resources.get(type);
         if (count + amount > CARDS_PER_RESOURCE) {

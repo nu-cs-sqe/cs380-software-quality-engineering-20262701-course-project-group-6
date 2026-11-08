@@ -76,7 +76,7 @@ Negative amounts are in the same invalid partition as 0 (the same `amount < 1` c
 | TC10 | 17 `BRICK` (2 withdrawn), deposit 2 | 19 `BRICK` (back to the max) | :white_check_mark: |
 | TC11 | 19 `BRICK`, deposit 1 | `IllegalStateException` with a message naming the type and the max of 19; still 19 `BRICK` | :white_check_mark: |
 | TC12 | 17 `BRICK`, deposit 0 | `IllegalArgumentException` with a message saying the amount must be at least 1; still 17 `BRICK` | :white_check_mark: |
-| TC13 | `type` = `null` | `IllegalArgumentException` with a message saying the resource type is required | :x: |
+| TC13 | `type` = `null` | `IllegalArgumentException` with a message saying the resource type is required | :white_check_mark: |
 
 ### Method under test: `getResourceCount(ResourceCardType type)`
 
