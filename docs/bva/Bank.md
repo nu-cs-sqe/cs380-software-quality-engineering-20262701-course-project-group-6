@@ -9,7 +9,10 @@ move between the bank and the players, a deposit above 19 means a bug somewhere 
 
 The bank builds its own `DevelopmentDeck` from a `Random` passed into the constructor. Nothing outside the bank holds
 the deck, so cards can only be drawn through the bank (this also keeps SpotBugs from flagging an outside reference to
-a mutable deck, EI_EXPOSE_REP2). Tests pass a normal `Random`, since the deck itself is tested in `DevelopmentDeck.md`.
+a mutable deck, EI_EXPOSE_REP2).
+
+Most tests pass a normal `Random`, since the deck itself is tested in `DevelopmentDeck.md`. TC15 passes a stub so
+the card drawn is known.
 
 ## Step 1: Inputs and outputs
 
@@ -92,7 +95,7 @@ Hands the call to the deck. The deck's own boundaries (empty deck, contents) are
 
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
-| TC15 | new bank | returns a card; 24 development cards left | :white_check_mark: |
+| TC15 | new bank built with a `Random` stub whose `nextInt` always returns 0 | returns the top card of the deck (`KNIGHT`, see `DevelopmentDeck.md` TC4); 24 development cards left | :white_check_mark: |
 
 ### Method under test: `getDevelopmentCardsRemaining()`
 

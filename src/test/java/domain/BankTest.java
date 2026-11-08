@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Random;
+import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -149,11 +150,15 @@ public class BankTest {
     }
 
     @Test
-    public void WithdrawDevelopmentCard_NewBank_TwentyFourCardsRemaining() {
-        Bank bank = newBank();
+    public void WithdrawDevelopmentCard_RandomAlwaysPicksFirstCard_ReturnsKnightAndTwentyFourLeft() {
+        Random alwaysFirst = EasyMock.createMock(Random.class);
+        EasyMock.expect(alwaysFirst.nextInt(EasyMock.anyInt())).andStubReturn(0);
+        EasyMock.replay(alwaysFirst);
+        Bank bank = new Bank(alwaysFirst);
 
-        bank.withdrawDevelopmentCard();
+        DevCardType card = bank.withdrawDevelopmentCard();
 
+        assertEquals(DevCardType.KNIGHT, card);
         assertEquals(24, bank.getDevelopmentCardsRemaining());
     }
 
