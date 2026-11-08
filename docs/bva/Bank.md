@@ -65,7 +65,7 @@ Negative amounts are in the same invalid partition as 0 (the same `amount < 1` c
 | TC4  | 19 `BRICK`, withdraw 19 | 0 `BRICK` (withdraws the whole supply) | :white_check_mark: |
 | TC5  | 19 `BRICK`, withdraw 20 | `IllegalStateException` with a message naming the type, how many the bank has, and how many were asked for; still 19 `BRICK` | :white_check_mark: |
 | TC6  | 19 `BRICK`, withdraw 0 | `IllegalArgumentException` with a message saying the amount must be at least 1; still 19 `BRICK` | :white_check_mark: |
-| TC7  | `type` = `null` | `IllegalArgumentException` with a message saying the resource type is required | :x: |
+| TC7  | `type` = `null` | `IllegalArgumentException` with a message saying the resource type is required | :white_check_mark: |
 | TC8  | 19 of each, withdraw 2 `BRICK` | 19 `ORE` (other types unchanged) | :x: |
 
 ### Method under test: `depositResource(ResourceCardType type, int amount)`

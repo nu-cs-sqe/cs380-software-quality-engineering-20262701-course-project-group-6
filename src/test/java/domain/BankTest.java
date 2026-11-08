@@ -66,6 +66,16 @@ public class BankTest {
         assertEquals(19, bank.getResourceCount(ResourceCardType.BRICK));
     }
 
+    @Test
+    public void WithdrawResource_NullType_ThrowsIllegalArgumentException() {
+        Bank bank = newBank();
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> bank.withdrawResource(null, 1));
+
+        assertEquals("Resource type is required", exception.getMessage());
+    }
+
     private static Bank newBank() {
         return new Bank(new Random());
     }

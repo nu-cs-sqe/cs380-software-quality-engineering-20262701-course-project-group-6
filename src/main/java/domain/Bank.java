@@ -18,6 +18,7 @@ public class Bank {
     }
 
     public void withdrawResource(ResourceCardType type, int amount) {
+        requireResourceType(type);
         requirePositiveAmount(amount);
         int count = resources.get(type);
         if (count < amount) {
@@ -32,6 +33,12 @@ public class Bank {
 
     public int getDevelopmentCardsRemaining() {
         return deck.getRemainingCount();
+    }
+
+    private void requireResourceType(ResourceCardType type) {
+        if (type == null) {
+            throw new IllegalArgumentException("Resource type is required");
+        }
     }
 
     private void requirePositiveAmount(int amount) {
