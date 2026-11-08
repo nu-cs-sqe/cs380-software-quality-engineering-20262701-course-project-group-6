@@ -35,6 +35,15 @@ public class BankTest {
         assertEquals(18, bank.getResourceCount(ResourceCardType.BRICK));
     }
 
+    @Test
+    public void WithdrawResource_NineteenBricksWithdrawNineteen_NoBricks() {
+        Bank bank = newBank();
+
+        bank.withdrawResource(ResourceCardType.BRICK, 19);
+
+        assertEquals(0, bank.getResourceCount(ResourceCardType.BRICK));
+    }
+
     private static Bank newBank() {
         return new Bank(new Random());
     }
