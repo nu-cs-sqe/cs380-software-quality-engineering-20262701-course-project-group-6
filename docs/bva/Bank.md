@@ -84,7 +84,7 @@ Checked in every test case above. Only the error case needs its own test.
 
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
-| TC14 | `type` = `null` | `IllegalArgumentException` with a message saying the resource type is required | :x: |
+| TC14 | `type` = `null` | `IllegalArgumentException` with a message saying the resource type is required | :white_check_mark: |
 
 ### Method under test: `withdrawDevelopmentCard()`
 

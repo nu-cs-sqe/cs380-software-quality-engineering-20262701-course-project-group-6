@@ -138,6 +138,16 @@ public class BankTest {
         assertEquals("Resource type is required", exception.getMessage());
     }
 
+    @Test
+    public void GetResourceCount_NullType_ThrowsIllegalArgumentException() {
+        Bank bank = newBank();
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> bank.getResourceCount(null));
+
+        assertEquals("Resource type is required", exception.getMessage());
+    }
+
     private static Bank newBank() {
         return new Bank(new Random());
     }

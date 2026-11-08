@@ -39,6 +39,7 @@ public class Bank {
     }
 
     public int getResourceCount(ResourceCardType type) {
+        requireResourceType(type);
         return resources.get(type);
     }
 
