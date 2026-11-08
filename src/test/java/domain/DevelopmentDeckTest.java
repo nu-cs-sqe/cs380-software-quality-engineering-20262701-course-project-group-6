@@ -76,6 +76,17 @@ public class DevelopmentDeckTest {
         assertEquals(0, deck.getRemainingCount());
     }
 
+    @Test
+    public void Draw_EmptyDeck_ThrowsIllegalStateException() {
+        DevelopmentDeck deck = new DevelopmentDeck(new Random());
+        drawCards(deck, 25);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, deck::draw);
+
+        assertEquals("Development deck is empty (all 25 cards have been drawn)", exception.getMessage());
+        assertEquals(0, deck.getRemainingCount());
+    }
+
     private static void drawCards(DevelopmentDeck deck, int count) {
         for (int cardsDrawn = 0; cardsDrawn < count; cardsDrawn++) {
             deck.draw();

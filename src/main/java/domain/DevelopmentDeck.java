@@ -11,6 +11,7 @@ public class DevelopmentDeck {
     private static final int ROAD_BUILDINGS = 2;
     private static final int YEARS_OF_PLENTY = 2;
     private static final int MONOPOLIES = 2;
+    private static final int DECK_SIZE = KNIGHTS + VICTORY_POINTS + ROAD_BUILDINGS + YEARS_OF_PLENTY + MONOPOLIES;
 
     private final List<DevCardType> cards = new ArrayList<>();
 
@@ -27,6 +28,9 @@ public class DevelopmentDeck {
     }
 
     public DevCardType draw() {
+        if (cards.isEmpty()) {
+            throw new IllegalStateException("Development deck is empty (all " + DECK_SIZE + " cards have been drawn)");
+        }
         return cards.remove(cards.size() - 1);
     }
 
