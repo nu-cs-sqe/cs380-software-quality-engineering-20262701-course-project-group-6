@@ -18,8 +18,8 @@ public class Bank {
     }
 
     public void withdrawResource(ResourceCardType type, int amount) {
-        requireResourceType(type);
-        requirePositiveAmount(amount);
+        ResourceArguments.requireType(type);
+        ResourceArguments.requirePositiveAmount(amount);
         int count = resources.get(type);
         if (count < amount) {
             throw new IllegalStateException("Bank has " + count + " " + type + " but " + amount + " were requested");
@@ -28,8 +28,8 @@ public class Bank {
     }
 
     public void depositResource(ResourceCardType type, int amount) {
-        requireResourceType(type);
-        requirePositiveAmount(amount);
+        ResourceArguments.requireType(type);
+        ResourceArguments.requirePositiveAmount(amount);
         int count = resources.get(type);
         if (count + amount > CARDS_PER_RESOURCE) {
             throw new IllegalStateException("Bank cannot hold more than " + CARDS_PER_RESOURCE + " " + type
@@ -39,7 +39,7 @@ public class Bank {
     }
 
     public int getResourceCount(ResourceCardType type) {
-        requireResourceType(type);
+        ResourceArguments.requireType(type);
         return resources.get(type);
     }
 
@@ -49,17 +49,5 @@ public class Bank {
 
     public int getDevelopmentCardsRemaining() {
         return deck.getRemainingCount();
-    }
-
-    private void requireResourceType(ResourceCardType type) {
-        if (type == null) {
-            throw new IllegalArgumentException("Resource type is required");
-        }
-    }
-
-    private void requirePositiveAmount(int amount) {
-        if (amount < 1) {
-            throw new IllegalArgumentException("Resource amount must be at least 1 (was " + amount + ")");
-        }
     }
 }
