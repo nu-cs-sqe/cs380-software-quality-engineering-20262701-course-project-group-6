@@ -76,6 +76,15 @@ public class BankTest {
         assertEquals("Resource type is required", exception.getMessage());
     }
 
+    @Test
+    public void WithdrawResource_TwoBricks_OreUnchanged() {
+        Bank bank = newBank();
+
+        bank.withdrawResource(ResourceCardType.BRICK, 2);
+
+        assertEquals(19, bank.getResourceCount(ResourceCardType.ORE));
+    }
+
     private static Bank newBank() {
         return new Bank(new Random());
     }
