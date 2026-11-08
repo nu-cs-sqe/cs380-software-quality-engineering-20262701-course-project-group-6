@@ -54,7 +54,7 @@ Negative amounts are in the same invalid partition as 0 (the same `amount < 1` c
 
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
-| TC1  | new bank | 19 of every `ResourceCardType`; 25 development cards left | :x: |
+| TC1  | new bank | 19 of every `ResourceCardType`; 25 development cards left | :white_check_mark: |
 | TC2  | `random` = `null` | `IllegalArgumentException` from the deck, with a message saying a `Random` is required | :x: |
 
 ### Method under test: `withdrawResource(ResourceCardType type, int amount)`
