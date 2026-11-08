@@ -18,7 +18,11 @@ public class Bank {
     }
 
     public void withdrawResource(ResourceCardType type, int amount) {
-        resources.put(type, resources.get(type) - amount);
+        int count = resources.get(type);
+        if (count < amount) {
+            throw new IllegalStateException("Bank has " + count + " " + type + " but " + amount + " were requested");
+        }
+        resources.put(type, count - amount);
     }
 
     public int getResourceCount(ResourceCardType type) {
