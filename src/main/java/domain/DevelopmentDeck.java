@@ -1,6 +1,7 @@
 package domain;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -22,6 +23,7 @@ public class DevelopmentDeck {
         addCopies(DevCardType.ROAD_BUILDING, ROAD_BUILDINGS);
         addCopies(DevCardType.YEAR_OF_PLENTY, YEARS_OF_PLENTY);
         addCopies(DevCardType.MONOPOLY, MONOPOLIES);
+        Collections.shuffle(cards, random);
     }
 
     public DevCardType draw() {

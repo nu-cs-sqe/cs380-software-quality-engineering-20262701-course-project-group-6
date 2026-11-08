@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Random;
+import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
 
 public class DevelopmentDeckTest {
@@ -42,5 +43,17 @@ public class DevelopmentDeckTest {
                 () -> new DevelopmentDeck(null));
 
         assertEquals("Random is required to shuffle the development deck", exception.getMessage());
+    }
+
+    @Test
+    public void Constructor_RandomAlwaysPicksFirstCard_KnightOnTop() {
+        Random alwaysFirst = EasyMock.createMock(Random.class);
+        EasyMock.expect(alwaysFirst.nextInt(EasyMock.anyInt())).andStubReturn(0);
+        EasyMock.replay(alwaysFirst);
+        DevelopmentDeck deck = new DevelopmentDeck(alwaysFirst);
+
+        DevCardType top = deck.draw();
+
+        assertEquals(DevCardType.KNIGHT, top);
     }
 }
