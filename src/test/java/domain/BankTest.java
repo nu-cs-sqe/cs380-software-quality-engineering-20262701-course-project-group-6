@@ -26,6 +26,15 @@ public class BankTest {
         assertEquals("Random is required to shuffle the development deck", exception.getMessage());
     }
 
+    @Test
+    public void WithdrawResource_NineteenBricksWithdrawOne_EighteenBricks() {
+        Bank bank = newBank();
+
+        bank.withdrawResource(ResourceCardType.BRICK, 1);
+
+        assertEquals(18, bank.getResourceCount(ResourceCardType.BRICK));
+    }
+
     private static Bank newBank() {
         return new Bank(new Random());
     }
