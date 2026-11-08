@@ -56,7 +56,7 @@ of the unshuffled list (a Knight) ends up on top. Without a shuffle, the top car
 |------|---------------------|-----------------|--------------|
 | TC1  | new deck | `getRemainingCount()` = 25 | :white_check_mark: |
 | TC2  | new deck, draw all 25 cards | 14 `KNIGHT`, 5 `VICTORY_POINT`, 2 `ROAD_BUILDING`, 2 `YEAR_OF_PLENTY`, 2 `MONOPOLY` | :white_check_mark: |
-| TC3  | `random` = `null` | `IllegalArgumentException` with a message saying a `Random` is required | :x: |
+| TC3  | `random` = `null` | `IllegalArgumentException` with a message saying a `Random` is required | :white_check_mark: |
 | TC4  | `random` stub whose `nextInt` always returns 0 | first card drawn is `KNIGHT` (the unshuffled top card would be `MONOPOLY`) | :x: |
 
 ### Method under test: `draw()`

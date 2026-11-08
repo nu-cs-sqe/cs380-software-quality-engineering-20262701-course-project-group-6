@@ -1,6 +1,7 @@
 package domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -33,5 +34,13 @@ public class DevelopmentDeckTest {
                 DevCardType.ROAD_BUILDING, 2,
                 DevCardType.YEAR_OF_PLENTY, 2,
                 DevCardType.MONOPOLY, 2), drawn);
+    }
+
+    @Test
+    public void Constructor_NullRandom_ThrowsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> new DevelopmentDeck(null));
+
+        assertEquals("Random is required to shuffle the development deck", exception.getMessage());
     }
 }

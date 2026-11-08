@@ -14,6 +14,9 @@ public class DevelopmentDeck {
     private final List<DevCardType> cards = new ArrayList<>();
 
     public DevelopmentDeck(Random random) {
+        if (random == null) {
+            throw new IllegalArgumentException("Random is required to shuffle the development deck");
+        }
         addCopies(DevCardType.KNIGHT, KNIGHTS);
         addCopies(DevCardType.VICTORY_POINT, VICTORY_POINTS);
         addCopies(DevCardType.ROAD_BUILDING, ROAD_BUILDINGS);
