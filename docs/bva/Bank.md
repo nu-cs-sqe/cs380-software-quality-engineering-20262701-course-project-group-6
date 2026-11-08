@@ -92,7 +92,7 @@ Hands the call to the deck. The deck's own boundaries (empty deck, contents) are
 
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
-| TC15 | new bank | returns a card; 24 development cards left | :x: |
+| TC15 | new bank | returns a card; 24 development cards left | :white_check_mark: |
 
 ### Method under test: `getDevelopmentCardsRemaining()`
 

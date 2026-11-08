@@ -148,6 +148,15 @@ public class BankTest {
         assertEquals("Resource type is required", exception.getMessage());
     }
 
+    @Test
+    public void WithdrawDevelopmentCard_NewBank_TwentyFourCardsRemaining() {
+        Bank bank = newBank();
+
+        bank.withdrawDevelopmentCard();
+
+        assertEquals(24, bank.getDevelopmentCardsRemaining());
+    }
+
     private static Bank newBank() {
         return new Bank(new Random());
     }

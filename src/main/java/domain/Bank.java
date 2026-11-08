@@ -43,6 +43,10 @@ public class Bank {
         return resources.get(type);
     }
 
+    public DevCardType withdrawDevelopmentCard() {
+        return deck.draw();
+    }
+
     public int getDevelopmentCardsRemaining() {
         return deck.getRemainingCount();
     }
