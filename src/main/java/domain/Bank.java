@@ -18,6 +18,7 @@ public class Bank {
     }
 
     public void withdrawResource(ResourceCardType type, int amount) {
+        requirePositiveAmount(amount);
         int count = resources.get(type);
         if (count < amount) {
             throw new IllegalStateException("Bank has " + count + " " + type + " but " + amount + " were requested");
@@ -31,5 +32,11 @@ public class Bank {
 
     public int getDevelopmentCardsRemaining() {
         return deck.getRemainingCount();
+    }
+
+    private void requirePositiveAmount(int amount) {
+        if (amount < 1) {
+            throw new IllegalArgumentException("Resource amount must be at least 1 (was " + amount + ")");
+        }
     }
 }
