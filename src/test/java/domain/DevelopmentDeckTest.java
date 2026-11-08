@@ -56,4 +56,13 @@ public class DevelopmentDeckTest {
 
         assertEquals(DevCardType.KNIGHT, top);
     }
+
+    @Test
+    public void Draw_NewDeck_TwentyFourCardsRemaining() {
+        DevelopmentDeck deck = new DevelopmentDeck(new Random());
+
+        deck.draw();
+
+        assertEquals(24, deck.getRemainingCount());
+    }
 }

@@ -63,7 +63,7 @@ of the unshuffled list (a Knight) ends up on top. Without a shuffle, the top car
 
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
-| TC5  | 25 cards left (new deck) | returns a card; 24 cards left | :x: |
+| TC5  | 25 cards left (new deck) | returns a card; 24 cards left | :white_check_mark: |
 | TC6  | 1 card left (24 drawn) | returns a card; 0 cards left | :x: |
 | TC7  | 0 cards left (25 drawn) | `IllegalStateException` with a message saying the deck is empty; still 0 cards left | :x: |
 
