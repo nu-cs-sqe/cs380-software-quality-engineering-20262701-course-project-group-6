@@ -10,16 +10,42 @@ move between the bank and the players, a deposit above 19 means a bug somewhere 
 The deck is passed into the constructor. Bank tests use a real `DevelopmentDeck` (coding standard: use the real object
 unless the interaction itself must be verified).
 
-## Steps 1–3 summary
+## Step 1: Inputs and outputs
 
-| Input / state | Catalog type | Boundary values |
+| | |
+|---|---|
+| **Inputs** | `deck` (constructor), `type`, `amount` |
+| **State** | how many cards of each `ResourceCardType` the bank holds |
+| **Outputs** | the bank's new count of that type, the development card returned, or an exception |
+
+## Steps 2–3: Catalog types and boundary values
+
+For whole numbers, the catalog's "LOW − ε" and "HIGH + ε" are LOW − 1 and HIGH + 1. "Can't set" (catalog term) means
+the code makes that value impossible to reach, so there is nothing to test.
+
+### Intervals
+
+| Input / state | Interval | LOW − 1 | LOW | HIGH | HIGH + 1 |
+|---|---|---|---|---|---|
+| `amount` in `withdrawResource` (bank holds 19) | [1, count] | 0 → TC6 (throws) | 1 → TC3 | 19 → TC4 | 20 → TC5 (throws) |
+| `amount` in `depositResource` | [1, 19 − count] | 0 → TC12 (throws) | 1 → TC9 (count 16) | 2 → TC10 (count 17) | 1 → TC11 (count 19, throws) |
+| bank count of one type | [0, 19] | -1: can't set (withdraw throws first, TC5) | 0 → TC4 | 19 → TC1, TC10 | 20: deposit throws, TC11 |
+
+Negative amounts are in the same invalid partition as 0 (the same `amount < 1` check), so they have no separate test.
+
+### Pointers
+
+| Input | Valid value | `null` |
 |---|---|---|
-| `deck` (constructor) | Pointer | a `DevelopmentDeck`; `null` (throws: TC2) |
-| `type` | Cases (enum) + Pointer | any `ResourceCardType`; `null` (throws: TC7, TC13, TC14) |
-| `amount` (withdraw and deposit) | Count | 0 (throws: TC6, TC12), 1, >1. -1 is in the same invalid partition as 0 |
-| bank count of one type, withdraw | Interval [0, 19] | amount = count (TC4), amount = count + 1 (throws: TC5) |
-| bank count of one type, deposit | Interval [0, 19] | count + amount = 19 (TC10), count + amount = 20 (throws: TC11) |
-| other types | Cases | unchanged by a withdraw or deposit of a different type (TC8) |
+| `deck` | a `DevelopmentDeck` → TC1 | TC2 (throws) |
+| `type` | a `ResourceCardType` → TC3–TC13 | TC7, TC13, TC14 (throw) |
+
+### Cases
+
+| Input | Values tested | Why |
+|---|---|---|
+| `type` | all 5 in TC1; `BRICK` elsewhere | every type goes through the same code, so one type stands in for all 5 after setup |
+| other types | `ORE` after withdrawing `BRICK` → TC8 | a change to one type must not change another |
 
 ## Step 4: Test cases
 

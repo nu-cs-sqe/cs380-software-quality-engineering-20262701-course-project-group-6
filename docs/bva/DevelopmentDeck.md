@@ -7,14 +7,42 @@ never returned to the deck.
 The deck takes a `Random` in its constructor, so tests can stub the shuffle (coding standard: inject random
 dependencies). The game passes in a normal `new Random()`.
 
-## Steps 1–3 summary
+## Step 1: Inputs and outputs
 
-| Input / state | Catalog type | Boundary values |
+| | |
+|---|---|
+| **Inputs** | `random` (constructor) |
+| **State** | the cards left in the deck, and their order |
+| **Outputs** | the card returned by `draw()`, the number of cards left, or an exception |
+
+## Steps 2–3: Catalog types and boundary values
+
+For whole numbers, the catalog's "LOW − ε" and "HIGH + ε" are LOW − 1 and HIGH + 1. "Can't set" (catalog term) means
+the code makes that value impossible to reach, so there is nothing to test.
+
+### Intervals
+
+| Input / state | Interval | LOW − 1 | LOW | HIGH | HIGH + 1 |
+|---|---|---|---|---|---|
+| cards left | [0, 25] | -1: drawing from an empty deck throws → TC7 | 0 → TC6 | 25 → TC1 | 26: can't set (nothing adds cards) |
+
+### Collections
+
+| Input / state | Empty | One | Many | Full | Duplicates |
+|---|---|---|---|---|---|
+| cards in the deck | TC7 (draw throws) | TC6 (draw leaves it empty) | TC5 (24 after a draw) | TC1 (25) | TC2 (14 / 5 / 2 / 2 / 2 copies) |
+
+### Pointers
+
+| Input | Valid value | `null` |
 |---|---|---|
-| `random` (constructor) | Pointer | a `Random`; `null` (throws: TC3) |
-| cards in the deck | Collection, Interval [0, 25] | 25 (new deck: TC1), 1 (TC6), 0 (TC7, throws). 26 can't be set: nothing adds cards |
-| deck contents | Collection (duplicates) | 14 / 5 / 2 / 2 / 2 copies of the five `DevCardType` values (TC2) |
-| shuffle | Cases | shuffled order differs from the unshuffled order (TC4) |
+| `random` | a `Random` → TC1, TC4 | TC3 (throws) |
+
+### Cases
+
+| Input / state | Values tested | Why |
+|---|---|---|
+| shuffle | stubbed `Random` → TC4 | shows the deck is shuffled with the `Random` it was given (see below) |
 
 `Collections.shuffle` walks the list from the last card to the second and swaps each with the card at
 `random.nextInt(i)`. With a stub whose `nextInt` always returns 0, every card moves up one place and the first card
