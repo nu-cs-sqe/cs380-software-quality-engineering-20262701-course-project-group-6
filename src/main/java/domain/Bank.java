@@ -27,6 +27,10 @@ public class Bank {
         resources.put(type, count - amount);
     }
 
+    public void depositResource(ResourceCardType type, int amount) {
+        resources.put(type, resources.get(type) + amount);
+    }
+
     public int getResourceCount(ResourceCardType type) {
         return resources.get(type);
     }

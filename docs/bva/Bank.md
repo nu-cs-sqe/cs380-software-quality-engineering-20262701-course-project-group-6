@@ -72,7 +72,7 @@ Negative amounts are in the same invalid partition as 0 (the same `amount < 1` c
 
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
-| TC9  | 16 `BRICK` (3 withdrawn), deposit 1 | 17 `BRICK` | :x: |
+| TC9  | 16 `BRICK` (3 withdrawn), deposit 1 | 17 `BRICK` | :white_check_mark: |
 | TC10 | 17 `BRICK` (2 withdrawn), deposit 2 | 19 `BRICK` (back to the max) | :x: |
 | TC11 | 19 `BRICK`, deposit 1 | `IllegalStateException` with a message naming the type and the max of 19; still 19 `BRICK` | :x: |
 | TC12 | 17 `BRICK`, deposit 0 | `IllegalArgumentException` with a message saying the amount must be at least 1; still 17 `BRICK` | :x: |
