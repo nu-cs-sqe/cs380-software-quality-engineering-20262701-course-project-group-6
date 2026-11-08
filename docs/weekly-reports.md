@@ -49,7 +49,7 @@
 19. [in progress] Ryan: Implementing the Tile, Node, and Edge classes with BVA and TDD (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/20)
 20. [not started] Daniel: Build the beginner board layout in the UI (no PR yet)
 21. [not started] Omar: Ask the professor about the language file approach, integration test scope, and null in private fields (no PR, questions for professor)
-22. [not started] Unassigned: Implement Bank and DevelopmentDeck (no PR yet)
+22. [not started] Omar: Implement Bank and DevelopmentDeck with BVA and TDD (no PR yet)
 
 # One section per week until the last week of class (the week before the Finals week)
 
