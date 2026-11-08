@@ -7,14 +7,15 @@ development card.
 The bank cannot pay out more cards of a type than it has. It also cannot hold more than 19 of a type: since cards only
 move between the bank and the players, a deposit above 19 means a bug somewhere else, so it throws instead of hiding it.
 
-The deck is passed into the constructor. Bank tests use a real `DevelopmentDeck` (coding standard: use the real object
-unless the interaction itself must be verified).
+The bank builds its own `DevelopmentDeck` from a `Random` passed into the constructor. Nothing outside the bank holds
+the deck, so cards can only be drawn through the bank (this also keeps SpotBugs from flagging an outside reference to
+a mutable deck, EI_EXPOSE_REP2). Tests pass a normal `Random`, since the deck itself is tested in `DevelopmentDeck.md`.
 
 ## Step 1: Inputs and outputs
 
 | | |
 |---|---|
-| **Inputs** | `deck` (constructor), `type`, `amount` |
+| **Inputs** | `random` (constructor), `type`, `amount` |
 | **State** | how many cards of each `ResourceCardType` the bank holds |
 | **Outputs** | the bank's new count of that type, the development card returned, or an exception |
 
@@ -37,7 +38,7 @@ Negative amounts are in the same invalid partition as 0 (the same `amount < 1` c
 
 | Input | Valid value | `null` |
 |---|---|---|
-| `deck` | a `DevelopmentDeck` → TC1 | TC2 (throws) |
+| `random` | a `Random` → TC1 | TC2 (throws) |
 | `type` | a `ResourceCardType` → TC3–TC13 | TC7, TC13, TC14 (throw) |
 
 ### Cases
@@ -49,12 +50,12 @@ Negative amounts are in the same invalid partition as 0 (the same `amount < 1` c
 
 ## Step 4: Test cases
 
-### Method under test: `Bank(DevelopmentDeck deck)`
+### Method under test: `Bank(Random random)`
 
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
 | TC1  | new bank | 19 of every `ResourceCardType`; 25 development cards left | :x: |
-| TC2  | `deck` = `null` | `IllegalArgumentException` with a message saying the deck is required | :x: |
+| TC2  | `random` = `null` | `IllegalArgumentException` from the deck, with a message saying a `Random` is required | :x: |
 
 ### Method under test: `withdrawResource(ResourceCardType type, int amount)`
 

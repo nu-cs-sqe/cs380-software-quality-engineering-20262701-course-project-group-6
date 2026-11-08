@@ -156,7 +156,7 @@ Handles game card reserves and initial resource payouts.
   * Maintain the 25-card development card deck.
   * Execute initial resource payouts based on tiles surrounding a player's second settlement.
 * **`Bank` Key Methods:**
-  * `public Bank(DevelopmentDeck deck)`
+  * `public Bank(Random random)`: Builds its own `DevelopmentDeck` with this `Random`, so only the bank can draw from it.
   * `public void withdrawResource(ResourceCardType type, int amount)`: Removes `amount` cards from that pile; throws
     `IllegalStateException` if the bank has fewer than `amount`.
   * `public void depositResource(ResourceCardType type, int amount)`: Returns `amount` cards to that pile (when a
@@ -164,7 +164,7 @@ Handles game card reserves and initial resource payouts.
   * `public int getResourceCount(ResourceCardType type)`
   * `public DevCardType withdrawDevelopmentCard()`: Removes and returns one development card from the top of the pile.
   * `public int getDevelopmentCardsRemaining()`
-  * Throws `IllegalArgumentException` for a null type or deck, or an amount below 1.
+  * Throws `IllegalArgumentException` for a null type or `Random`, or an amount below 1.
 
 
 ---
