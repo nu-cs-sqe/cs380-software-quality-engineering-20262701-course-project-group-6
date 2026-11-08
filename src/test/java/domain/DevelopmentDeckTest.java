@@ -65,4 +65,20 @@ public class DevelopmentDeckTest {
 
         assertEquals(24, deck.getRemainingCount());
     }
+
+    @Test
+    public void Draw_OneCardLeft_NoCardsRemaining() {
+        DevelopmentDeck deck = new DevelopmentDeck(new Random());
+        drawCards(deck, 24);
+
+        deck.draw();
+
+        assertEquals(0, deck.getRemainingCount());
+    }
+
+    private static void drawCards(DevelopmentDeck deck, int count) {
+        for (int cardsDrawn = 0; cardsDrawn < count; cardsDrawn++) {
+            deck.draw();
+        }
+    }
 }
