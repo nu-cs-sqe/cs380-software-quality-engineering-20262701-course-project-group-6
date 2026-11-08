@@ -28,7 +28,12 @@ public class Bank {
     }
 
     public void depositResource(ResourceCardType type, int amount) {
-        resources.put(type, resources.get(type) + amount);
+        int count = resources.get(type);
+        if (count + amount > CARDS_PER_RESOURCE) {
+            throw new IllegalStateException("Bank cannot hold more than " + CARDS_PER_RESOURCE + " " + type
+                    + " (has " + count + ", tried to deposit " + amount + ")");
+        }
+        resources.put(type, count + amount);
     }
 
     public int getResourceCount(ResourceCardType type) {

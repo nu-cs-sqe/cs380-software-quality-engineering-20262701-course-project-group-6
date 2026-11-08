@@ -105,6 +105,17 @@ public class BankTest {
         assertEquals(19, bank.getResourceCount(ResourceCardType.BRICK));
     }
 
+    @Test
+    public void DepositResource_NineteenBricksDepositOne_ThrowsIllegalStateException() {
+        Bank bank = newBank();
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> bank.depositResource(ResourceCardType.BRICK, 1));
+
+        assertEquals("Bank cannot hold more than 19 BRICK (has 19, tried to deposit 1)", exception.getMessage());
+        assertEquals(19, bank.getResourceCount(ResourceCardType.BRICK));
+    }
+
     private static Bank newBank() {
         return new Bank(new Random());
     }
