@@ -116,6 +116,18 @@ public class BankTest {
         assertEquals(19, bank.getResourceCount(ResourceCardType.BRICK));
     }
 
+    @Test
+    public void DepositResource_ZeroAmount_ThrowsIllegalArgumentException() {
+        Bank bank = newBank();
+        bank.withdrawResource(ResourceCardType.BRICK, 2);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> bank.depositResource(ResourceCardType.BRICK, 0));
+
+        assertEquals("Resource amount must be at least 1 (was 0)", exception.getMessage());
+        assertEquals(17, bank.getResourceCount(ResourceCardType.BRICK));
+    }
+
     private static Bank newBank() {
         return new Bank(new Random());
     }
