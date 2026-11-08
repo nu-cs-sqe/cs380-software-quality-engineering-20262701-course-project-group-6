@@ -1,8 +1,10 @@
 package domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Random;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
@@ -15,6 +17,13 @@ public class BankTest {
 
         assertEquals(19, bank.getResourceCount(type));
         assertEquals(25, bank.getDevelopmentCardsRemaining());
+    }
+
+    @Test
+    public void Constructor_NullRandom_ThrowsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new Bank(null));
+
+        assertEquals("Random is required to shuffle the development deck", exception.getMessage());
     }
 
     private static Bank newBank() {
