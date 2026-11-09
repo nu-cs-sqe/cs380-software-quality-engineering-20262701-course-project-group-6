@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class Node {
+    private static final int MAX_NODE_ID = 53;
     private final int id;
     private final HarborType harborType;
     private final List<Edge> incidentEdges;
@@ -12,7 +13,7 @@ public class Node {
     private PlayerColor buildingColor;
 
     public Node(int id, HarborType harborType) {
-        if (id >= 0) {
+        if (id >= 0 && id <= MAX_NODE_ID) {
             this.id = id;
         } else {
             throw new IllegalArgumentException("ID must be between 0 and 53");

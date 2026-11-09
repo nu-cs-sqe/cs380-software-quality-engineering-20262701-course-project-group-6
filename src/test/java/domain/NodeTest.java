@@ -37,4 +37,10 @@ public class NodeTest {
         assertEquals("ID must be between 0 and 53", exception.getMessage());
     }
 
+    @Test
+    public void Node_Id54_ThrowsIllegalArgumentException() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> new Node(54, HarborType.NONE));
+        assertEquals("ID must be between 0 and 53", exception.getMessage());
+    }
+
 }
