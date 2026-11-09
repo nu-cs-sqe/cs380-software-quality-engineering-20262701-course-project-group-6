@@ -21,4 +21,12 @@ public class NodeTest {
         assertEquals(Optional.empty(), node.getBuildingColor());
         assertFalse(node.isOccupied());
     }
+
+    @Test
+    public void Node_Id53HarborGeneric_InitializesCorrectly() {
+        Node node = new Node(53, HarborType.GENERIC_THREE_FOR_ONE);
+
+        assertEquals(53, node.getId());
+        assertEquals(HarborType.GENERIC_THREE_FOR_ONE, node.getHarborType());
+    }
 }
