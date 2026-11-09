@@ -175,6 +175,107 @@ Used later to check whether a player holds more than 7 cards when a 7 is rolled.
 | TC30 | new player | 0 | :white_check_mark: |
 | TC31 | 2 `BRICK` and 1 of each other type | 6 (sum across all types) | :white_check_mark: |
 
-## Next section (to be added before that code is written)
+## Development cards
 
-Development cards: `collectDevCard`, `useDevCard`, `getDevCardCount`.
+Rules (rulebook):
+- A player may play at most one development card per turn.
+- A card cannot be played on the turn it was bought.
+- Victory Point cards are never played. Each one counts 1 point while it is held, so it counts on the turn it is
+  bought (that is how a player "reveals" them to win). The UI hides them from the other players.
+- Playing a Knight adds 1 to the player's army (for Largest Army later). What Road Building, Year of Plenty, and
+  Monopoly do is handled by `GameSession`; `Player` only removes the card.
+
+`Player` keeps cards bought this turn apart from cards it can play. `endTurn()` makes this turn's cards playable and
+resets the one-card-per-turn limit. Cards are bought and played one at a time, so there is no `amount` parameter
+(team decision 11/08).
+
+### Steps 2–3: Catalog types and boundary values (development cards)
+
+#### Counts
+
+| State | 0 | 1 | >1 |
+|---|---|---|---|
+| playable copies of the card being played | TC41 (throws) | TC38 (leaves 0) | TC39 (leaves 1) |
+| copies of one type held (`getDevCardCount`) | TC36 | TC32 | TC33 |
+| Victory Point cards held | TC14 (2 points from pieces only) | TC49 (3 points) | TC50 (4 points) |
+| knights played | TC48 | TC38 | TC47 |
+
+There is no upper limit in `Player`: the deck only has 25 cards, so the deck enforces it (`DevelopmentDeck.md` TC7).
+
+#### Collections
+
+| State | Empty | One | Many |
+|---|---|---|---|
+| development cards held | TC36 | TC32 | TC33 (same type), TC50 (bought on different turns) |
+
+#### Pointers
+
+| Input | Valid value | `null` |
+|---|---|---|
+| `type` | a `DevCardType` → TC32–TC50 | TC35, TC37, TC44 (throw) |
+
+#### Cases
+
+| Input / state | Values tested | Why |
+|---|---|---|
+| `type` played | `KNIGHT` → TC38; `MONOPOLY` → TC45; `VICTORY_POINT` → TC43 (throws) | a Knight adds to the army, the other progress cards do not, and VP cards can never be played. `ROAD_BUILDING` and `YEAR_OF_PLENTY` go through the same code as `MONOPOLY` |
+| when the card was bought | earlier turn → TC38; this turn → TC40 (throws); one of each → TC46 | a card bought this turn cannot be played yet |
+| card already played this turn | no → TC38; yes → TC42 (throws); yes, then `endTurn()` → TC47 | one card per turn, reset at the end of the turn |
+| other types | `MONOPOLY` after collecting a `KNIGHT` → TC34 | a change to one type must not change another |
+
+### Method under test: `collectDevCard(DevCardType type)`
+
+|      | State of the System | Expected output | Implemented? |
+|------|---------------------|-----------------|--------------|
+| TC32 | new player, collect a `KNIGHT` | 1 `KNIGHT` | :x: |
+| TC33 | 1 `KNIGHT`, collect a `KNIGHT` | 2 `KNIGHT` (added, not replaced) | :x: |
+| TC34 | new player, collect a `KNIGHT` | 0 `MONOPOLY` (other types unchanged) | :x: |
+| TC35 | `type` = `null` | `IllegalArgumentException` with a message saying the development card type is required | :x: |
+
+### Method under test: `getDevCardCount(DevCardType type)`
+
+Counts every copy the player holds, whether it was bought this turn or earlier.
+
+|      | State of the System | Expected output | Implemented? |
+|------|---------------------|-----------------|--------------|
+| TC36 | new player | 0 for every `DevCardType` | :x: |
+| TC37 | `type` = `null` | `IllegalArgumentException` with a message saying the development card type is required | :x: |
+
+### Method under test: `useDevCard(DevCardType type)`
+
+"Earlier turn" means the card was collected and then `endTurn()` was called.
+
+|      | State of the System | Expected output | Implemented? |
+|------|---------------------|-----------------|--------------|
+| TC38 | 1 `KNIGHT` from an earlier turn, use `KNIGHT` | 0 `KNIGHT`; 1 knight played | :x: |
+| TC39 | 2 `KNIGHT` from an earlier turn, use `KNIGHT` | 1 `KNIGHT` left | :x: |
+| TC40 | 1 `KNIGHT` bought this turn, use `KNIGHT` | `IllegalStateException` with a message saying a card cannot be played the turn it was bought; still 1 `KNIGHT` | :x: |
+| TC41 | no `MONOPOLY`, use `MONOPOLY` | `IllegalStateException` with a message naming the color and the type; still 0 `MONOPOLY` | :x: |
+| TC42 | 2 `KNIGHT` from an earlier turn, one already used this turn, use `KNIGHT` again | `IllegalStateException` with a message saying only one card can be played per turn; still 1 `KNIGHT`; 1 knight played | :x: |
+| TC43 | 1 `VICTORY_POINT` from an earlier turn, use `VICTORY_POINT` | `IllegalArgumentException` with a message saying Victory Point cards are never played; still 1 `VICTORY_POINT` | :x: |
+| TC44 | `type` = `null` | `IllegalArgumentException` with a message saying the development card type is required | :x: |
+| TC45 | 1 `MONOPOLY` from an earlier turn, use `MONOPOLY` | 0 `MONOPOLY`; 0 knights played (only Knights add to the army) | :x: |
+| TC46 | 1 `KNIGHT` from an earlier turn and 1 bought this turn, use `KNIGHT` | succeeds; 1 `KNIGHT` left (the new one) | :x: |
+
+### Method under test: `endTurn()`
+
+|      | State of the System | Expected output | Implemented? |
+|------|---------------------|-----------------|--------------|
+| TC47 | 2 `KNIGHT` from an earlier turn, use one, `endTurn()`, use the other | succeeds; 0 `KNIGHT`; 2 knights played (the limit resets) | :x: |
+
+Making this turn's cards playable is checked in TC38 (and TC40 shows they are not playable before `endTurn()`).
+
+### Method under test: `getKnightsPlayed()`
+
+|      | State of the System | Expected output | Implemented? |
+|------|---------------------|-----------------|--------------|
+| TC48 | new player | 0 | :x: |
+
+Also checked in TC38, TC42, TC45, and TC47.
+
+### Method under test: `getVictoryPointCount()` (Victory Point cards)
+
+|      | State of the System | Expected output | Implemented? |
+|------|---------------------|-----------------|--------------|
+| TC49 | new player, collect a `VICTORY_POINT` this turn | 3 (2 settlements + 1 card; counts the turn it is bought) | :x: |
+| TC50 | new player, 1 `VICTORY_POINT` from an earlier turn and 1 bought this turn | 4 | :x: |
