@@ -61,4 +61,16 @@ public class NodeTest {
         assertEquals(1, edges.size());
         assertEquals(edge, edges.get(0));
     }
+
+    @Test
+    public void addIncidentEdge_DuplicateEdge_ThrowsIllegalArgumentException() {
+        Node node1 = new Node(0, HarborType.NONE);
+        Node node2 = new Node(1, HarborType.NONE);
+        Edge edge = new Edge(0, node1, node2);
+
+        node1.addIncidentEdge(edge);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> node1.addIncidentEdge(edge));
+        assertTrue(exception.getMessage().contains("Edge cannot be duplicate, already added"));
+    }
 }
