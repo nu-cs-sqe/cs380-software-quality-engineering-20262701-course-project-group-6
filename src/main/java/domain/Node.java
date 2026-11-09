@@ -12,7 +12,11 @@ public class Node {
     private PlayerColor buildingColor;
 
     public Node(int id, HarborType harborType) {
-        this.id = id;
+        if (id >= 0) {
+            this.id = id;
+        } else {
+            throw new IllegalArgumentException("ID must be between 0 and 53");
+        }
         this.harborType = harborType;
         this.incidentEdges = new ArrayList<>();
         this.buildingType = BuildingType.NONE;

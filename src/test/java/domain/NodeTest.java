@@ -3,6 +3,7 @@ package domain;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -29,4 +30,11 @@ public class NodeTest {
         assertEquals(53, node.getId());
         assertEquals(HarborType.GENERIC_THREE_FOR_ONE, node.getHarborType());
     }
+
+    @Test
+    public void Node_IdMinus1_ThrowsIllegalArgumentException() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> new Node(-1, HarborType.NONE));
+        assertEquals("ID must be between 0 and 53", exception.getMessage());
+    }
+
 }
