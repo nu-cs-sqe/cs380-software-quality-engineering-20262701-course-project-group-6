@@ -25,26 +25,26 @@ Callers can inspect the topology via getters and check if a road exists via `isO
 
 |  | State of the System | Expected output | Implemented? | 
 | ----- | ----- | ----- | ----- | 
-| TC1 | `id` = 0, `node1` = valid `Node`, `node2` = valid `Node` | `getEdgeId()` = 0, endpoints match inputs, `getRoadColor()` = `Optional.empty()`, `isOccupied()` = `false` | :x: | 
-| TC2 | `id` = 71, `node1` = valid `Node`, `node2` = valid `Node` | `getEdgeId()` = 71, endpoints match inputs, `getRoadColor()` = `Optional.empty()`, `isOccupied()` = `false` | :x: | 
-| TC3 | `id` = -1, `node1` = valid `Node`, `node2` = valid `Node` | `IllegalArgumentException` with a message saying id is out of bounds | :x: | 
-| TC4 | `id` = 72, `node1` = valid `Node`, `node2` = valid `Node` | `IllegalArgumentException` with a message saying id is out of bounds | :x: | 
-| TC5 | `id` = 0, `node1` = `null`, `node2` = valid `Node` | `IllegalArgumentException` with a message saying endpoint `node1` cannot be null | :x: | 
-| TC6 | `id` = 0, `node1` = valid `Node`, `node2` = `null` | `IllegalArgumentException` with a message saying endpoint `node2` cannot be null | :x: | 
+| TC1 | `id` = 0, `node1` = valid `Node`, `node2` = valid `Node` | `getEdgeId()` = 0, endpoints match inputs, `getRoadColor()` = `Optional.empty()`, `isOccupied()` = `false` | :white_check_mark: | 
+| TC2 | `id` = 71, `node1` = valid `Node`, `node2` = valid `Node` | `getEdgeId()` = 71, endpoints match inputs, `getRoadColor()` = `Optional.empty()`, `isOccupied()` = `false` | :white_check_mark: | 
+| TC3 | `id` = -1, `node1` = valid `Node`, `node2` = valid `Node` | `IllegalArgumentException` with a message saying id is out of bounds | :white_check_mark: | 
+| TC4 | `id` = 72, `node1` = valid `Node`, `node2` = valid `Node` | `IllegalArgumentException` with a message saying id is out of bounds | :white_check_mark: | 
+| TC5 | `id` = 0, `node1` = `null`, `node2` = valid `Node` | `IllegalArgumentException` with a message saying endpoint `node1` cannot be null | :white_check_mark: | 
+| TC6 | `id` = 0, `node1` = valid `Node`, `node2` = `null` | `IllegalArgumentException` with a message saying endpoint `node2` cannot be null | :white_check_mark: | 
 
 ### Method under test: `setRoadColor(PlayerColor roadColor)` & `getRoadColor()`
 
 |  | State of the System | Expected output | Implemented? | 
 | ----- | ----- | ----- | ----- | 
-| TC7 | new edge (`roadColor` = `null`), call `setRoadColor(PlayerColor.BLUE)` | `getRoadColor()` returns `Optional.of(PlayerColor.BLUE)` | :x: | 
-| TC8 | new edge (`roadColor` = `null`), call `setRoadColor(null)` | `IllegalArgumentException` with a message saying `roadColor` cannot be null | :x: | 
+| TC7 | new edge (`roadColor` = `null`), call `setRoadColor(PlayerColor.BLUE)` | `getRoadColor()` returns `Optional.of(PlayerColor.BLUE)` | :white_check_mark: | 
+| TC8 | new edge (`roadColor` = `null`), call `setRoadColor(null)` | `IllegalArgumentException` with a message saying `roadColor` cannot be null | :white_check_mark: | 
 
 ### Method under test: `isOccupied()`
 
 |  | State of the System | Expected output | Implemented? | 
 | ----- | ----- | ----- | ----- | 
-| TC9 | `roadColor` = `null` (default state) | `false` | :x: | 
-| TC10 | `roadColor` = `PlayerColor.BLUE` | `true` | :x: | 
+| TC9 | `roadColor` = `null` (default state) | `false` | :white_check_mark: | 
+| TC10 | `roadColor` = `PlayerColor.BLUE` | `true` | :white_check_mark: | 
 
 ### Methods under test: `getEdgeId()`, `getNode1()`, `getNode2()`
 
