@@ -49,4 +49,8 @@ public class Node {
     public boolean isOccupied() {
         return buildingType != BuildingType.NONE;
     }
+
+    void addIncidentEdge(Edge incidentEdge) {
+        incidentEdges.add(incidentEdge);
+    }
 }

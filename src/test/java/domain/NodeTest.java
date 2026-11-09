@@ -48,4 +48,17 @@ public class NodeTest {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> new Node(0, null));
         assertTrue(exception.getMessage().contains("harborType cannot be null"));
     }
+
+    @Test
+    public void addIncidentEdge_ValidNewEdge_AddsEdgeToList() {
+        Node node1 = new Node(0, HarborType.NONE);
+        Node node2 = new Node(1, HarborType.NONE);
+        Edge edge = new Edge(0, node1, node2);
+
+        node1.addIncidentEdge(edge);
+
+        List<Edge> edges = node1.getIncidentEdges();
+        assertEquals(1, edges.size());
+        assertEquals(edge, edges.get(0));
+    }
 }
