@@ -135,12 +135,16 @@ Encapsulates Catan's hexagonal board topology using an intersection/edge graph r
   * `Tile`: Holds `ResourceCardType` (`LUMBER`, `WOOL`, `GRAIN`, `BRICK`, `ORE`) or unassigned (`null`) for the desert tile, `int diceNumber`, `int tileId`,  and bounded `Node` references.
   * **`BuildingType` (Enum)**: `NONE`, `SETTLEMENT`, `CITY`.
   * **`HarborType` (Enum)**: `NONE`, `GENERIC_THREE_FOR_ONE`, `LUMBER_TWO_FOR_ONE`, `WOOL_TWO_FOR_ONE`, `GRAIN_TWO_FOR_ONE`, `BRICK_TWO_FOR_ONE`, `ORE_TWO_FOR_ONE`.
-  * **`Node` (Intersections)**: Holds `int nodeId`, incident `Edge` references, neighboring `Tile` references, `BuildingType buildingType` (default `NONE`), `PlayerColor owner` (`null` when vacant), and `HarborType harborType` (default `NONE`).
-
+  
 * **`Edge` Subcomponent (Paths):**
   * State: Holds `int id`, the two fixed endpoint `Node` references (node1, node2), and `PlayerColor roadColor` (`null` when no road is built).   
   * Encapsulation Strategy: The `setRoadColor` mutator is package-private to restrict placement logic exclusively to `GameBoard`.
   * Accessors: Exposes public getters for its fields and provides topological helper method `public boolean isOccupied()`.
+
+* **`Node` Subcomponent (Intersection):**
+  * State: Holds `int id`, a collection of incident `Edge` references, `BuildingType buildingType` (default `NONE`), `PlayerColor buildingColor` (`null` when vacant), and `HarborType harborType` (default `NONE`).
+  * Encapsulation Strategy: The `setBuildingType`, `setBuildingColor`, and `addIncidentEdge` mutators are package-private to restrict setup and placement logic exclusively to `GameBoard`.
+  * Accessors: Exposes public getters for its fields (using `List.copyOf()` for the edge collection to prevent external modification) and provides topological helper method `public boolean isOccupied()`.
 
 ---
 
