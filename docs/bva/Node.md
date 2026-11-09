@@ -22,19 +22,19 @@ Callers can inspect the topology via getters (which return immutable copies of c
 
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
-| TC1  | `id` = 0, `harborType` = `NONE` | `getId()` = 0, `getHarborType()` = `NONE`, `getIncidentEdges()` is empty, `getBuildingColor()` = `Optional.empty()`, `isOccupied()` = `false` | :x: |
-| TC2  | `id` = 53, `harborType` = `GENERIC_THREE_FOR_ONE` | `getId()` = 53, `getHarborType()` = `GENERIC_THREE_FOR_ONE` | :x: |
-| TC3  | `id` = -1, `harborType` = `NONE` | `IllegalArgumentException` with a message saying id is out of bounds | :x: |
-| TC4  | `id` = 54, `harborType` = `NONE` | `IllegalArgumentException` with a message saying id is out of bounds | :x: |
-| TC5  | `id` = 0, `harborType` = `null` | `IllegalArgumentException` with a message saying harborType cannot be null | :x: |
+| TC1  | `id` = 0, `harborType` = `NONE` | `getId()` = 0, `getHarborType()` = `NONE`, `getIncidentEdges()` is empty, `getBuildingColor()` = `Optional.empty()`, `isOccupied()` = `false` | :white_check_mark: |
+| TC2  | `id` = 53, `harborType` = `GENERIC_THREE_FOR_ONE` | `getId()` = 53, `getHarborType()` = `GENERIC_THREE_FOR_ONE` | :white_check_mark: |
+| TC3  | `id` = -1, `harborType` = `NONE` | `IllegalArgumentException` with a message saying id is out of bounds | :white_check_mark: |
+| TC4  | `id` = 54, `harborType` = `NONE` | `IllegalArgumentException` with a message saying id is out of bounds | :white_check_mark: |
+| TC5  | `id` = 0, `harborType` = `null` | `IllegalArgumentException` with a message saying harborType cannot be null | :white_check_mark: |
 
 ### Method under test: `addIncidentEdge(Edge edge)`
 
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
-| TC6  | Node has 0 edges, add valid new `Edge` | `getIncidentEdges()` returns list of size 1 containing the edge | :x: |
-| TC7  | Node has 1 edge, add the *same* `Edge` again | `IllegalArgumentException` with a message saying that the edge was already added | :x: |
-| TC8  | Node has 0 edge, add `null` edge | `IllegalArgumentException` with a message saying that edge cannot be null, `getIncidentEdges()` returns empty list | :x: |
+| TC6  | Node has 0 edges, add valid new `Edge` | `getIncidentEdges()` returns list of size 1 containing the edge | :white_check_mark: |
+| TC7  | Node has 1 edge, add the *same* `Edge` again | `IllegalArgumentException` with a message saying that the edge was already added | :white_check_mark: |
+| TC8  | Node has 0 edge, add `null` edge | `IllegalArgumentException` with a message saying that edge cannot be null, `getIncidentEdges()` returns empty list | :white_check_mark: |
 
 ### Methods under test: `setBuildingType(BuildingType)`, `setBuildingColor(PlayerColor)` & `getBuildingColor()`
 

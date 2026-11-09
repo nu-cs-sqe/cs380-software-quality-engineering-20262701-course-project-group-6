@@ -51,9 +51,14 @@ public class Node {
     }
 
     void addIncidentEdge(Edge incidentEdge) {
+        if (incidentEdge == null) {
+            throw new IllegalArgumentException("Edge cannot be null");
+        }
+
         if (incidentEdges.contains(incidentEdge)) {
             throw new IllegalArgumentException("Edge cannot be duplicate, already added");
         }
+
         incidentEdges.add(incidentEdge);
     }
 }

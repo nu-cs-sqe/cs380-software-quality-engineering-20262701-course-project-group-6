@@ -73,4 +73,13 @@ public class NodeTest {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> node1.addIncidentEdge(edge));
         assertTrue(exception.getMessage().contains("Edge cannot be duplicate, already added"));
     }
+
+    @Test
+    public void addIncidentEdge_NullEdge_ThrowsIllegalArgumentException() {
+        Node node = new Node(0, HarborType.NONE);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> node.addIncidentEdge(null));
+        assertTrue(exception.getMessage().contains("Edge cannot be null"));
+        assertTrue(node.getIncidentEdges().isEmpty());
+    }
 }
