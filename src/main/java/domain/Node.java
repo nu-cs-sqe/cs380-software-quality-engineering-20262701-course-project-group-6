@@ -18,7 +18,13 @@ public class Node {
         } else {
             throw new IllegalArgumentException("ID must be between 0 and 53");
         }
-        this.harborType = harborType;
+
+        if (harborType != null) {
+            this.harborType = harborType;
+        } else {
+            throw new IllegalArgumentException("harborType cannot be null");
+        }
+
         this.incidentEdges = new ArrayList<>();
         this.buildingType = BuildingType.NONE;
         this.buildingColor = null;

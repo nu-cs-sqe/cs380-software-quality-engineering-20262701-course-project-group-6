@@ -43,4 +43,9 @@ public class NodeTest {
         assertEquals("ID must be between 0 and 53", exception.getMessage());
     }
 
+    @Test
+    public void Node_HarborNull_ThrowsIllegalArgumentException() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> new Node(0, null));
+        assertTrue(exception.getMessage().contains("harborType cannot be null"));
+    }
 }
