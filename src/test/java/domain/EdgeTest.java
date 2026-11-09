@@ -13,8 +13,8 @@ public class EdgeTest {
 
     @Test
     public void Edge_ValidInputs_InitializesCorrectly() {
-        Node node1 = new Node();
-        Node node2 = new Node();
+        Node node1 = new Node(0, HarborType.NONE);
+        Node node2 = new Node(1, HarborType.NONE);
         Edge edge = new Edge(0, node1, node2);
 
         assertEquals(0, edge.getId());
@@ -26,8 +26,8 @@ public class EdgeTest {
 
     @Test
     public void Edge_Id71_InitializesCorrectly() {
-        Node node1 = new Node();
-        Node node2 = new Node();
+        Node node1 = new Node(0, HarborType.NONE);
+        Node node2 = new Node(1, HarborType.NONE);
         Edge edge = new Edge(71, node1, node2);
 
         assertEquals(71, edge.getId());
@@ -35,8 +35,8 @@ public class EdgeTest {
 
     @Test
     public void Edge_IdMinusOne_ThrowsIllegalArgumentException() {
-        Node node1 = new Node();
-        Node node2 = new Node();
+        Node node1 = new Node(0, HarborType.NONE);
+        Node node2 = new Node(1, HarborType.NONE);
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> new Edge(-1, node1, node2));
 
@@ -45,8 +45,8 @@ public class EdgeTest {
 
     @Test
     public void Edge_Id72_ThrowsIllegalArgumentException() {
-        Node node1 = new Node();
-        Node node2 = new Node();
+        Node node1 = new Node(0, HarborType.NONE);
+        Node node2 = new Node(1, HarborType.NONE);
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> new Edge(72, node1, node2));
 
@@ -55,7 +55,7 @@ public class EdgeTest {
 
     @Test
     public void Edge_Node1Null_ThrowsIllegalArgumentException() {
-        Node node2 = new Node();
+        Node node2 = new Node(1, HarborType.NONE);
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> new Edge(0, null, node2));
 
@@ -64,7 +64,7 @@ public class EdgeTest {
 
     @Test
     public void Edge_Node2Null_ThrowsIllegalArgumentException() {
-        Node node1 = new Node();
+        Node node1 = new Node(0, HarborType.NONE);
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> new Edge(0, node1, null));
 
@@ -73,7 +73,7 @@ public class EdgeTest {
 
     @Test
     public void setRoadColor_ValidColor_UpdatesRoadColor() {
-        Edge edge = new Edge(0, new Node(), new Node());
+        Edge edge = new Edge(0, new Node(0, HarborType.NONE), new Node(1, HarborType.NONE));
 
         edge.setRoadColor(PlayerColor.BLUE);
 
@@ -82,7 +82,7 @@ public class EdgeTest {
 
     @Test
     public void setRoadColor_null_ThrowsIllegalArgumentException() {
-        Edge edge = new Edge(0, new Node(), new Node());
+        Edge edge = new Edge(0, new Node(0, HarborType.NONE), new Node(1, HarborType.NONE));
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> edge.setRoadColor(null));
 
@@ -91,14 +91,14 @@ public class EdgeTest {
 
     @Test
     public void isOccupied_RoadColorNull_ReturnsFalse() {
-        Edge edge = new Edge(0, new Node(), new Node());
+        Edge edge = new Edge(0, new Node(0, HarborType.NONE), new Node(1, HarborType.NONE));
 
         assertFalse(edge.isOccupied());
     }
 
     @Test
     public void isOccupied_RoadColorAssigned_ReturnsTrue() {
-        Edge edge = new Edge(0, new Node(), new Node());
+        Edge edge = new Edge(0, new Node(0, HarborType.NONE), new Node(1, HarborType.NONE));
         edge.setRoadColor(PlayerColor.BLUE);
 
         assertTrue(edge.isOccupied());
