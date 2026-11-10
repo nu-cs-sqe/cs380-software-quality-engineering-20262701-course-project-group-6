@@ -42,6 +42,10 @@ public class Node {
         return incidentEdges;
     }
 
+    public BuildingType getBuildingType() {
+        return buildingType;
+    }
+
     public Optional<PlayerColor> getBuildingColor() {
         return Optional.ofNullable(buildingColor);
     }
@@ -60,5 +64,13 @@ public class Node {
         }
 
         incidentEdges.add(incidentEdge);
+    }
+
+    void setBuildingType(BuildingType buildingType) {
+        this.buildingType = buildingType;
+    }
+
+    void setBuildingColor(PlayerColor buildingColor) {
+        this.buildingColor = buildingColor;
     }
 }

@@ -82,4 +82,15 @@ public class NodeTest {
         assertTrue(exception.getMessage().contains("Edge cannot be null"));
         assertTrue(node.getIncidentEdges().isEmpty());
     }
+
+    @Test
+    public void setBuildingTypeAndColor_ValidInputs_UpdatesState() {
+        Node node = new Node(0, HarborType.NONE);
+
+        node.setBuildingType(BuildingType.SETTLEMENT);
+        node.setBuildingColor(PlayerColor.BLUE);
+
+        assertEquals(BuildingType.SETTLEMENT, node.getBuildingType());
+        assertEquals(Optional.of(PlayerColor.BLUE), node.getBuildingColor());
+    }
 }
