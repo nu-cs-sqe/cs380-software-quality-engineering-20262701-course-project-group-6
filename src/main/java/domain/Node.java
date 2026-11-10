@@ -67,7 +67,11 @@ public class Node {
     }
 
     void setBuildingType(BuildingType buildingType) {
-        this.buildingType = buildingType;
+        if (buildingType != null) {
+            this.buildingType = buildingType;
+        } else {
+            throw new IllegalArgumentException("buildingType cannot be null");
+        }
     }
 
     void setBuildingColor(PlayerColor buildingColor) {

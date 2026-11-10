@@ -101,4 +101,11 @@ public class NodeTest {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> node.setBuildingColor(null));
         assertEquals("buildingColor cannot be null", exception.getMessage());
     }
+
+    @Test
+    public void setBuildingType_Null_ThrowsIllegalArgumentException() {
+        Node node = new Node(0, HarborType.NONE);
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> node.setBuildingType(null));
+        assertEquals("buildingType cannot be null", exception.getMessage());
+    }
 }
