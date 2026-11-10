@@ -85,27 +85,12 @@ public class NodeTest {
     }
 
     @Test
-    public void setBuildingTypeAndColor_ValidInputs_UpdatesState() {
+    public void placeBuilding_ValidInputs_UpdatesState() {
         Node node = new Node(0, HarborType.NONE);
 
-        node.setBuildingType(BuildingType.SETTLEMENT);
-        node.setBuildingColor(PlayerColor.BLUE);
+        node.placeBuilding(BuildingType.SETTLEMENT, PlayerColor.BLUE);
 
         assertEquals(BuildingType.SETTLEMENT, node.getBuildingType());
         assertEquals(Optional.of(PlayerColor.BLUE), node.getBuildingColor());
-    }
-
-    @Test
-    public void setBuildingColor_Null_ThrowsIllegalArgumentException() {
-        Node node = new Node(0, HarborType.NONE);
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> node.setBuildingColor(null));
-        assertEquals("buildingColor cannot be null", exception.getMessage());
-    }
-
-    @Test
-    public void setBuildingType_Null_ThrowsIllegalArgumentException() {
-        Node node = new Node(0, HarborType.NONE);
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> node.setBuildingType(null));
-        assertEquals("buildingType cannot be null", exception.getMessage());
     }
 }

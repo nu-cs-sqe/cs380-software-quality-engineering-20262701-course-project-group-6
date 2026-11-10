@@ -66,19 +66,8 @@ public class Node {
         incidentEdges.add(incidentEdge);
     }
 
-    void setBuildingType(BuildingType buildingType) {
-        if (buildingType != null) {
-            this.buildingType = buildingType;
-        } else {
-            throw new IllegalArgumentException("buildingType cannot be null");
-        }
-    }
-
-    void setBuildingColor(PlayerColor buildingColor) {
-        if (buildingColor != null) {
-            this.buildingColor = buildingColor;
-        } else {
-            throw new IllegalArgumentException("buildingColor cannot be null");
-        }
+    void placeBuilding(BuildingType buildingType, PlayerColor buildingColor) {
+        this.buildingType = buildingType;
+        this.buildingColor = buildingColor;
     }
 }
