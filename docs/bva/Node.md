@@ -47,8 +47,8 @@ Callers can inspect the topology via getters (which return immutable copies of c
 ### Method under test: `getIncidentEdges()`
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
-| TC12 | Node has 1 edge, call `getIncidentEdges()`, then call `.clear()` on returned list | `UnsupportedOperationException` is thrown (proves immutability) | :x |
-| TC13 | Node has 1 edge, call `getIncidentEdges()` to get snapshot copy, then call `addIncidentEdge()` with a new edge | Snapshot copy size remains 1, new call to `getIncidentEdges().size()` returns 2 (proves disconnected copy) | :x: |
+| TC12 | Node has 1 edge, call `getIncidentEdges()`, then call `.clear()` on returned list | `UnsupportedOperationException` is thrown (proves immutability) | :white_check_mark: |
+| TC13 | Node has 1 edge, call `getIncidentEdges()` to get snapshot copy, then call `addIncidentEdge()` with a new edge | Snapshot copy size remains 1, new call to `getIncidentEdges().size()` returns 2 (proves disconnected copy) | :white_check_mark: |
 
 ### Methods under test: `getId()`, `getHarborType()`, `getBuildingType()`
 

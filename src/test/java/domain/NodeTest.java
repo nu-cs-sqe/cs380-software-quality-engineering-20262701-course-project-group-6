@@ -127,4 +127,20 @@ public class NodeTest {
 
         Exception exception = assertThrows(UnsupportedOperationException.class, () -> retrievedEdges.clear());
     }
+
+    @Test
+    public void getIncidentEdges_InternalStateChanges_DoesNotAffectPreviousCopy() {
+        Node node = new Node(0, HarborType.NONE);
+        Edge edge1 = new Edge(0, node, new Node(1, HarborType.NONE));
+        node.addIncidentEdge(edge1);
+
+        List<Edge> snapshot = node.getIncidentEdges();
+        assertEquals(1, snapshot.size());
+
+        Edge edge2 = new Edge(1, node, new Node(2, HarborType.NONE));
+        node.addIncidentEdge(edge2);
+
+        assertEquals(1, snapshot.size());
+        assertEquals(2, node.getIncidentEdges().size());
+    }
 }
