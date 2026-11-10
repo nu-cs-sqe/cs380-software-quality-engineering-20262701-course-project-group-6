@@ -36,21 +36,14 @@ Callers can inspect the topology via getters (which return immutable copies of c
 | TC7  | Node has 1 edge, add the *same* `Edge` again | `IllegalArgumentException` with a message saying that the edge was already added | :white_check_mark: |
 | TC8  | Node has 0 edge, add `null` edge | `IllegalArgumentException` with a message saying that edge cannot be null, `getIncidentEdges()` returns empty list | :white_check_mark: |
 
-### Methods under test: `placeBuilding(BuildingType, BuildingColor)`, `getBuildingColor()`, & `getBuildingType`
+### Methods under test: `placeBuilding(BuildingType, BuildingColor)`, `getBuildingColor()`, `getBuildingType`, & `isOccupied`
 
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
-| TC9  | new node, call `placeBuilding(BuildingType.SETTLEMENT, PlayerColor.BLUE)` | `getBuildingType()` returns `SETTLEMENT`, `getBuildingColor()` returns `Optional.of(PlayerColor.BLUE)` | :x: |
-| TC10 | new node, call `placeBuilding(BuildingType.SETTLEMENT, null` | `IllegalArgumentException` with a message saying buildingColor cannot be null | :x: |
-| TC11 | new node, call `placeBuilding(null, PlayerColor.BLUE)` | `IllegalArgumentException` with a message saying buildingType cannot be null | :x: |
+| TC9  | new node, call `placeBuilding(BuildingType.SETTLEMENT, PlayerColor.BLUE)` | `getBuildingType()` returns `SETTLEMENT`, `getBuildingColor()` returns `Optional.of(PlayerColor.BLUE)`, `isOccupied()` returns `true` | :white_check_mark |
+| TC10 | new node, call `placeBuilding(BuildingType.SETTLEMENT, null` | `IllegalArgumentException` with a message saying buildingColor cannot be null | :white_check_mark: |
+| TC11 | new node, call `placeBuilding(null, PlayerColor.BLUE)` | `IllegalArgumentException` with a message saying buildingType cannot be null | :white_check_mark: |
 
-### Method under test: `isOccupied()`
-
-|      | State of the System | Expected output | Implemented? |
-|------|---------------------|-----------------|--------------|
-| TC12 | `buildingType` = `NONE`, `buildingColor` = `null` (default) | `false` | :x: |
-| TC13 | `buildingType` = `SETTLEMENT`, `buildingColor` = `PlayerColor.BLUE` | `true` | :x: |
-
-### Methods under test: `getId()`, `getHarborType()`, `getBuildingType()`, `getIncidentEdges()`
+### Methods under test: `getId()`, `getHarborType()`, `getBuildingType()`
 
 Simple getters. They are verified as part of the constructor boundary and state initialization tests, as well as the edge addition tests.

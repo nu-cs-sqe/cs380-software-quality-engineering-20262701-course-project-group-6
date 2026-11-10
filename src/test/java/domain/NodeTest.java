@@ -92,6 +92,7 @@ public class NodeTest {
 
         assertEquals(BuildingType.SETTLEMENT, node.getBuildingType());
         assertEquals(Optional.of(PlayerColor.BLUE), node.getBuildingColor());
+        assertTrue(node.isOccupied());
     }
 
     @Test
