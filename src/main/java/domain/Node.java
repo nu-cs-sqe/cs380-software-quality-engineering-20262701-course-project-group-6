@@ -39,7 +39,7 @@ public class Node {
     }
 
     public List<Edge> getIncidentEdges() {
-        return incidentEdges;
+        return List.copyOf(incidentEdges);
     }
 
     public BuildingType getBuildingType() {

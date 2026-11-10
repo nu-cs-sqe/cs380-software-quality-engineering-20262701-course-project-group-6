@@ -116,4 +116,15 @@ public class NodeTest {
         assertEquals(BuildingType.NONE, node.getBuildingType());
         assertEquals(Optional.empty(), node.getBuildingColor());
     }
+
+    @Test
+    public void getIncidentEdges_AttemptToModify_ThrowsUnsupportedOperationException() {
+        Node node = new Node(0, HarborType.NONE);
+        Edge edge1 = new Edge(0, node, new Node(1, HarborType.NONE));
+        node.addIncidentEdge(edge1);
+
+        List<Edge> retrievedEdges = node.getIncidentEdges();
+
+        Exception exception = assertThrows(UnsupportedOperationException.class, () -> retrievedEdges.clear());
+    }
 }
