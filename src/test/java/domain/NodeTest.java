@@ -94,4 +94,11 @@ public class NodeTest {
         assertEquals(BuildingType.SETTLEMENT, node.getBuildingType());
         assertEquals(Optional.of(PlayerColor.BLUE), node.getBuildingColor());
     }
+
+    @Test
+    public void setBuildingColor_Null_ThrowsIllegalArgumentException() {
+        Node node = new Node(0, HarborType.NONE);
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> node.setBuildingColor(null));
+        assertEquals("buildingColor cannot be null", exception.getMessage());
+    }
 }
