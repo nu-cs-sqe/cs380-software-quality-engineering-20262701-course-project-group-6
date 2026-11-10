@@ -5,4 +5,10 @@
     <Match>
         <Bug pattern="CT_CONSTRUCTOR_THROW"/>
     </Match>
+    <!-- Edge must hold references to shared mutable graph nodes and return those node references under
+         the assumption that this is done only done safely within the GameBoard class. -->
+    <Match>
+        <Class name="domain.Edge" />
+        <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2" />
+    </Match>
 </FindBugsFilter>
