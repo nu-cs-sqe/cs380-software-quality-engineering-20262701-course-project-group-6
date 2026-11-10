@@ -36,13 +36,13 @@ Callers can inspect the topology via getters (which return immutable copies of c
 | TC7  | Node has 1 edge, add the *same* `Edge` again | `IllegalArgumentException` with a message saying that the edge was already added | :white_check_mark: |
 | TC8  | Node has 0 edge, add `null` edge | `IllegalArgumentException` with a message saying that edge cannot be null, `getIncidentEdges()` returns empty list | :white_check_mark: |
 
-### Methods under test: `setBuildingType(BuildingType)`, `setBuildingColor(PlayerColor)` & `getBuildingColor()`
+### Methods under test: `placeBuilding(BuildingType, BuildingColor)`, `getBuildingColor()`, & `getBuildingType`
 
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
-| TC9  | new node (`buildingColor` = `null`), call `setBuildingType(SETTLEMENT)` and `setBuildingColor(PlayerColor.BLUE)` | `getBuildingType()` returns `SETTLEMENT`, `getBuildingColor()` returns `Optional.of(PlayerColor.BLUE)` | :white_check_mark: |
-| TC10 | new node (`buildingColor` = `null`), call `setBuildingColor(null)` | `IllegalArgumentException` with a message saying buildingColor cannot be null | :white_check_mark: |
-| TC11 | new node (`buildingType` = `BuildingType.NONE`), call `setBuildingType(null)` | `IllegalArgumentException` with a message saying buildingType cannot be null | :white_check_mark: |
+| TC9  | new node, call `placeBuilding(BuildingType.SETTLEMENT, PlayerColor.BLUE)` | `getBuildingType()` returns `SETTLEMENT`, `getBuildingColor()` returns `Optional.of(PlayerColor.BLUE)` | :x: |
+| TC10 | new node, call `placeBuilding(BuildingType.SETTLEMENT, null` | `IllegalArgumentException` with a message saying buildingColor cannot be null | :x: |
+| TC11 | new node, call `placeBuilding(null, PlayerColor.BLUE)` | `IllegalArgumentException` with a message saying buildingType cannot be null | :x: |
 
 ### Method under test: `isOccupied()`
 

@@ -143,7 +143,7 @@ Encapsulates Catan's hexagonal board topology using an intersection/edge graph r
 
 * **`Node` Subcomponent (Intersection):**
   * State: Holds `int id`, a collection of incident `Edge` references, `BuildingType buildingType` (default `NONE`), `PlayerColor buildingColor` (`null` when vacant), and `HarborType harborType` (default `NONE`).
-  * Encapsulation Strategy: The `setBuildingType`, `setBuildingColor`, and `addIncidentEdge` mutators are package-private to restrict setup and placement logic exclusively to `GameBoard`.
+  * Encapsulation Strategy: The `placeBuilding` and `addIncidentEdge` mutators are package-private to restrict setup and placement logic exclusively to `GameBoard`.
   * Accessors: Exposes public getters for its fields (using `List.copyOf()` for the edge collection to prevent external modification) and provides topological helper method `public boolean isOccupied()`.
 
 ---
