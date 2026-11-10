@@ -67,7 +67,11 @@ public class Node {
     }
 
     void placeBuilding(BuildingType buildingType, PlayerColor buildingColor) {
+        if (buildingColor != null) {
+            this.buildingColor = buildingColor;
+        } else {
+            throw new IllegalArgumentException("buildingColor cannot be null");
+        }
         this.buildingType = buildingType;
-        this.buildingColor = buildingColor;
     }
 }
