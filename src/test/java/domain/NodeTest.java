@@ -99,7 +99,9 @@ public class NodeTest {
     public void placeBuilding_NullBuildingColor_ThrowsIllegalArgumentException() {
         Node node = new Node(0, HarborType.NONE);
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> node.placeBuilding(BuildingType.SETTLEMENT, null));
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            node.placeBuilding(BuildingType.SETTLEMENT, null);
+        });
         assertEquals("buildingColor cannot be null", exception.getMessage());
 
         assertEquals(BuildingType.NONE, node.getBuildingType());
@@ -110,7 +112,9 @@ public class NodeTest {
     public void placeBuilding_NullBuildingType_ThrowsIllegalArgumentException() {
         Node node = new Node(0, HarborType.NONE);
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> node.placeBuilding(null, PlayerColor.BLUE));
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            node.placeBuilding(null, PlayerColor.BLUE);
+        });
         assertEquals("buildingType cannot be null", exception.getMessage());
 
         assertEquals(BuildingType.NONE, node.getBuildingType());
