@@ -129,7 +129,7 @@ public class NodeTest {
 
         List<Edge> retrievedEdges = node.getIncidentEdges();
 
-        Exception exception = assertThrows(UnsupportedOperationException.class, () -> retrievedEdges.clear());
+        assertThrows(UnsupportedOperationException.class, () -> retrievedEdges.clear());
     }
 
     @Test
