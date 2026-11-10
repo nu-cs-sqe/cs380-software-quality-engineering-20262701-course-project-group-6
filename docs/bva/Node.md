@@ -44,6 +44,12 @@ Callers can inspect the topology via getters (which return immutable copies of c
 | TC10 | new node, call `placeBuilding(BuildingType.SETTLEMENT, null` | `IllegalArgumentException` with a message saying buildingColor cannot be null | :white_check_mark: |
 | TC11 | new node, call `placeBuilding(null, PlayerColor.BLUE)` | `IllegalArgumentException` with a message saying buildingType cannot be null | :white_check_mark: |
 
+### Method under test: `getIncidentEdges()`
+|      | State of the System | Expected output | Implemented? |
+|------|---------------------|-----------------|--------------|
+| TC12 | Node has 1 edge, call `getIncidentEdges()`, then call `.clear()` on returned list | `UnsupportedOperationException` is thrown (proves immutability) | :x |
+| TC13 | Node has 1 edge, call `getIncidentEdges()` to get snapshot copy, then call `addIncidentEdge()` with a new edge | Snapshot copy size remains 1, new call to `getIncidentEdges().size()` returns 2 (proves disconnected copy) | :x: |
+
 ### Methods under test: `getId()`, `getHarborType()`, `getBuildingType()`
 
 Simple getters. They are verified as part of the constructor boundary and state initialization tests, as well as the edge addition tests.
