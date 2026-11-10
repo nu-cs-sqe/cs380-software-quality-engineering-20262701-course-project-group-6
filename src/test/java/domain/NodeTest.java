@@ -20,6 +20,7 @@ public class NodeTest {
         assertEquals(HarborType.NONE, node.getHarborType());
         assertTrue(node.getIncidentEdges().isEmpty());
         assertEquals(Optional.empty(), node.getBuildingColor());
+        assertEquals(BuildingType.NONE, node.getBuildingType());
         assertFalse(node.isOccupied());
     }
 

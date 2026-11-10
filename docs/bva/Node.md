@@ -22,7 +22,7 @@ Callers can inspect the topology via getters (which return immutable copies of c
 
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
-| TC1  | `id` = 0, `harborType` = `NONE` | `getId()` = 0, `getHarborType()` = `NONE`, `getIncidentEdges()` is empty, `getBuildingColor()` = `Optional.empty()`, `isOccupied()` = `false` | :white_check_mark: |
+| TC1  | `id` = 0, `harborType` = `NONE` | `getId()` = 0, `getHarborType()` = `NONE`, `getIncidentEdges()` is empty, `getBuildingColor()` = `Optional.empty()`, `getBuildingType()` = `BuildingType.NONE`, `isOccupied()` = `false` | :white_check_mark: |
 | TC2  | `id` = 53, `harborType` = `GENERIC_THREE_FOR_ONE` | `getId()` = 53, `getHarborType()` = `GENERIC_THREE_FOR_ONE` | :white_check_mark: |
 | TC3  | `id` = -1, `harborType` = `NONE` | `IllegalArgumentException` with a message saying id is out of bounds | :white_check_mark: |
 | TC4  | `id` = 54, `harborType` = `NONE` | `IllegalArgumentException` with a message saying id is out of bounds | :white_check_mark: |
@@ -41,14 +41,15 @@ Callers can inspect the topology via getters (which return immutable copies of c
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
 | TC9  | new node (`buildingColor` = `null`), call `setBuildingType(SETTLEMENT)` and `setBuildingColor(PlayerColor.BLUE)` | `getBuildingType()` returns `SETTLEMENT`, `getBuildingColor()` returns `Optional.of(PlayerColor.BLUE)` | :x: |
-| TC10 | new node (`buildingColor` = `null`), call `getBuildingType()` and `getBuildingColor()` | `getBuildingType()` returns `NONE` and `getBuildingColor()` returns `Optional.empty()` | :x: |
+| TC10 | new node (`buildingColor` = `null`), call `setBuildingColor(null)` | `IllegalArgumentException` with a message saying buildingColor cannot be null | :x: |
+| TC11 | new node (`buildingType` = `BuildingType.NONE`), call `setBuildingType(null)` | `IllegalArgumentException` with a message saying buildingType cannot be null | :x: |
 
 ### Method under test: `isOccupied()`
 
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
-| TC11 | `buildingType` = `NONE`, `buildingColor` = `null` (default) | `false` | :x: |
-| TC12 | `buildingType` = `SETTLEMENT`, `buildingColor` = `PlayerColor.BLUE` | `true` | :x: |
+| TC12 | `buildingType` = `NONE`, `buildingColor` = `null` (default) | `false` | :x: |
+| TC13 | `buildingType` = `SETTLEMENT`, `buildingColor` = `PlayerColor.BLUE` | `true` | :x: |
 
 ### Methods under test: `getId()`, `getHarborType()`, `getBuildingType()`, `getIncidentEdges()`
 
