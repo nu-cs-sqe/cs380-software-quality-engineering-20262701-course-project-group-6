@@ -261,7 +261,7 @@ Counts every copy the player holds, whether it was bought this turn or earlier.
 
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
-| TC47 | 2 `KNIGHT` from an earlier turn, use one, `endTurn()`, use the other | succeeds; 0 `KNIGHT`; 2 knights played (the limit resets) | :x: |
+| TC47 | 2 `KNIGHT` from an earlier turn, use one, `endTurn()`, use the other | succeeds; 0 `KNIGHT`; 2 knights played (the limit resets) | :white_check_mark: |
 
 Making this turn's cards playable is checked in TC38 (and TC40 shows they are not playable before `endTurn()`).
 

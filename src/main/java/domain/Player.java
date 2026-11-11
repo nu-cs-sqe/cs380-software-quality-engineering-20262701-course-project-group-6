@@ -102,6 +102,7 @@ public class Player {
     public void endTurn() {
         newDevCards.forEach((type, count) -> playableDevCards.merge(type, count, Integer::sum));
         newDevCards.clear();
+        playedDevCardThisTurn = false;
     }
 
     public int getDevCardCount(DevCardType type) {

@@ -519,4 +519,19 @@ public class PlayerTest {
 
         assertEquals(1, player.getDevCardCount(DevCardType.KNIGHT));
     }
+
+    @Test
+    public void EndTurn_AfterPlayingCard_CanPlayAnotherNextTurn() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectDevCard(DevCardType.KNIGHT);
+        player.collectDevCard(DevCardType.KNIGHT);
+        player.endTurn();
+        player.useDevCard(DevCardType.KNIGHT);
+
+        player.endTurn();
+        player.useDevCard(DevCardType.KNIGHT);
+
+        assertEquals(0, player.getDevCardCount(DevCardType.KNIGHT));
+        assertEquals(2, player.getKnightsPlayed());
+    }
 }
