@@ -277,5 +277,5 @@ Also checked in TC38, TC42, TC45, and TC47.
 
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
-| TC49 | new player, collect a `VICTORY_POINT` this turn | 3 (2 settlements + 1 card; counts the turn it is bought) | :x: |
+| TC49 | new player, collect a `VICTORY_POINT` this turn | 3 (2 settlements + 1 card; counts the turn it is bought) | :white_check_mark: |
 | TC50 | new player, 1 `VICTORY_POINT` from an earlier turn and 1 bought this turn | 4 | :x: |

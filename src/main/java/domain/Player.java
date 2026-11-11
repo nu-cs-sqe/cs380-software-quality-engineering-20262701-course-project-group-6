@@ -115,7 +115,7 @@ public class Player {
     }
 
     public int getVictoryPointCount() {
-        return settlementsPlaced + citiesPlaced * CITY_VICTORY_POINTS;
+        return settlementsPlaced + citiesPlaced * CITY_VICTORY_POINTS + getDevCardCount(DevCardType.VICTORY_POINT);
     }
 
     public PlayerColor getColor() {
