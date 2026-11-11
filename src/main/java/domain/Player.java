@@ -81,18 +81,8 @@ public class Player {
     }
 
     public void useDevCard(DevCardType type) {
-        requireDevCardType(type);
-        if (type == DevCardType.VICTORY_POINT) {
-            throw new IllegalArgumentException("Victory Point cards are never played; they count while held");
-        }
-        if (playedDevCardThisTurn) {
-            throw new IllegalStateException("Player " + color + " has already played a development card this turn");
-        }
-        int playable = playableDevCards.getOrDefault(type, 0);
-        if (playable == 0) {
-            throw noPlayableCopy(type);
-        }
-        playableDevCards.put(type, playable - 1);
+        requirePlayable(type);
+        playableDevCards.merge(type, -1, Integer::sum);
         playedDevCardThisTurn = true;
         if (type == DevCardType.KNIGHT) {
             knightsPlayed++;
@@ -147,9 +137,23 @@ public class Player {
         return total;
     }
 
+    private void requirePlayable(DevCardType type) {
+        requireDevCardType(type);
+        if (type == DevCardType.VICTORY_POINT) {
+            throw new IllegalArgumentException("Victory Point cards are never played; they count while held");
+        }
+        if (playedDevCardThisTurn) {
+            throw new IllegalStateException("Player " + color + " has already played a development card this turn");
+        }
+        if (playableDevCards.getOrDefault(type, 0) == 0) {
+            throw noPlayableCopy(type);
+        }
+    }
+
     private IllegalStateException noPlayableCopy(DevCardType type) {
         if (newDevCards.containsKey(type)) {
-            return new IllegalStateException("Player " + color + " cannot play a " + type + " on the turn it was bought");
+            return new IllegalStateException(
+                    "Player " + color + " cannot play a " + type + " on the turn it was bought");
         }
         return new IllegalStateException("Player " + color + " has no " + type + " to play");
     }
