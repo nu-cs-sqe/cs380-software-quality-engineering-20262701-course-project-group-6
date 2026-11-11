@@ -16,6 +16,7 @@ public class Player {
     private int citiesPlaced;
     private int roadsPlaced;
     private final Map<ResourceCardType, Integer> resources = new EnumMap<>(ResourceCardType.class);
+    private final Map<DevCardType, Integer> newDevCards = new EnumMap<>(DevCardType.class);
 
     public Player(PlayerColor color) {
         if (color == null) {
@@ -69,6 +70,14 @@ public class Player {
                     "Player " + color + " has " + count + " " + type + " but tried to use " + amount);
         }
         resources.put(type, count - amount);
+    }
+
+    public void collectDevCard(DevCardType type) {
+        newDevCards.merge(type, 1, Integer::sum);
+    }
+
+    public int getDevCardCount(DevCardType type) {
+        return newDevCards.get(type);
     }
 
     public int getVictoryPointCount() {

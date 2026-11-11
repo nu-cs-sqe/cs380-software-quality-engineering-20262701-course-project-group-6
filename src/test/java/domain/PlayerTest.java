@@ -351,4 +351,13 @@ public class PlayerTest {
 
         assertEquals(6, total);
     }
+
+    @Test
+    public void CollectDevCard_NewPlayerOneKnight_OneKnight() {
+        Player player = new Player(PlayerColor.BLUE);
+
+        player.collectDevCard(DevCardType.KNIGHT);
+
+        assertEquals(1, player.getDevCardCount(DevCardType.KNIGHT));
+    }
 }
