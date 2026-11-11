@@ -81,6 +81,7 @@ public class Player {
     }
 
     public void useDevCard(DevCardType type) {
+        requireDevCardType(type);
         if (type == DevCardType.VICTORY_POINT) {
             throw new IllegalArgumentException("Victory Point cards are never played; they count while held");
         }

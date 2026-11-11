@@ -485,4 +485,14 @@ public class PlayerTest {
         assertEquals("Victory Point cards are never played; they count while held", exception.getMessage());
         assertEquals(1, player.getDevCardCount(DevCardType.VICTORY_POINT));
     }
+
+    @Test
+    public void UseDevCard_NullType_ThrowsIllegalArgumentException() {
+        Player player = new Player(PlayerColor.BLUE);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> player.useDevCard(null));
+
+        assertEquals("Development card type is required", exception.getMessage());
+    }
 }
