@@ -553,4 +553,16 @@ public class PlayerTest {
 
         assertEquals(3, victoryPoints);
     }
+
+    @Test
+    public void GetVictoryPointCount_TwoVictoryPointCards_ReturnsFour() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectDevCard(DevCardType.VICTORY_POINT);
+        player.endTurn();
+        player.collectDevCard(DevCardType.VICTORY_POINT);
+
+        int victoryPoints = player.getVictoryPointCount();
+
+        assertEquals(4, victoryPoints);
+    }
 }
