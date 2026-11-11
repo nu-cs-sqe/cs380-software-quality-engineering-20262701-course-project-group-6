@@ -250,7 +250,7 @@ Counts every copy the player holds, whether it was bought this turn or earlier.
 | TC38 | 1 `KNIGHT` from an earlier turn, use `KNIGHT` | 0 `KNIGHT`; 1 knight played | :white_check_mark: |
 | TC39 | 2 `KNIGHT` from an earlier turn, use `KNIGHT` | 1 `KNIGHT` left | :white_check_mark: |
 | TC40 | 1 `KNIGHT` bought this turn, use `KNIGHT` | `IllegalStateException` with a message saying a card cannot be played the turn it was bought; still 1 `KNIGHT` | :white_check_mark: |
-| TC41 | no `MONOPOLY`, use `MONOPOLY` | `IllegalStateException` with a message naming the color and the type; still 0 `MONOPOLY` | :x: |
+| TC41 | no `MONOPOLY`, use `MONOPOLY` | `IllegalStateException` with a message naming the color and the type; still 0 `MONOPOLY` | :white_check_mark: |
 | TC42 | 2 `KNIGHT` from an earlier turn, one already used this turn, use `KNIGHT` again | `IllegalStateException` with a message saying only one card can be played per turn; still 1 `KNIGHT`; 1 knight played | :x: |
 | TC43 | 1 `VICTORY_POINT` from an earlier turn, use `VICTORY_POINT` | `IllegalArgumentException` with a message saying Victory Point cards are never played; still 1 `VICTORY_POINT` | :x: |
 | TC44 | `type` = `null` | `IllegalArgumentException` with a message saying the development card type is required | :x: |

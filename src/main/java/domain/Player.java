@@ -82,7 +82,7 @@ public class Player {
     public void useDevCard(DevCardType type) {
         int playable = playableDevCards.getOrDefault(type, 0);
         if (playable == 0) {
-            throw new IllegalStateException("Player " + color + " cannot play a " + type + " on the turn it was bought");
+            throw noPlayableCopy(type);
         }
         playableDevCards.put(type, playable - 1);
         knightsPlayed++;
@@ -133,6 +133,13 @@ public class Player {
             total += count;
         }
         return total;
+    }
+
+    private IllegalStateException noPlayableCopy(DevCardType type) {
+        if (newDevCards.containsKey(type)) {
+            return new IllegalStateException("Player " + color + " cannot play a " + type + " on the turn it was bought");
+        }
+        return new IllegalStateException("Player " + color + " has no " + type + " to play");
     }
 
     private static void requireDevCardType(DevCardType type) {

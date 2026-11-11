@@ -445,4 +445,15 @@ public class PlayerTest {
         assertEquals("Player BLUE cannot play a KNIGHT on the turn it was bought", exception.getMessage());
         assertEquals(1, player.getDevCardCount(DevCardType.KNIGHT));
     }
+
+    @Test
+    public void UseDevCard_NoMonopoly_ThrowsIllegalStateException() {
+        Player player = new Player(PlayerColor.BLUE);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> player.useDevCard(DevCardType.MONOPOLY));
+
+        assertEquals("Player BLUE has no MONOPOLY to play", exception.getMessage());
+        assertEquals(0, player.getDevCardCount(DevCardType.MONOPOLY));
+    }
 }
