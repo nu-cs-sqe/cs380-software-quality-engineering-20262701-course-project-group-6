@@ -138,7 +138,7 @@ Encapsulates Catan's hexagonal board topology using an intersection/edge graph r
   * **`HarborType` (Enum)**: `NONE`, `GENERIC_THREE_FOR_ONE`, `LUMBER_TWO_FOR_ONE`, `WOOL_TWO_FOR_ONE`, `GRAIN_TWO_FOR_ONE`, `BRICK_TWO_FOR_ONE`, `ORE_TWO_FOR_ONE`.
   * **`Node` (Intersections)**: Holds `int nodeId`, incident `Edge` references, neighboring `Tile` references, `BuildingType buildingType` (default `NONE`), `Integer ownerPlayerId` (`null` when vacant, or the integer ID of the player who owns the settlement/city), and `HarborType harborType` (default `NONE`).
   * **`Edge` (Paths)**: Holds `int edgeId`, the two endpoint `Node` references, and `Integer roadOwnerPlayerId` (`null` when no road is built, or the integer ID of the player who owns the road).
-#### Fixed beginner board
+#### Story 1: Game setup UI
 
 `BeginnerBoard` holds the starting layout from [Illustration A](https://cdn.1j1ju.com/medias/7a/18/fd-catan-rulebook.pdf#page=3).
 The five rows contain the terrain and dice numbers in tile ID order, with the robber on tile 9.
@@ -148,8 +148,10 @@ Settlements and resource markers use corner IDs, while roads and harbors use edg
 
 `BoardGeometry` derives the 54 corners and 72 sides from the same tile rows. Shared corners and sides get one ID each.
 Corners are numbered from top to bottom and then left to right. Sides follow the same order by midpoint.
-`BoardView` renders those positions when the home screen's **New Game** button is pressed, using the selected language.
-The initial screen shows all four starting colors. Color selection and the award of starting resources belong to Story 2.
+The home screen's **New Game** button opens `GameSetupView` in the selected language. Players choose 3 or 4 and a
+board setup. **Start Game** becomes available after a count is selected with **Beginner board**. Selecting **Manual
+setup** displays its availability notice and disables **Start Game**. Starting a beginner game opens `BoardView`
+with the board for the selected count. Color selection and the award of starting resources belong to Story 2.
 
 ---
 

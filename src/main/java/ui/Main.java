@@ -73,7 +73,7 @@ public class Main extends Application {
                 ResourceBundle.Control.getNoFallbackControl(ResourceBundle.Control.FORMAT_PROPERTIES));
 
         VBox root = new VBox(SECTION_SPACING, createCover(messages), createLanguagePicker(stage, messages, locale),
-                createNewGameButton(messages, () -> showBoard(stage, messages, locale)), createCredits(messages));
+                createNewGameButton(messages, () -> showSetup(stage, messages, locale)), createCredits(messages));
         root.setAlignment(Pos.CENTER);
         root.setPadding(new Insets(WINDOW_PADDING));
         root.setStyle("-fx-background-color: #f5ecdc;");
@@ -82,8 +82,14 @@ public class Main extends Application {
         stage.getScene().setRoot(root);
     }
 
-    private void showBoard(Stage stage, ResourceBundle messages, Locale locale) {
-        stage.getScene().setRoot(new BoardView(new BeginnerBoard(), messages, () -> showHome(stage, locale)));
+    private void showSetup(Stage stage, ResourceBundle messages, Locale locale) {
+        Runnable goHome = () -> showHome(stage, locale);
+        GameSetupView setup = new GameSetupView(messages, board -> showBoard(stage, board, messages, goHome), goHome);
+        stage.getScene().setRoot(setup);
+    }
+
+    private void showBoard(Stage stage, BeginnerBoard board, ResourceBundle messages, Runnable goHome) {
+        stage.getScene().setRoot(new BoardView(board, messages, goHome));
         stage.setWidth(Math.max(stage.getWidth(), BOARD_WINDOW_WIDTH));
         stage.setHeight(Math.max(stage.getHeight(), BOARD_WINDOW_HEIGHT));
         stage.centerOnScreen();
@@ -126,11 +132,11 @@ public class Main extends Application {
         return name.substring(0, 1).toUpperCase(locale) + name.substring(1);
     }
 
-    private Button createNewGameButton(ResourceBundle messages, Runnable startGame) {
+    private Button createNewGameButton(ResourceBundle messages, Runnable openSetup) {
         Button newGame = new Button(messages.getString("home.newGameButton"));
         newGame.setPrefSize(CONTENT_WIDTH, BUTTON_HEIGHT);
         newGame.setDefaultButton(true);
-        newGame.setOnAction(event -> startGame.run());
+        newGame.setOnAction(event -> openSetup.run());
         newGame.setStyle("-fx-background-color: #a51f24; -fx-text-fill: white; "
                 + "-fx-font-size: 20px; -fx-font-weight: bold; -fx-cursor: hand;");
         return newGame;
