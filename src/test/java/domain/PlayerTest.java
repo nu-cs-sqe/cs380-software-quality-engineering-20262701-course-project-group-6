@@ -472,4 +472,17 @@ public class PlayerTest {
         assertEquals(1, player.getDevCardCount(DevCardType.KNIGHT));
         assertEquals(1, player.getKnightsPlayed());
     }
+
+    @Test
+    public void UseDevCard_VictoryPoint_ThrowsIllegalArgumentException() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectDevCard(DevCardType.VICTORY_POINT);
+        player.endTurn();
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> player.useDevCard(DevCardType.VICTORY_POINT));
+
+        assertEquals("Victory Point cards are never played; they count while held", exception.getMessage());
+        assertEquals(1, player.getDevCardCount(DevCardType.VICTORY_POINT));
+    }
 }

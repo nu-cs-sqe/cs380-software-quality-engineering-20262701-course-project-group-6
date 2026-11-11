@@ -81,6 +81,9 @@ public class Player {
     }
 
     public void useDevCard(DevCardType type) {
+        if (type == DevCardType.VICTORY_POINT) {
+            throw new IllegalArgumentException("Victory Point cards are never played; they count while held");
+        }
         if (playedDevCardThisTurn) {
             throw new IllegalStateException("Player " + color + " has already played a development card this turn");
         }
