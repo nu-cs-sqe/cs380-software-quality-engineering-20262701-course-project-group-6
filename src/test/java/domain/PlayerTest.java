@@ -421,4 +421,16 @@ public class PlayerTest {
         assertEquals(0, player.getDevCardCount(DevCardType.KNIGHT));
         assertEquals(1, player.getKnightsPlayed());
     }
+
+    @Test
+    public void UseDevCard_TwoKnightsFromEarlierTurn_OneKnightLeft() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectDevCard(DevCardType.KNIGHT);
+        player.collectDevCard(DevCardType.KNIGHT);
+        player.endTurn();
+
+        player.useDevCard(DevCardType.KNIGHT);
+
+        assertEquals(1, player.getDevCardCount(DevCardType.KNIGHT));
+    }
 }
