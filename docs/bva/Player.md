@@ -269,7 +269,7 @@ Making this turn's cards playable is checked in TC38 (and TC40 shows they are no
 
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
-| TC48 | new player | 0 | :x: |
+| TC48 | new player | 0 | :white_check_mark: |
 
 Also checked in TC38, TC42, TC45, and TC47.
 

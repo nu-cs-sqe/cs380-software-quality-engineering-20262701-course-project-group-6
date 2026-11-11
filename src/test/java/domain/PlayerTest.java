@@ -534,4 +534,13 @@ public class PlayerTest {
         assertEquals(0, player.getDevCardCount(DevCardType.KNIGHT));
         assertEquals(2, player.getKnightsPlayed());
     }
+
+    @Test
+    public void GetKnightsPlayed_NewPlayer_ReturnsZero() {
+        Player player = new Player(PlayerColor.BLUE);
+
+        int knightsPlayed = player.getKnightsPlayed();
+
+        assertEquals(0, knightsPlayed);
+    }
 }
