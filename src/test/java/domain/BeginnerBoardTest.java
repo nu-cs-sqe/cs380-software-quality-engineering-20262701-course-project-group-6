@@ -46,6 +46,21 @@ public class BeginnerBoardTest {
                 69, HarborType.GENERIC_THREE_FOR_ONE), board.getHarbors());
     }
 
+    @Test
+    public void Initialize_ThreePlayerBoard_OmitsRedStartingPlacements() {
+        BeginnerBoard fourPlayerBoard = new BeginnerBoard();
+        BeginnerBoard board = BeginnerBoard.createForThreePlayers();
+
+        assertEquals(Map.of(14, PlayerColor.ORANGE, 40, PlayerColor.ORANGE, 39, PlayerColor.BLUE,
+                41, PlayerColor.BLUE, 17, PlayerColor.WHITE, 31, PlayerColor.WHITE), board.getSettlements());
+        assertEquals(Map.of(15, PlayerColor.ORANGE, 58, PlayerColor.ORANGE, 56, PlayerColor.BLUE,
+                52, PlayerColor.BLUE, 25, PlayerColor.WHITE, 37, PlayerColor.WHITE), board.getRoads());
+        assertEquals(Set.of(17, 39, 40), board.getStartingResourceNodes());
+        assertEquals(fourPlayerBoard.getTileRows(), board.getTileRows());
+        assertEquals(fourPlayerBoard.getRobberTileId(), board.getRobberTileId());
+        assertEquals(fourPlayerBoard.getHarbors(), board.getHarbors());
+    }
+
     private static String describeTile(BeginnerBoard.TileSetup tile) {
         return tile.getResource().map(resource -> resource.name() + " " + tile.getDiceNumber().orElseThrow())
                 .orElse("DESERT");

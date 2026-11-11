@@ -142,7 +142,8 @@ Encapsulates Catan's hexagonal board topology using an intersection/edge graph r
 
 `BeginnerBoard` holds the starting layout from [Illustration A](https://cdn.1j1ju.com/medias/7a/18/fd-catan-rulebook.pdf#page=3).
 The five rows contain the terrain and dice numbers in tile ID order, with the robber on tile 9.
-The setup includes the four colors' starting roads and settlements, the resource settlement markers, and the nine harbors.
+The setup includes starting roads and settlements, the resource settlement markers, and the nine harbors.
+`BeginnerBoard()` includes all four colors. `createForThreePlayers()` omits red's pieces and starting resource marker.
 Settlements and resource markers use corner IDs, while roads and harbors use edge IDs.
 
 `BoardGeometry` derives the 54 corners and 72 sides from the same tile rows. Shared corners and sides get one ID each.

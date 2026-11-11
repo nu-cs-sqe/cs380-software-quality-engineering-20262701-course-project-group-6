@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public final class BeginnerBoard {
     private static final int ROBBER_TILE_ID = 9;
@@ -45,6 +46,22 @@ public final class BeginnerBoard {
             38, GENERIC_THREE_FOR_ONE, 49, BRICK_TWO_FOR_ONE, 61, WOOL_TWO_FOR_ONE,
             66, GENERIC_THREE_FOR_ONE, 69, GENERIC_THREE_FOR_ONE);
 
+    private final Map<Integer, PlayerColor> settlements;
+    private final Map<Integer, PlayerColor> roads;
+
+    public BeginnerBoard() {
+        this(SETTLEMENTS, ROADS);
+    }
+
+    private BeginnerBoard(Map<Integer, PlayerColor> settlements, Map<Integer, PlayerColor> roads) {
+        this.settlements = Map.copyOf(settlements);
+        this.roads = Map.copyOf(roads);
+    }
+
+    public static BeginnerBoard createForThreePlayers() {
+        return new BeginnerBoard(omitRed(SETTLEMENTS), omitRed(ROADS));
+    }
+
     public List<List<TileSetup>> getTileRows() {
         return List.copyOf(TILE_ROWS);
     }
@@ -54,19 +71,26 @@ public final class BeginnerBoard {
     }
 
     public Map<Integer, PlayerColor> getSettlements() {
-        return Map.copyOf(SETTLEMENTS);
+        return Map.copyOf(settlements);
     }
 
     public Map<Integer, PlayerColor> getRoads() {
-        return Map.copyOf(ROADS);
+        return Map.copyOf(roads);
     }
 
     public Set<Integer> getStartingResourceNodes() {
-        return Set.copyOf(STARTING_RESOURCE_NODES);
+        return STARTING_RESOURCE_NODES.stream()
+                .filter(settlements::containsKey)
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     public Map<Integer, HarborType> getHarbors() {
         return Map.copyOf(HARBORS);
+    }
+
+    private static Map<Integer, PlayerColor> omitRed(Map<Integer, PlayerColor> placements) {
+        return placements.entrySet().stream().filter(placement -> placement.getValue() != RED)
+                .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     public static final class TileSetup {
