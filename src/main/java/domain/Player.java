@@ -55,14 +55,14 @@ public class Player {
     }
 
     public void collectResource(ResourceCardType type, int amount) {
-        requireResourceType(type);
-        requirePositiveAmount(amount);
+        ResourceArguments.requireType(type);
+        ResourceArguments.requirePositiveAmount(amount);
         resources.merge(type, amount, Integer::sum);
     }
 
     public void useResource(ResourceCardType type, int amount) {
-        requireResourceType(type);
-        requirePositiveAmount(amount);
+        ResourceArguments.requireType(type);
+        ResourceArguments.requirePositiveAmount(amount);
         int count = countOf(type);
         if (count < amount) {
             throw new IllegalStateException(
@@ -92,7 +92,7 @@ public class Player {
     }
 
     public int getResourceCount(ResourceCardType type) {
-        requireResourceType(type);
+        ResourceArguments.requireType(type);
         return countOf(type);
     }
 
@@ -102,18 +102,6 @@ public class Player {
             total += count;
         }
         return total;
-    }
-
-    private void requireResourceType(ResourceCardType type) {
-        if (type == null) {
-            throw new IllegalArgumentException("Resource type is required");
-        }
-    }
-
-    private void requirePositiveAmount(int amount) {
-        if (amount < 1) {
-            throw new IllegalArgumentException("Resource amount must be at least 1 (was " + amount + ")");
-        }
     }
 
     private int countOf(ResourceCardType type) {
