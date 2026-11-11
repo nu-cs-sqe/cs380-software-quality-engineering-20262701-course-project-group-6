@@ -507,4 +507,16 @@ public class PlayerTest {
         assertEquals(0, player.getDevCardCount(DevCardType.MONOPOLY));
         assertEquals(0, player.getKnightsPlayed());
     }
+
+    @Test
+    public void UseDevCard_OneOldOneNewKnight_PlaysOldKnight() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectDevCard(DevCardType.KNIGHT);
+        player.endTurn();
+        player.collectDevCard(DevCardType.KNIGHT);
+
+        player.useDevCard(DevCardType.KNIGHT);
+
+        assertEquals(1, player.getDevCardCount(DevCardType.KNIGHT));
+    }
 }
