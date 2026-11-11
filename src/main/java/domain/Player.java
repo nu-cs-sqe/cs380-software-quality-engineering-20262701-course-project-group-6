@@ -77,7 +77,7 @@ public class Player {
     }
 
     public int getDevCardCount(DevCardType type) {
-        return newDevCards.get(type);
+        return newDevCards.getOrDefault(type, 0);
     }
 
     public int getVictoryPointCount() {

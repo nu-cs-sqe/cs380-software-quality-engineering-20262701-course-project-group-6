@@ -229,7 +229,7 @@ There is no upper limit in `Player`: the deck only has 25 cards, so the deck enf
 |------|---------------------|-----------------|--------------|
 | TC32 | new player, collect a `KNIGHT` | 1 `KNIGHT` | :white_check_mark: |
 | TC33 | 1 `KNIGHT`, collect a `KNIGHT` | 2 `KNIGHT` (added, not replaced) | :white_check_mark: |
-| TC34 | new player, collect a `KNIGHT` | 0 `MONOPOLY` (other types unchanged) | :x: |
+| TC34 | new player, collect a `KNIGHT` | 0 `MONOPOLY` (other types unchanged) | :white_check_mark: |
 | TC35 | `type` = `null` | `IllegalArgumentException` with a message saying the development card type is required | :x: |
 
 ### Method under test: `getDevCardCount(DevCardType type)`
