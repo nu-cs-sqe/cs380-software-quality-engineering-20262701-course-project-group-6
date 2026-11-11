@@ -254,7 +254,7 @@ Counts every copy the player holds, whether it was bought this turn or earlier.
 | TC42 | 2 `KNIGHT` from an earlier turn, one already used this turn, use `KNIGHT` again | `IllegalStateException` with a message saying only one card can be played per turn; still 1 `KNIGHT`; 1 knight played | :white_check_mark: |
 | TC43 | 1 `VICTORY_POINT` from an earlier turn, use `VICTORY_POINT` | `IllegalArgumentException` with a message saying Victory Point cards are never played; still 1 `VICTORY_POINT` | :white_check_mark: |
 | TC44 | `type` = `null` | `IllegalArgumentException` with a message saying the development card type is required | :white_check_mark: |
-| TC45 | 1 `MONOPOLY` from an earlier turn, use `MONOPOLY` | 0 `MONOPOLY`; 0 knights played (only Knights add to the army) | :x: |
+| TC45 | 1 `MONOPOLY` from an earlier turn, use `MONOPOLY` | 0 `MONOPOLY`; 0 knights played (only Knights add to the army) | :white_check_mark: |
 | TC46 | 1 `KNIGHT` from an earlier turn and 1 bought this turn, use `KNIGHT` | succeeds; 1 `KNIGHT` left (the new one) | :x: |
 
 ### Method under test: `endTurn()`

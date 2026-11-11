@@ -495,4 +495,16 @@ public class PlayerTest {
 
         assertEquals("Development card type is required", exception.getMessage());
     }
+
+    @Test
+    public void UseDevCard_MonopolyFromEarlierTurn_NoKnightPlayed() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectDevCard(DevCardType.MONOPOLY);
+        player.endTurn();
+
+        player.useDevCard(DevCardType.MONOPOLY);
+
+        assertEquals(0, player.getDevCardCount(DevCardType.MONOPOLY));
+        assertEquals(0, player.getKnightsPlayed());
+    }
 }

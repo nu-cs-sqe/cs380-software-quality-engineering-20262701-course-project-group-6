@@ -94,7 +94,9 @@ public class Player {
         }
         playableDevCards.put(type, playable - 1);
         playedDevCardThisTurn = true;
-        knightsPlayed++;
+        if (type == DevCardType.KNIGHT) {
+            knightsPlayed++;
+        }
     }
 
     public void endTurn() {
