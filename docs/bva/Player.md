@@ -238,7 +238,7 @@ Counts every copy the player holds, whether it was bought this turn or earlier.
 
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
-| TC36 | new player | 0 for every `DevCardType` | :x: |
+| TC36 | new player | 0 for every `DevCardType` | :white_check_mark: |
 | TC37 | `type` = `null` | `IllegalArgumentException` with a message saying the development card type is required | :x: |
 
 ### Method under test: `useDevCard(DevCardType type)`

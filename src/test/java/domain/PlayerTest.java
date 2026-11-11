@@ -389,4 +389,14 @@ public class PlayerTest {
 
         assertEquals("Development card type is required", exception.getMessage());
     }
+
+    @ParameterizedTest
+    @EnumSource(DevCardType.class)
+    public void GetDevCardCount_NewPlayer_ReturnsZero(DevCardType type) {
+        Player player = new Player(PlayerColor.BLUE);
+
+        int count = player.getDevCardCount(type);
+
+        assertEquals(0, count);
+    }
 }
