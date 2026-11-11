@@ -80,7 +80,11 @@ public class Player {
     }
 
     public void useDevCard(DevCardType type) {
-        playableDevCards.merge(type, -1, Integer::sum);
+        int playable = playableDevCards.getOrDefault(type, 0);
+        if (playable == 0) {
+            throw new IllegalStateException("Player " + color + " cannot play a " + type + " on the turn it was bought");
+        }
+        playableDevCards.put(type, playable - 1);
         knightsPlayed++;
     }
 

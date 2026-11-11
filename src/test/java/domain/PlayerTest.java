@@ -433,4 +433,16 @@ public class PlayerTest {
 
         assertEquals(1, player.getDevCardCount(DevCardType.KNIGHT));
     }
+
+    @Test
+    public void UseDevCard_KnightBoughtThisTurn_ThrowsIllegalStateException() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectDevCard(DevCardType.KNIGHT);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> player.useDevCard(DevCardType.KNIGHT));
+
+        assertEquals("Player BLUE cannot play a KNIGHT on the turn it was bought", exception.getMessage());
+        assertEquals(1, player.getDevCardCount(DevCardType.KNIGHT));
+    }
 }
