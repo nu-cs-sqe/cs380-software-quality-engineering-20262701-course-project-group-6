@@ -7,15 +7,37 @@ that list and adding its `messages_<code>.properties` file, with no Java changes
 The UI loads the file into a `java.util.Properties` and passes it in, so tests can build the `Properties` directly
 without touching the file system.
 
-## Steps 1–3 summary
+## Step 1: Inputs and outputs
 
-| Input / state | Catalog type | Boundary values |
+| | |
+|---|---|
+| **Inputs** | `languageFile` (constructor) |
+| **State** | the list of locales read from the file |
+| **Outputs** | the list returned by `getLocales()`, or an exception |
+
+## Steps 2–3: Catalog types and boundary values
+
+There are no numeric inputs, so there are no intervals or counts.
+
+### Collections
+
+| Input / state | Empty | One | Many |
+|---|---|---|---|
+| codes in the `languages` entry | TC4 (throws) | TC1 | TC2 |
+
+### Pointers
+
+| Input | Valid value | `null` |
 |---|---|---|
-| `languageFile` (constructor) | Pointer | a loaded `Properties`; `null` (throws: TC6) |
-| `languages` entry | Cases | present; missing (throws: TC5) |
-| codes in the `languages` entry | Collection | empty (throws: TC4), one (TC1), many (TC2) |
-| spacing around codes | Cases | none (TC2), spaces after commas (TC3) |
-| returned list | Collection (copy) | changing it does not change `LanguageOptions` (TC7) |
+| `languageFile` | a loaded `Properties` → TC1 | TC6 (throws) |
+
+### Cases
+
+| Input / state | Values tested | Why |
+|---|---|---|
+| `languages` entry | present → TC1; missing → TC5 (throws) | a file without the entry is a setup mistake that should be reported clearly |
+| spacing around codes | none → TC2; a space after the comma → TC3 | people often type `en, es`, so spaces are trimmed |
+| returned list | try to change it → TC7 | callers get a copy, so they cannot change `LanguageOptions` (Clean Code ch. 6) |
 
 Order matters: the first language in the file is the one selected when the game starts.
 

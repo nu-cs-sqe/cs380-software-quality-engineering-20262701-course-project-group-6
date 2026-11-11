@@ -164,15 +164,23 @@ Handles game card reserves and initial resource payouts.
   * `DevCardType` (Enum): (`KNIGHT`, `VICTORY_POINT`, `ROAD_BUILDING`, `YEAR_OF_PLENTY`, `MONOPOLY`)
 * **`DevelopmentDeck`: Stack of `DevCardType` values, shuffled upon initialization:**
   * Contains 14 knights, 5 victory points, 2 road building, 2 year of plenty, and 2 monopoly
+  * `public DevelopmentDeck(Random random)`: The `Random` is passed in so tests can control the shuffle.
   * `public DevCardType draw()`: Removes and returns top card; throws exception if depleted.
-  * `public int remainingCount()`
+  * `public int getRemainingCount()`
 * **`Bank` Responsibilities:**
   * Maintain resource card supply stacks (19 of each type: Lumber, Wool, Grain, Brick, Ore).
   * Maintain the 25-card development card deck.
   * Execute initial resource payouts based on tiles surrounding a player's second settlement.
 * **`Bank` Key Methods:**
-  * `public void withdrawResource(ResourceCardType type)`: Removes one resource card from the respective pile.
+  * `public Bank(Random random)`: Builds its own `DevelopmentDeck` with this `Random`, so only the bank can draw from it.
+  * `public void withdrawResource(ResourceCardType type, int amount)`: Removes `amount` cards from that pile; throws
+    `IllegalStateException` if the bank has fewer than `amount`.
+  * `public void depositResource(ResourceCardType type, int amount)`: Returns `amount` cards to that pile (when a
+    player builds or trades); throws `IllegalStateException` if the pile would go above 19.
+  * `public int getResourceCount(ResourceCardType type)`
   * `public DevCardType withdrawDevelopmentCard()`: Removes and returns one development card from the top of the pile.
+  * `public int getDevelopmentCardsRemaining()`
+  * Throws `IllegalArgumentException` for a null type or `Random`, or an amount below 1.
 
 
 ---

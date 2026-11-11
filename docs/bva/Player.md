@@ -5,14 +5,39 @@ and 2 beginner roads already placed, so its remaining supply is 3 settlements, 4
 
 Piece limits (rulebook): 5 settlements, 4 cities, 15 roads.
 
-## Steps 1–3 summary
+## Step 1: Inputs and outputs
 
-| Input / state | Catalog type | Boundary values |
+| | |
+|---|---|
+| **Inputs** | `color` (constructor), `type` and `amount` (resource cards) |
+| **State** | settlements, cities, and roads placed; how many cards of each `ResourceCardType` the player holds |
+| **Outputs** | pieces remaining, victory points, card counts, or an exception |
+
+## Steps 2–3: Catalog types and boundary values (pieces and victory points)
+
+For whole numbers, the catalog's "LOW − ε" and "HIGH + ε" are LOW − 1 and HIGH + 1. "Can't set" (catalog term) means
+the code makes that value impossible to reach, so there is nothing to test.
+
+### Intervals
+
+| State | Interval | LOW − 1 | LOW | HIGH | HIGH + 1 |
+|---|---|---|---|---|---|
+| settlements placed | [0, 5] | -1: upgrading with no settlement throws → TC10 | 0 → TC10, TC16 | 5 → TC4, TC6 | 6 → TC5 (throws) |
+| cities placed | [0, 4] | -1: can't set (nothing removes a city) | 0 → TC1, TC7 | 4 → TC8, TC16 | 5 → TC9 (throws) |
+| roads placed | [2, 15] | 1: can't set (roads start at 2 and are never removed) | 2 → TC11 | 15 → TC12 | 16 → TC13 (throws) |
+
+### Pointers
+
+| Input | Valid value | `null` |
 |---|---|---|
-| `color` (constructor) | Cases (enum) + Pointer | any `PlayerColor`; `null` |
-| `settlementsPlaced` | Interval [0, 5] | -1 (only reachable by upgrading with 0 settlements, throws: TC10), 0, 5, 6 (throws: TC5) |
-| `citiesPlaced` | Interval [0, 4] | -1 (can't set: nothing removes a city), 0, 4, 5 (throws: TC9) |
-| `roadsPlaced` | Interval [2, 15] | 1 (can't set: roads start at 2 and are never removed), 2, 15, 16 (throws: TC13) |
+| `color` | `BLUE` → TC1 | TC2 (throws) |
+
+### Cases
+
+| Input / state | Values tested | Why |
+|---|---|---|
+| `color` | `BLUE` | every color goes through the same code, so one color stands in for all 4 |
+| pieces counted for victory points | settlements only → TC14; both → TC15; cities only (max 4) → TC16 | settlements are worth 1 and cities 2, so each kind of piece is checked on its own and together |
 
 Placing a city replaces one of the player's settlements on the board, so `placeCityPiece()` needs at least one placed
 settlement and gives that settlement piece back to the supply. Player only tracks how many pieces are placed; which
@@ -76,15 +101,39 @@ Simple getters. They are checked in every test case above (implemented in TC1–
 Resource cards were merged in from `PlayerInventory` (team decision 11/04). `Player` keeps a count for each
 `ResourceCardType`. The counts are never returned as a map; callers ask for one count or the total.
 
-### Steps 1–3 summary
+### Steps 2–3: Catalog types and boundary values (resource cards)
 
-| Input / state | Catalog type | Boundary values |
+#### Intervals
+
+| Input | Interval | LOW − 1 | LOW | HIGH | HIGH + 1 |
+|---|---|---|---|---|---|
+| `amount` in `useResource` | [1, count held] | 0 → TC25 (throws) | 1 → TC22 (holds 3) | 2 → TC23 (holds 2) | 3 → TC24 (holds 2, throws) |
+
+#### Counts
+
+| Input / state | -1 | 0 | 1 | >1 | max | max + 1 |
+|---|---|---|---|---|---|---|
+| `amount` in `collectResource` | same partition as 0 (same `amount < 1` check) | TC19 (throws) | TC17 | TC18 | none in `Player` (see below) | none |
+| cards held of one type | can't set (`useResource` throws first, TC24) | TC27 | TC17 | TC18 | none | none |
+
+#### Collections
+
+| State | Empty | One | Many |
+|---|---|---|---|
+| hand (all types) | TC30 | TC17 (one type) | TC31 (every type) |
+
+#### Pointers
+
+| Input | Valid value | `null` |
 |---|---|---|
-| `type` | Cases (enum) + Pointer | any `ResourceCardType`; `null` (throws: TC21, TC26, TC29) |
-| `amount` (collect and use) | Count | 0 (throws: TC19, TC25), 1, >1. -1 is in the same invalid partition as 0, so it has no separate test |
-| count of one type | Count | 0, 1, >1 |
-| count of one type vs. `amount` in `useResource` | Interval [0, count] | amount = count (TC23), amount = count + 1 (throws: TC24) |
-| hand (all types) | Collection | empty (TC30), one type (TC17), many types (TC31) |
+| `type` | a `ResourceCardType` → TC17–TC28 | TC21, TC26, TC29 (throw) |
+
+#### Cases
+
+| Input / state | Values tested | Why |
+|---|---|---|
+| `type` | all 5 in TC27; `BRICK` elsewhere | every type goes through the same code, so one type stands in for all 5 |
+| other types | `BRICK` after collecting `ORE` → TC20; `ORE` when holding only `BRICK` → TC28 | a change to one type must not change another |
 
 There is no upper limit in `Player`. The bank holds 19 cards of each type and cannot pay out more, so the bank
 enforces that limit.
