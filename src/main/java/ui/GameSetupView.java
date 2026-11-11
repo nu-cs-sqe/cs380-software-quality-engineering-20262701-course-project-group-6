@@ -45,7 +45,7 @@ final class GameSetupView extends StackPane {
         RadioButton beginner = createOption("setup.beginner", layouts);
         RadioButton manual = createOption("setup.manual", layouts);
         beginner.setSelected(true);
-        VBox layoutOptions = new VBox(OPTION_SPACING, beginner, manual, createManualNotice(manual));
+        VBox layoutOptions = new VBox(OPTION_SPACING, beginner, manual);
 
         Label title = new Label(messages.getString("setup.title"));
         title.setFont(TITLE_FONT);
@@ -72,15 +72,6 @@ final class GameSetupView extends StackPane {
         Label label = new Label(messages.getString(key));
         label.setStyle("-fx-font-weight: bold;");
         return new VBox(OPTION_SPACING, label, options);
-    }
-
-    private Label createManualNotice(RadioButton manual) {
-        Label notice = new Label(messages.getString("setup.manualNotice"));
-        notice.setWrapText(true);
-        notice.setStyle("-fx-text-fill: #665747;");
-        notice.visibleProperty().bind(manual.selectedProperty());
-        notice.managedProperty().bind(notice.visibleProperty());
-        return notice;
     }
 
     private Button createStartButton(RadioButton threePlayers, RadioButton beginner,

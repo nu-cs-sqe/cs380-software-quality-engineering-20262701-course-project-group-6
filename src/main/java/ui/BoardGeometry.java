@@ -45,6 +45,11 @@ final class BoardGeometry {
         return toPixels(tileCenters.get(tileId));
     }
 
+    Point2D getCenter() {
+        Point2D total = tileCenters.stream().reduce(Point2D.ZERO, Point2D::add);
+        return toPixels(total.multiply(1.0 / tileCenters.size()));
+    }
+
     List<Point2D> getTileCorners(int tileId) {
         return getCorners(tileCenters.get(tileId)).stream().map(BoardGeometry::toPixels).collect(Collectors.toList());
     }

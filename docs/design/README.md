@@ -142,7 +142,8 @@ Encapsulates Catan's hexagonal board topology using an intersection/edge graph r
 
 `BeginnerBoard` holds the starting layout from [Illustration A](https://cdn.1j1ju.com/medias/7a/18/fd-catan-rulebook.pdf#page=3).
 The five rows contain the terrain and dice numbers in tile ID order, with the robber on tile 9.
-The setup includes starting roads and settlements, the resource settlement markers, and the nine harbors.
+The setup includes starting roads and settlements and the nine harbors. The white star marks the settlement used
+to determine each color's starting resources, corresponding to the second settlement in the regular setup.
 `BeginnerBoard()` includes all four colors. `createForThreePlayers()` omits red's pieces and starting resource marker.
 Settlements and resource markers use corner IDs, while roads and harbors use edge IDs.
 
@@ -150,7 +151,7 @@ Settlements and resource markers use corner IDs, while roads and harbors use edg
 Corners are numbered from top to bottom and then left to right. Sides follow the same order by midpoint.
 The home screen's **New Game** button opens `GameSetupView` in the selected language. Players choose 3 or 4 and a
 board setup. **Start Game** becomes available after a count is selected with **Beginner board**. Selecting **Manual
-setup** displays its availability notice and disables **Start Game**. Starting a beginner game opens `BoardView`
+setup** disables **Start Game**. Starting a beginner game opens `BoardView`
 with the board for the selected count. Color selection and the award of starting resources belong to Story 2.
 
 ---

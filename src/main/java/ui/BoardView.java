@@ -40,7 +40,7 @@ final class BoardView extends BorderPane {
     private static final double SECTION_SPACING = 14;
     private static final double MAP_PADDING = 22;
     private static final double TERRAIN_LABEL_OFFSET = 24;
-    private static final double TOKEN_OFFSET = -9;
+    private static final double TILE_SYMBOL_OFFSET = -9;
     private static final double TOKEN_RADIUS = 19;
     private static final double TOKEN_NUMBER_OFFSET = -3;
     private static final double TOKEN_PIPS_OFFSET = 9;
@@ -49,8 +49,11 @@ final class BoardView extends BorderPane {
     private static final int MAX_TOKEN_PIPS = 5;
     private static final double ROAD_WIDTH = 8;
     private static final double ROAD_OUTLINE_WIDTH = 11;
+    private static final double PIECE_OUTLINE_WIDTH = 2;
+    private static final double TILE_OUTLINE_WIDTH = 2;
     private static final double RESOURCE_STAR_OFFSET = -19;
     private static final double HARBOR_DISTANCE = 37;
+    private static final double HARBOR_CONNECTOR_WIDTH = 2;
     private static final double HARBOR_LABEL_HEIGHT = 23;
     private static final double HARBOR_LABEL_PADDING = 8;
     private static final double HARBOR_LABEL_RADIUS = 10;
@@ -92,6 +95,7 @@ final class BoardView extends BorderPane {
 
         Label legend = new Label(messages.getString("board.startingResources"));
         legend.setTextFill(INK);
+        legend.setWrapText(true);
         setBottom(legend);
         setAlignment(legend, Pos.CENTER);
         setMargin(legend, new Insets(SECTION_SPACING, 0, 0, 0));
@@ -129,15 +133,15 @@ final class BoardView extends BorderPane {
     private Group createMap(BeginnerBoard board) {
         List<List<TileSetup>> rows = board.getTileRows();
         BoardGeometry geometry = new BoardGeometry(rows);
-        Point2D robberCenter = geometry.getTileCenter(board.getRobberTileId());
+        Point2D boardCenter = geometry.getCenter();
         Group map = new Group(createTerrain(rows, geometry));
         board.getHarbors().forEach((id, type) -> map.getChildren().add(
-                createHarbor(geometry.getEdge(id), type, robberCenter)));
+                createHarbor(geometry.getEdge(id), type, boardCenter)));
         board.getRoads().forEach((id, owner) -> map.getChildren().add(createRoad(geometry.getEdge(id), owner)));
         board.getSettlements().forEach((id, owner) -> map.getChildren().add(
                 createSettlement(geometry.getNode(id), owner)));
         board.getStartingResourceNodes().forEach(id -> map.getChildren().add(createResourceStar(geometry.getNode(id))));
-        map.getChildren().add(createRobber(robberCenter));
+        map.getChildren().add(createRobber(geometry.getTileCenter(board.getRobberTileId())));
         return map;
     }
 
@@ -161,7 +165,7 @@ final class BoardView extends BorderPane {
         }
         hex.setFill(tile.getResource().map(TERRAIN_COLORS::get).orElse(DESERT));
         hex.setStroke(SAND);
-        hex.setStrokeWidth(2);
+        hex.setStrokeWidth(TILE_OUTLINE_WIDTH);
 
         String key = tile.getResource().map(resource -> "board.terrain." + resource.name())
                 .orElse("board.terrain.desert");
@@ -169,7 +173,7 @@ final class BoardView extends BorderPane {
         Text label = createText(messages.getString(key), labelCenter, TERRAIN_FONT, Color.WHITE);
         Group group = new Group(hex, label);
         tile.getDiceNumber().ifPresent(number -> group.getChildren().add(
-                createToken(center.add(0, TOKEN_OFFSET), number)));
+                createToken(center.add(0, TILE_SYMBOL_OFFSET), number)));
         return group;
     }
 
@@ -192,8 +196,8 @@ final class BoardView extends BorderPane {
         Point2D harborCenter = midpoint.add(outward.multiply(HARBOR_DISTANCE));
         Text label = createText(messages.getString("board.harbor." + type.name()), harborCenter, HARBOR_FONT, INK);
         Rectangle badge = createHarborBadge(label, harborCenter);
-        return new Group(createLine(start, harborCenter, SAND, 2),
-                createLine(end, harborCenter, SAND, 2), badge, label);
+        return new Group(createLine(start, harborCenter, SAND, HARBOR_CONNECTOR_WIDTH),
+                createLine(end, harborCenter, SAND, HARBOR_CONNECTOR_WIDTH), badge, label);
     }
 
     private Point2D outwardNormal(Point2D start, Point2D end, Point2D boardCenter) {
@@ -231,7 +235,7 @@ final class BoardView extends BorderPane {
         Polygon house = new Polygon(SETTLEMENT_POINTS);
         house.setFill(PLAYER_COLORS.get(owner));
         house.setStroke(INK);
-        house.setStrokeWidth(2);
+        house.setStrokeWidth(PIECE_OUTLINE_WIDTH);
         house.setTranslateX(position.getX());
         house.setTranslateY(position.getY());
         return house;
@@ -251,9 +255,10 @@ final class BoardView extends BorderPane {
         head.setStroke(TOKEN_FILL);
         Group robber = new Group(body, head);
         robber.setTranslateX(center.getX());
-        robber.setTranslateY(center.getY() + TOKEN_OFFSET);
-        robber.setAccessibleText(messages.getString("board.robber"));
-        Tooltip.install(robber, new Tooltip(messages.getString("board.robber")));
+        robber.setTranslateY(center.getY() + TILE_SYMBOL_OFFSET);
+        String robberName = messages.getString("board.robber");
+        robber.setAccessibleText(robberName);
+        Tooltip.install(robber, new Tooltip(robberName));
         return robber;
     }
 
