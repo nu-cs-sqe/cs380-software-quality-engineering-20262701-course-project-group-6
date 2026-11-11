@@ -16,7 +16,9 @@ public class Player {
     private int citiesPlaced;
     private int roadsPlaced;
     private final Map<ResourceCardType, Integer> resources = new EnumMap<>(ResourceCardType.class);
+    private final Map<DevCardType, Integer> playableDevCards = new EnumMap<>(DevCardType.class);
     private final Map<DevCardType, Integer> newDevCards = new EnumMap<>(DevCardType.class);
+    private int knightsPlayed;
 
     public Player(PlayerColor color) {
         if (color == null) {
@@ -77,9 +79,23 @@ public class Player {
         newDevCards.merge(type, 1, Integer::sum);
     }
 
+    public void useDevCard(DevCardType type) {
+        playableDevCards.merge(type, -1, Integer::sum);
+        knightsPlayed++;
+    }
+
+    public void endTurn() {
+        newDevCards.forEach((type, count) -> playableDevCards.merge(type, count, Integer::sum));
+        newDevCards.clear();
+    }
+
     public int getDevCardCount(DevCardType type) {
         requireDevCardType(type);
-        return newDevCards.getOrDefault(type, 0);
+        return playableDevCards.getOrDefault(type, 0) + newDevCards.getOrDefault(type, 0);
+    }
+
+    public int getKnightsPlayed() {
+        return knightsPlayed;
     }
 
     public int getVictoryPointCount() {
