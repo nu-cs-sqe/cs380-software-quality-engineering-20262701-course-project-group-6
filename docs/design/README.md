@@ -14,7 +14,7 @@ The Game Setup Phase encompasses:
 1. Initializing player identities, colors, and game configuration (3–4 players).
 2. Generating and laying out the 19 hexagonal board tiles, resource types, and dice roll number tokens.
 3. Establishing the game bank, resource card decks, and development card deck.
-4. Initializing starting set-up for beginners (found on page 13 of rule book).
+4. Initializing the starting map for beginners (Illustration A on page 3 of the rulebook).
 5. Handing off state to the turn manager ready for Player 1's first standard turn.
 
 ---
@@ -138,6 +138,22 @@ Encapsulates Catan's hexagonal board topology using an intersection/edge graph r
   * **`HarborType` (Enum)**: `NONE`, `GENERIC_THREE_FOR_ONE`, `LUMBER_TWO_FOR_ONE`, `WOOL_TWO_FOR_ONE`, `GRAIN_TWO_FOR_ONE`, `BRICK_TWO_FOR_ONE`, `ORE_TWO_FOR_ONE`.
   * **`Node` (Intersections)**: Holds `int nodeId`, incident `Edge` references, neighboring `Tile` references, `BuildingType buildingType` (default `NONE`), `Integer ownerPlayerId` (`null` when vacant, or the integer ID of the player who owns the settlement/city), and `HarborType harborType` (default `NONE`).
   * **`Edge` (Paths)**: Holds `int edgeId`, the two endpoint `Node` references, and `Integer roadOwnerPlayerId` (`null` when no road is built, or the integer ID of the player who owns the road).
+#### Story 1: Game setup UI
+
+`BeginnerBoard` holds the starting layout from [Illustration A](https://cdn.1j1ju.com/medias/7a/18/fd-catan-rulebook.pdf#page=3).
+The five rows contain the terrain and dice numbers in tile ID order, with the robber on tile 9.
+The setup includes starting roads and settlements and the nine harbors. The white star marks the settlement used
+to determine each color's starting resources, corresponding to the second settlement in the regular setup.
+`BeginnerBoard()` includes all four colors. `createForThreePlayers()` omits red's pieces and starting resource marker.
+Settlements and resource markers use corner IDs, while roads and harbors use edge IDs.
+
+`BoardGeometry` derives the 54 corners and 72 sides from the same tile rows. Shared corners and sides get one ID each.
+Corners are numbered from top to bottom and then left to right. Sides follow the same order by midpoint.
+The home screen's **New Game** button opens `GameSetupView` in the selected language. Players choose 3 or 4 and a
+board setup. **Start Game** becomes available after a count is selected with **Beginner board**. Selecting **Manual
+setup** disables **Start Game**. Starting a beginner game opens `BoardView`
+with the board for the selected count. Color selection and the award of starting resources belong to Story 2.
+
 ---
 
 ### 3.4 Bank, Deck, and Card Model
