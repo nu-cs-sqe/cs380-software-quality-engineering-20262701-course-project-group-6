@@ -32,6 +32,7 @@ the code makes that value impossible to reach, so there is nothing to test.
 | Input / state | Interval | LOW − 1 | LOW | HIGH | HIGH + 1 |
 |---|---|---|---|---|---|
 | `amount` in `withdrawResource` (bank holds 19) | [1, count] | 0 → TC6 (throws) | 1 → TC3 | 19 → TC4 | 20 → TC5 (throws) |
+| `amount` in `withdrawResource` (bank holds 1, after earlier withdrawals) | [1, count] | (same as above) | (same as above) | 1 | 2 → TC16 (throws) |
 | `amount` in `depositResource` | [1, 19 − count] | 0 → TC12 (throws) | 1 → TC9 (count 16) | 2 → TC10 (count 17) | 1 → TC11 (count 19, throws) |
 | bank count of one type | [0, 19] | -1: can't set (withdraw throws first, TC5) | 0 → TC4 | 19 → TC1, TC10 | 20: deposit throws, TC11 |
 
@@ -70,6 +71,7 @@ Negative amounts are in the same invalid partition as 0 (the same `amount < 1` c
 | TC6  | 19 `BRICK`, withdraw 0 | `IllegalArgumentException` with a message saying the amount must be at least 1; still 19 `BRICK` | :white_check_mark: |
 | TC7  | `type` = `null` | `IllegalArgumentException` with a message saying the resource type is required | :white_check_mark: |
 | TC8  | 19 of each, withdraw 2 `BRICK` | 19 `ORE` (other types unchanged) | :white_check_mark: |
+| TC16 | 1 `BRICK` (18 withdrawn), withdraw 2 | `IllegalStateException` with a message naming the type, how many the bank has, and how many were asked for; still 1 `BRICK` (the limit follows the current supply, review on #22) | :white_check_mark: |
 
 ### Method under test: `depositResource(ResourceCardType type, int amount)`
 

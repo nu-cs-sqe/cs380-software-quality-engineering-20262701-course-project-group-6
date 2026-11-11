@@ -87,6 +87,18 @@ public class BankTest {
     }
 
     @Test
+    public void WithdrawResource_OneBrickLeftWithdrawTwo_ThrowsIllegalStateException() {
+        Bank bank = newBank();
+        bank.withdrawResource(ResourceCardType.BRICK, 18);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> bank.withdrawResource(ResourceCardType.BRICK, 2));
+
+        assertEquals("Bank has 1 BRICK but 2 were requested", exception.getMessage());
+        assertEquals(1, bank.getResourceCount(ResourceCardType.BRICK));
+    }
+
+    @Test
     public void DepositResource_SixteenBricksDepositOne_SeventeenBricks() {
         Bank bank = newBank();
         bank.withdrawResource(ResourceCardType.BRICK, 3);
