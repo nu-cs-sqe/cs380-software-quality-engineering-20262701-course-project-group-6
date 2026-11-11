@@ -19,6 +19,7 @@ public class Player {
     private final Map<DevCardType, Integer> playableDevCards = new EnumMap<>(DevCardType.class);
     private final Map<DevCardType, Integer> newDevCards = new EnumMap<>(DevCardType.class);
     private int knightsPlayed;
+    private boolean playedDevCardThisTurn;
 
     public Player(PlayerColor color) {
         if (color == null) {
@@ -80,11 +81,15 @@ public class Player {
     }
 
     public void useDevCard(DevCardType type) {
+        if (playedDevCardThisTurn) {
+            throw new IllegalStateException("Player " + color + " has already played a development card this turn");
+        }
         int playable = playableDevCards.getOrDefault(type, 0);
         if (playable == 0) {
             throw noPlayableCopy(type);
         }
         playableDevCards.put(type, playable - 1);
+        playedDevCardThisTurn = true;
         knightsPlayed++;
     }
 
