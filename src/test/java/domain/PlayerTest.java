@@ -360,4 +360,14 @@ public class PlayerTest {
 
         assertEquals(1, player.getDevCardCount(DevCardType.KNIGHT));
     }
+
+    @Test
+    public void CollectDevCard_OneKnightCollectAnother_TwoKnights() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectDevCard(DevCardType.KNIGHT);
+
+        player.collectDevCard(DevCardType.KNIGHT);
+
+        assertEquals(2, player.getDevCardCount(DevCardType.KNIGHT));
+    }
 }
