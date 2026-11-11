@@ -379,4 +379,14 @@ public class PlayerTest {
 
         assertEquals(0, player.getDevCardCount(DevCardType.MONOPOLY));
     }
+
+    @Test
+    public void CollectDevCard_NullType_ThrowsIllegalArgumentException() {
+        Player player = new Player(PlayerColor.BLUE);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> player.collectDevCard(null));
+
+        assertEquals("Development card type is required", exception.getMessage());
+    }
 }

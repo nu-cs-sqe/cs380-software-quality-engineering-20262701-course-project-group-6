@@ -73,6 +73,7 @@ public class Player {
     }
 
     public void collectDevCard(DevCardType type) {
+        requireDevCardType(type);
         newDevCards.merge(type, 1, Integer::sum);
     }
 
@@ -111,6 +112,12 @@ public class Player {
             total += count;
         }
         return total;
+    }
+
+    private static void requireDevCardType(DevCardType type) {
+        if (type == null) {
+            throw new IllegalArgumentException("Development card type is required");
+        }
     }
 
     private int countOf(ResourceCardType type) {
