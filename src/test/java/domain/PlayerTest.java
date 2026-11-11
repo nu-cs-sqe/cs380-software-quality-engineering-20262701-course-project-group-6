@@ -399,4 +399,14 @@ public class PlayerTest {
 
         assertEquals(0, count);
     }
+
+    @Test
+    public void GetDevCardCount_NullType_ThrowsIllegalArgumentException() {
+        Player player = new Player(PlayerColor.BLUE);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> player.getDevCardCount(null));
+
+        assertEquals("Development card type is required", exception.getMessage());
+    }
 }

@@ -78,6 +78,7 @@ public class Player {
     }
 
     public int getDevCardCount(DevCardType type) {
+        requireDevCardType(type);
         return newDevCards.getOrDefault(type, 0);
     }
 
