@@ -10,7 +10,7 @@ Because `Node` is a data structure, it does not validate domain logic (like whet
 |---|---|---|
 | `id` (constructor) | Interval [0, 53] | -1 (throws: TC3), 0, 53, 54 (throws: TC4) |
 | `harborType` (constructor) | Cases (enum) + Pointer | `null` (throws: TC5), valid `HarborType` (e.g., `NONE`, `GENERIC_THREE_FOR_ONE`) |
-| `edge` (`addIncidentEdge`) | Pointer | `null` (ignored: TC8), valid unique `Edge` (added: TC6), duplicate `Edge` (ignored: TC7) |
+| `edge` (`addIncidentEdge`) | Pointer | `null` (ignored: TC8), valid unique `Edge` (added: TC6), duplicate `Edge` (throws: TC7) |
 | `buildingType` | Cases (enum) | `NONE` (default), `SETTLEMENT`, `CITY` |
 | `buildingColor` | Cases (enum) + Pointer | `null` (unoccupied / returns `Optional.empty()`), any valid `PlayerColor` (returns `Optional.of(PlayerColor)`) |
 
