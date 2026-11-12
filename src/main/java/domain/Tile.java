@@ -12,7 +12,7 @@ public class Tile {
 
     public Tile(int id, ResourceCardType resourceProduced, int diceNumber,
                 Node node1, Node node2, Node node3, Node node4, Node node5, Node node6) {
-        if (id >= 0) {
+        if (id >= 0 && id <= 18) {
             this.id = id;
         } else {
             throw new IllegalArgumentException("ID must be between 0 and 18");

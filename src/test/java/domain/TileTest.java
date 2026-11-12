@@ -54,4 +54,12 @@ public class TileTest {
         });
         assertEquals("ID must be between 0 and 18", exception.getMessage());
     }
+
+    @Test
+    public void Tile_Id19_ThrowsIllegalArgumentException() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new Tile(19, ResourceCardType.LUMBER, 6, n1, n2, n3, n4, n5, n6);
+        });
+        assertEquals("ID must be between 0 and 18", exception.getMessage());
+    }
 }
