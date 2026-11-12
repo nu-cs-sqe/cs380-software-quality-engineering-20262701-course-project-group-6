@@ -1,6 +1,7 @@
 package domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,5 +45,13 @@ public class TileTest {
         assertEquals(Optional.of(ResourceCardType.BRICK), tile.getResourceProduced());
         assertEquals(12, tile.getDiceNumber());
         assertEquals(6, tile.getCornerNodes().size());
+    }
+
+    @Test
+    public void Tile_IdMinus1_ThrowsIllegalArgumentException() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new Tile(-1, ResourceCardType.LUMBER, 6, n1, n2, n3, n4, n5, n6);
+        });
+        assertEquals("ID must be between 0 and 18", exception.getMessage());
     }
 }

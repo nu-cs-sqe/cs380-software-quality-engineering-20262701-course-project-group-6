@@ -12,7 +12,12 @@ public class Tile {
 
     public Tile(int id, ResourceCardType resourceProduced, int diceNumber,
                 Node node1, Node node2, Node node3, Node node4, Node node5, Node node6) {
-        this.id = id;
+        if (id >= 0) {
+            this.id = id;
+        } else {
+            throw new IllegalArgumentException("ID must be between 0 and 18");
+        }
+
         this.resourceProduced = resourceProduced;
         this.diceNumber = diceNumber;
         this.cornerNodes = new ArrayList<>(List.of(node1, node2, node3, node4, node5, node6));
