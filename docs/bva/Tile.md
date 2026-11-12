@@ -23,7 +23,7 @@ Callers can inspect the hex via getters (which return immutable copies of the no
 
 |  | State of the System | Expected output | Implemented? | 
 | ----- | ----- | ----- | ----- | 
-| TC1 | id = 0, resourceProduced = ORE, diceNumber = 2, nodes = 6 distinct valid nodes | getId() = 0, getResourceProduced() = `Optional.of(ResourceCardType.ORE)`, getDiceNumber() = 2, getCornerNodes().size() = 6 | :x: | 
+| TC1 | id = 0, resourceProduced = ORE, diceNumber = 2, nodes = 6 distinct valid nodes | getId() = 0, getResourceProduced() = `Optional.of(ResourceCardType.ORE)`, getDiceNumber() = 2, getCornerNodes().size() = 6 | :white_check_mark: | 
 | TC2 | id = 18, resourceProduced = BRICK, diceNumber = 12, nodes = 6 distinct valid nodes | getId() = 18, getResourceProduced() = `Optional.of(ResourceCardType.BRICK)`, getDiceNumber() = 12 | :x: | 
 | TC3 | id = -1, resourceProduced = LUMBER, diceNumber = 6, nodes = 6 distinct valid nodes | IllegalArgumentException with a message saying id is out of bounds | :x: | 
 | TC4 | id = 19, resourceProduced = LUMBER, diceNumber = 6, nodes = 6 distinct valid nodes | IllegalArgumentException with a message saying id is out of bounds | :x: | 
@@ -53,4 +53,4 @@ Callers can inspect the hex via getters (which return immutable copies of the no
 
 ##### Methods under test: getId(), getResourceProduced(), getDiceNumber()
 
-Simple getters. They are verified as part of the constructor boundary and state initialization tests (implemented in TC1, TC2, and TC11).
+Simple getters. They are verified as part of the constructor boundary and state initialization tests (implemented in TC1, TC2, TC11, and TC12).
