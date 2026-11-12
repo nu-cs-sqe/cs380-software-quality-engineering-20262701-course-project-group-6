@@ -36,5 +36,13 @@ public class TileTest {
         assertEquals(6, tile.getCornerNodes().size());
     }
 
+    @Test
+    public void Tile_ValidInputsMaxIdAndDiceNumber_InitializesCorrectly() {
+        Tile tile = new Tile(18, ResourceCardType.BRICK, 12, n1, n2, n3, n4, n5, n6);
 
+        assertEquals(18, tile.getId());
+        assertEquals(Optional.of(ResourceCardType.BRICK), tile.getResourceProduced());
+        assertEquals(12, tile.getDiceNumber());
+        assertEquals(6, tile.getCornerNodes().size());
+    }
 }
