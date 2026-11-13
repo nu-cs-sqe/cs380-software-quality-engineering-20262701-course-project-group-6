@@ -110,4 +110,14 @@ public class TileTest {
         });
         assertEquals("nodes must be distinct", exception.getMessage());
     }
+
+    @Test
+    public void Tile_DesertId0_InitializesCorrectly() {
+        Tile tile = new Tile(0, n1, n2, n3, n4, n5, n6);
+
+        assertEquals(0, tile.getId());
+        assertEquals(Optional.empty(), tile.getResourceProduced());
+        assertEquals(7, tile.getDiceNumber());
+        assertEquals(6, tile.getCornerNodes().size());
+    }
 }
