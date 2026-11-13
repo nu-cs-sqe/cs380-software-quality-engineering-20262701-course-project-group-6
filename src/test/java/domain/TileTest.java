@@ -146,4 +146,12 @@ public class TileTest {
         });
         assertEquals("ID must be between 0 and 18", exception.getMessage());
     }
+
+    @Test
+    public void Tile_NullDesertCornerNode_ThrowsIllegalArgumentException() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new Tile(9, null, n2, n3, n4, n5, n6);
+        });
+        assertEquals("node cannot be null", exception.getMessage());
+    }
 }
