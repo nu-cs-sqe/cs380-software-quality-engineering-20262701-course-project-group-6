@@ -43,7 +43,7 @@ Callers can inspect the hex via getters (which return immutable copies of the no
 | TC13 | id = -1, nodes = 6 distinct valid nodes | IllegalArgumentException with a message saying id is out of bounds | :white_check_mark: |
 | TC14 | id = 19, nodes = 6 distinct valid nodes | IllegalArgumentException with a message saying id is out of bounds | :white_check_mark: | 
 | TC15 | id = 9, node1 is null | IllegalArgumentException with a message saying corner nodes cannot be null | :white_check_mark: | 
-| TC16 | id = 9, node4 and node6 are the same Node | IllegalArgumentException with a message saying corner nodes must be distinct | :x: | 
+| TC16 | id = 9, node4 and node6 are the same Node | IllegalArgumentException with a message saying corner nodes must be distinct | :white_check_mark: | 
 
 ##### Method under test: getCornerNodes()
 

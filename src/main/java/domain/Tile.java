@@ -54,6 +54,9 @@ public class Tile {
         } else {
             throw new IllegalArgumentException("node cannot be null");
         }
+        if (new HashSet<>(this.cornerNodes).size() != 6) {
+            throw new IllegalArgumentException("nodes must be distinct");
+        }
 
         resourceProduced = null;
         diceNumber = 7;

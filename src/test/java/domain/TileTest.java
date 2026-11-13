@@ -154,4 +154,12 @@ public class TileTest {
         });
         assertEquals("node cannot be null", exception.getMessage());
     }
+
+    @Test
+    public void Tile_DesertDuplicateCornerNodes_ThrowsIllegalArgumentException() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new Tile(9, n1, n2, n3, n4, n5, n4);
+        });
+        assertEquals("nodes must be distinct", exception.getMessage());
+    }
 }
