@@ -34,7 +34,7 @@ Callers can inspect the hex via getters (which return immutable copies of the no
 | TC9 | id = 1, resourceProduced = LUMBER, diceNumber = 6, node3 is null | IllegalArgumentException with a message saying corner nodes cannot be null | :white_check_mark: | 
 | TC10 | id = 1, resourceProduced = LUMBER, diceNumber = 6, node2 and node5 are the same Node | IllegalArgumentException with a message saying corner nodes must be distinct | :white_check_mark: | 
 | TC18 | id = 1, resourceProduced = LUMBER, diceNumber = 6, cornerNodes = 5 distinct valid nodes | IllegalArgumentException with a message saying their must be exactly 6 corner nodes | :white_check_mark: |
-| TC19 | id = 1, resourceProduced = LUMBER, diceNumber = 6, cornerNodes = 7 distinct valid nodes | IllegalArgumentException with a message saying their must be exactly 6 corner nodes | :x: |
+| TC19 | id = 1, resourceProduced = LUMBER, diceNumber = 6, cornerNodes = 7 distinct valid nodes | IllegalArgumentException with a message saying their must be exactly 6 corner nodes | :white_check_mark: |
 | TC20 | id = 1, resourceProduced = LUMBER, diceNumber = 6, cornerNodes = null | IllegalArgumentException with a message saying their must be exactly 6 corner nodes | :x: |
 
 ##### Method under test: Tile(int id, Node node1, Node node2, Node node3, Node node4, Node node5, Node node6) (Desert Overload)

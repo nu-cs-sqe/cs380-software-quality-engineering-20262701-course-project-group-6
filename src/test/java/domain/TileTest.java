@@ -180,4 +180,13 @@ public class TileTest {
         });
         assertEquals("cornerNodes must have exactly 6 corner nodes", exception.getMessage());
     }
+
+    @Test
+    public void Tile_7CornerNodes_ThrowsIllegalArgumentException() {
+        Node n7 = new Node(6, HarborType.NONE);
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new Tile(1, ResourceCardType.LUMBER, 6, new ArrayList<>(Arrays.asList(n1, n2, n3, n4, n5, n6, n7)));
+        });
+        assertEquals("cornerNodes must have exactly 6 corner nodes", exception.getMessage());
+    }
 }
