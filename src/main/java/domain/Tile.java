@@ -5,7 +5,7 @@ import java.util.Optional;
 import java.util.HashSet;
 
 public class Tile {
-    private static final int MAX_NODE_ID = 18;
+    private static final int MAX_TILE_ID = 18;
     private static final int MIN_DICE_NUM = 2;
     private static final int MAX_DICE_NUM = 12;
     private static final int DESERT_DICE_NUM = 7;
@@ -16,7 +16,7 @@ public class Tile {
     private final List<Node> cornerNodes;
 
     public Tile(int id, ResourceCardType resourceProduced, int diceNumber, List<Node> cornerNodes) {
-        if (id >= 0 && id <= MAX_NODE_ID) {
+        if (id >= 0 && id <= MAX_TILE_ID) {
             this.id = id;
         } else {
             throw new IllegalArgumentException("ID must be between 0 and 18");
@@ -40,7 +40,7 @@ public class Tile {
 
     // Desert tile constructor
     public Tile(int id, List<Node> cornerNodes) {
-        if (id >= 0 && id <= MAX_NODE_ID) {
+        if (id >= 0 && id <= MAX_TILE_ID) {
             this.id = id;
         } else {
             throw new IllegalArgumentException("ID must be between 0 and 18");
