@@ -19,3 +19,20 @@ to bottom, left to right. Illustration A on page 3 of the
 | TC1 | `getTileRows()`, `getRobberTileId()`, `TileSetup.getResource()`, `TileSetup.getDiceNumber()` | New beginner board | Five rows of 3, 4, 5, 4, and 3 tiles with the exact resources and tokens from Illustration A. Center tile 9 is the desert, has neither a resource nor a token, and starts with the robber. | :white_check_mark: |
 | TC2 | `BeginnerBoard()`, `getSettlements()`, `getRoads()`, `getStartingResourceNodes()`, `getHarbors()` | New beginner board with all four colors | Eight settlements and eight roads in their rulebook positions, four settlements marked for starting resources, and nine harbors with the trade types and coastal positions from Illustration A. | :white_check_mark: |
 | TC3 | `createForThreePlayers()`, `getSettlements()`, `getRoads()`, `getStartingResourceNodes()`, `getTileRows()`, `getRobberTileId()`, `getHarbors()` | New beginner board for three players | Six settlements and six roads in the blue, orange, and white starting positions, and three resource markers. Terrain, robber, and harbors match the four-player layout. | :white_check_mark: |
+
+### Method under test: `getStartingResources(PlayerColor color)`
+
+Added for Story 2. Lists the resources of the hexes next to the color's starred settlement, in tile ID order, read from
+Illustration A. Fixed data until `GameBoard` can find the hexes next to a corner (issue #25).
+
+| Input / state | Catalog type | Boundary values |
+|---|---|---|
+| `color` | Cases (enum) + Pointer | each of the 4 colors (TC4); `null` (throws: TC6) |
+| board | Cases | 4-player board (TC4); 3-player board asked for red (throws: TC5) |
+| resources returned | Collection (duplicates) | 3 different types (white, blue, orange); a type twice (red: 2 lumber; orange: 2 grain) |
+
+| ID | Method | State of the system | Expected output | Implemented? |
+|----|--------|---------------------|-----------------|--------------|
+| TC4 | `getStartingResources(color)` | New 4-player board, each color | white: `GRAIN, BRICK, LUMBER`; red: `GRAIN, LUMBER, LUMBER`; blue: `LUMBER, ORE, BRICK`; orange: `ORE, GRAIN, GRAIN` | :x: |
+| TC5 | `getStartingResources(RED)` | 3-player board | `IllegalArgumentException` with a message saying red is not on this board | :x: |
+| TC6 | `getStartingResources(null)` | New 4-player board | `IllegalArgumentException` with a message saying a color is required | :x: |
