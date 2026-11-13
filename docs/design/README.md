@@ -47,24 +47,50 @@ v               v              v                            v
 ## 3. Class Specifications
 
 ### 3.1 GameSession (Orchestrator & Turn Controller)
-Coordinates session lifecycle, game initialization, setup phase, turn taking, and resource distribution.
+Runs one game: sets up the bank and the beginner board (Story 1), lets the players roll for starting order and pick
+colors (Story 2), and then controls the turn order. Turn play (rolling for resources, building, buying and playing
+development cards, the robber, winning) is added in a later PR once `GameBoard` exists.
 
 * **Responsibilities:**
-  * Validate player registration count (enforcing 3–4 players) and instantiate `Player` models.
-  * Initializes beginners' map set-up including pre-placed settlements and roads
-  * Coordinates board, bank, and player updates during setup actions and gameplay.
-  * Trigger initial resource card payouts after starting settlement placements conclude.
+  * Accept only 3 or 4 players. Create the `Bank` and the `BeginnerBoard` (without red for 3 players).
+  * Run the roll for starting order through `StartingRollOff`: each seat rolls 2 dice, highest picks first, ties
+    re-roll among themselves (house rule, Story 2).
+  * Let each seat, in roll order, pick one of the colors still available. Picking creates that color's `Player`
+    (Players are identified only by color, team decision 11/01) and pays its starting resources from the bank: one
+    card for each hex next to the color's starred settlement.
+  * Once every seat has picked, the pick order becomes the turn order for the whole game (house rule).
+  * Later: track which color holds Longest Road and Largest Army (Ryan's suggestion on #26), so `Player` does not
+    need to know about them.
 * **Key Fields:**
-  * `private final GameBoard board`
   * `private final Bank bank`
-  * `private final List<Player> players`
-  * `private int currentPlayerIndex`
-  * `private GamePhase currentPhase` (`SET_UP`, `GAMEPLAY`, `GAME_OVER`)
+  * `private final BeginnerBoard board` (replaced by `GameBoard` built from `BeginnerBoard`, issue #25)
+  * `private final StartingRollOff rollOff`
+  * `private final int playerCount`
+  * `private List<Integer> pickOrder` (seat numbers 1..playerCount, empty until rolled)
+  * `private final Map<PlayerColor, Player> players` (insertion order = pick order = turn order)
+  * `private int currentTurnIndex`
 * **Key Methods:**
-  * `public void initializeGame(List<String> playerNames)`: Validates names/counts, constructs `Player` objects, builds `board`, and fills `bank`.
-  * `public Player getCurrentPlayer()`: Returns `players.get(currentPlayerIndex)`.
-  * `public void placeSettlement(int nodeId)`: Validates ownership and board rules, updates `Node`, and decrements the active player's settlement reserve.
-  * `public void placeRoad(int edgeId, int connectedNodeId)`: Enforces road adjacency to the just-placed settlement, updates `Edge`, and decrements road reserve.
+  * `public GameSession(int playerCount, Random random)`: `IllegalArgumentException` unless `playerCount` is 3 or 4,
+    or if `random` is `null`. The same `Random` shuffles the deck and rolls the dice, so tests can stub it.
+  * `public List<Integer> rollForStartingOrder()`: rolls once and returns the seats in pick order;
+    `IllegalStateException` if already rolled.
+  * `public int getSeatToPick()`: the seat whose turn it is to pick; `IllegalStateException` before the roll or after
+    everyone has picked.
+  * `public List<PlayerColor> getAvailableColors()`: colors in play that nobody has picked yet.
+  * `public void pickColor(PlayerColor color)`: `IllegalArgumentException` for `null`; `IllegalStateException` if it
+    is not time to pick, the color is already taken, or the color is not in play (red with 3 players).
+  * `public List<PlayerColor> getTurnOrder()`: colors in pick order (the full turn order once everyone has picked).
+  * `public PlayerColor getCurrentColor()`: whose turn it is; `IllegalStateException` while players are still picking.
+  * `public int getResourceCount(PlayerColor color, ResourceCardType type)`,
+    `public int getVictoryPointCount(PlayerColor color)`: for the UI; `IllegalArgumentException` if no player has
+    that color.
+  * `public int getBankResourceCount(ResourceCardType type)`: for the UI and for Story 2 criterion 6.
+
+* **`StartingRollOff`:** rolls for starting order with an injected `Random` (two dice, each `nextInt(6) + 1`).
+  * `public StartingRollOff(Random random)`: `IllegalArgumentException` if `random` is `null`.
+  * `public List<Integer> rollOrder(int seatCount)`: seats `1..seatCount`, highest roll first. Seats that tie roll
+    again among themselves (repeating until the tie is broken) and keep their place relative to everyone else.
+    `IllegalArgumentException` if `seatCount` is below 2.
 
 ---
 
@@ -152,6 +178,9 @@ The five rows contain the terrain and dice numbers in tile ID order, with the ro
 The setup includes starting roads and settlements and the nine harbors. The white star marks the settlement used
 to determine each color's starting resources, corresponding to the second settlement in the regular setup.
 `BeginnerBoard()` includes all four colors. `createForThreePlayers()` omits red's pieces and starting resource marker.
+`getStartingResources(color)` lists the resources of the hexes next to that color's starred settlement, in tile ID order
+(white: grain, brick, lumber; red: grain, lumber, lumber; blue: lumber, ore, brick; orange: ore, grain, grain). It is fixed
+data from Illustration A until `GameBoard` can find the hexes next to a corner (issue #25).
 Settlements and resource markers use corner IDs, while roads and harbors use edge IDs.
 
 `BoardGeometry` derives the 54 corners and 72 sides from the same tile rows. Shared corners and sides get one ID each.
