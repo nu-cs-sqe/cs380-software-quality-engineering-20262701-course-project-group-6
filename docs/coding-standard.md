@@ -117,9 +117,25 @@ error handling, BVA, and TDD, and the Google Java Style Guide.
 
 - No hardcoded user-visible text in UI code. Every label, button, and message shown to the player comes from a
   `ResourceBundle` (`messages_<language>.properties`).
-- Adding a language means adding one properties file, with no changes to existing code.
-- Domain exception messages are for developers and stay in English. The UI translates errors into a
-  user-facing message from the bundle.
+- Adding a language means adding its code to `languages.properties` and adding its `messages_<language>.properties`
+  file, with no Java changes (approved by the professor 11/09).
+- Text that includes a value (a color, a number, a resource) is one bundle entry with `{0}`, `{1}` placeholders,
+  filled in with `MessageFormat.format(...)`. Never build displayed text with `+`, because word order differs between
+  languages (i18n lecture, 11/11). For example:
+
+  ```properties
+  # messages_en.properties
+  turn.rolled={0} rolled {1}
+  # messages_es.properties
+  turn.rolled={0} sacó {1}
+  ```
+
+  ```java
+  String text = MessageFormat.format(messages.getString("turn.rolled"), colorName, roll);
+  ```
+
+- Domain exception messages are for developers and stay in English. They may use `+`, since players never see them.
+  The UI translates errors into a user-facing message from the bundle.
 
 ## 8. Tests (Clean Code ch. 9, ch. 17 T1–T9, BVA and TDD slides)
 
