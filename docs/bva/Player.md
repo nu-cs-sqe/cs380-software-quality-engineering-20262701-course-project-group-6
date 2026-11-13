@@ -5,14 +5,39 @@ and 2 beginner roads already placed, so its remaining supply is 3 settlements, 4
 
 Piece limits (rulebook): 5 settlements, 4 cities, 15 roads.
 
-## Steps 1–3 summary
+## Step 1: Inputs and outputs
 
-| Input / state | Catalog type | Boundary values |
+| | |
+|---|---|
+| **Inputs** | `color` (constructor), `type` and `amount` (resource cards) |
+| **State** | settlements, cities, and roads placed; how many cards of each `ResourceCardType` the player holds |
+| **Outputs** | pieces remaining, victory points, card counts, or an exception |
+
+## Steps 2–3: Catalog types and boundary values (pieces and victory points)
+
+For whole numbers, the catalog's "LOW − ε" and "HIGH + ε" are LOW − 1 and HIGH + 1. "Can't set" (catalog term) means
+the code makes that value impossible to reach, so there is nothing to test.
+
+### Intervals
+
+| State | Interval | LOW − 1 | LOW | HIGH | HIGH + 1 |
+|---|---|---|---|---|---|
+| settlements placed | [0, 5] | -1: upgrading with no settlement throws → TC10 | 0 → TC10, TC16 | 5 → TC4, TC6 | 6 → TC5 (throws) |
+| cities placed | [0, 4] | -1: can't set (nothing removes a city) | 0 → TC1, TC7 | 4 → TC8, TC16 | 5 → TC9 (throws) |
+| roads placed | [2, 15] | 1: can't set (roads start at 2 and are never removed) | 2 → TC11 | 15 → TC12 | 16 → TC13 (throws) |
+
+### Pointers
+
+| Input | Valid value | `null` |
 |---|---|---|
-| `color` (constructor) | Cases (enum) + Pointer | any `PlayerColor`; `null` |
-| `settlementsPlaced` | Interval [0, 5] | -1 (only reachable by upgrading with 0 settlements, throws: TC10), 0, 5, 6 (throws: TC5) |
-| `citiesPlaced` | Interval [0, 4] | -1 (can't set: nothing removes a city), 0, 4, 5 (throws: TC9) |
-| `roadsPlaced` | Interval [2, 15] | 1 (can't set: roads start at 2 and are never removed), 2, 15, 16 (throws: TC13) |
+| `color` | `BLUE` → TC1 | TC2 (throws) |
+
+### Cases
+
+| Input / state | Values tested | Why |
+|---|---|---|
+| `color` | `BLUE` | every color goes through the same code, so one color stands in for all 4 |
+| pieces counted for victory points | settlements only → TC14; both → TC15; cities only (max 4) → TC16 | settlements are worth 1 and cities 2, so each kind of piece is checked on its own and together |
 
 Placing a city replaces one of the player's settlements on the board, so `placeCityPiece()` needs at least one placed
 settlement and gives that settlement piece back to the supply. Player only tracks how many pieces are placed; which
@@ -71,7 +96,85 @@ in a later story.
 
 Simple getters. They are checked in every test case above (implemented in TC1–TC13).
 
+## Resource cards
+
+Resource cards were merged in from `PlayerInventory` (team decision 11/04). `Player` keeps a count for each
+`ResourceCardType`. The counts are never returned as a map; callers ask for one count or the total.
+
+### Steps 2–3: Catalog types and boundary values (resource cards)
+
+#### Intervals
+
+| Input | Interval | LOW − 1 | LOW | HIGH | HIGH + 1 |
+|---|---|---|---|---|---|
+| `amount` in `useResource` | [1, count held] | 0 → TC25 (throws) | 1 → TC22 (holds 3) | 2 → TC23 (holds 2) | 3 → TC24 (holds 2, throws) |
+
+#### Counts
+
+| Input / state | -1 | 0 | 1 | >1 | max | max + 1 |
+|---|---|---|---|---|---|---|
+| `amount` in `collectResource` | same partition as 0 (same `amount < 1` check) | TC19 (throws) | TC17 | TC18 | none in `Player` (see below) | none |
+| cards held of one type | can't set (`useResource` throws first, TC24) | TC27 | TC17 | TC18 | none | none |
+
+#### Collections
+
+| State | Empty | One | Many |
+|---|---|---|---|
+| hand (all types) | TC30 | TC17 (one type) | TC31 (every type) |
+
+#### Pointers
+
+| Input | Valid value | `null` |
+|---|---|---|
+| `type` | a `ResourceCardType` → TC17–TC28 | TC21, TC26, TC29 (throw) |
+
+#### Cases
+
+| Input / state | Values tested | Why |
+|---|---|---|
+| `type` | all 5 in TC27; `BRICK` elsewhere | every type goes through the same code, so one type stands in for all 5 |
+| other types | `BRICK` after collecting `ORE` → TC20; `ORE` when holding only `BRICK` → TC28 | a change to one type must not change another |
+
+There is no upper limit in `Player`. The bank holds 19 cards of each type and cannot pay out more, so the bank
+enforces that limit.
+
+### Method under test: `collectResource(ResourceCardType type, int amount)`
+
+|      | State of the System | Expected output | Implemented? |
+|------|---------------------|-----------------|--------------|
+| TC17 | new player, collect 1 `BRICK` | 1 `BRICK`; total 1 | :white_check_mark: |
+| TC18 | 1 `BRICK`, collect 2 `BRICK` | 3 `BRICK` (added, not replaced) | :white_check_mark: |
+| TC19 | new player, collect 0 `BRICK` | `IllegalArgumentException` with a message saying the amount must be at least 1; still 0 `BRICK` | :white_check_mark: |
+| TC20 | 1 `BRICK`, collect 1 `ORE` | 1 `BRICK` and 1 `ORE` (other types unchanged) | :white_check_mark: |
+| TC21 | `type` = `null` | `IllegalArgumentException` with a message saying the resource type is required | :white_check_mark: |
+
+### Method under test: `useResource(ResourceCardType type, int amount)`
+
+|      | State of the System | Expected output | Implemented? |
+|------|---------------------|-----------------|--------------|
+| TC22 | 3 `BRICK`, use 1 `BRICK` | 2 `BRICK` | :white_check_mark: |
+| TC23 | 2 `BRICK`, use 2 `BRICK` | 0 `BRICK` (uses the whole count) | :white_check_mark: |
+| TC24 | 2 `BRICK`, use 3 `BRICK` | `IllegalStateException` with a message naming the color, the type, how many it has, and how many were asked for; still 2 `BRICK` | :white_check_mark: |
+| TC25 | 2 `BRICK`, use 0 `BRICK` | `IllegalArgumentException` with a message saying the amount must be at least 1; still 2 `BRICK` | :white_check_mark: |
+| TC26 | `type` = `null` | `IllegalArgumentException` with a message saying the resource type is required | :white_check_mark: |
+
+### Method under test: `getResourceCount(ResourceCardType type)`
+
+|      | State of the System | Expected output | Implemented? |
+|------|---------------------|-----------------|--------------|
+| TC27 | new player | 0 for every `ResourceCardType` | :white_check_mark: |
+| TC28 | 2 `BRICK` | 0 `ORE` (asking for a type the player has none of) | :white_check_mark: |
+| TC29 | `type` = `null` | `IllegalArgumentException` with a message saying the resource type is required | :white_check_mark: |
+
+### Method under test: `getTotalResourceCount()`
+
+Used later to check whether a player holds more than 7 cards when a 7 is rolled.
+
+|      | State of the System | Expected output | Implemented? |
+|------|---------------------|-----------------|--------------|
+| TC30 | new player | 0 | :white_check_mark: |
+| TC31 | 2 `BRICK` and 1 of each other type | 6 (sum across all types) | :white_check_mark: |
+
 ## Next section (to be added before that code is written)
 
-Resource cards, merged in from `PlayerInventory` (team decision 11/04): `collectResource`, `useResource`,
-`getResourceCount`, `getTotalResourceCount`. The card map is never returned directly.
+Development cards: `collectDevCard`, `useDevCard`, `getDevCardCount`.

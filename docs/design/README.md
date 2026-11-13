@@ -14,7 +14,7 @@ The Game Setup Phase encompasses:
 1. Initializing player identities, colors, and game configuration (3–4 players).
 2. Generating and laying out the 19 hexagonal board tiles, resource types, and dice roll number tokens.
 3. Establishing the game bank, resource card decks, and development card deck.
-4. Initializing starting set-up for beginners (found on page 13 of rule book).
+4. Initializing the starting map for beginners (Illustration A on page 3 of the rulebook).
 5. Handing off state to the turn manager ready for Player 1's first standard turn.
 
 ---
@@ -101,10 +101,11 @@ for each color in play during setup (Story 1); in Story 2, picking a color means
   * `public int getVictoryPointCount()`: Totals up victory points for win condition check (settlements 1, cities 2).
   * `public int getSettlementsRemaining()`, `getCitiesRemaining()`, `getRoadsRemaining()`: Pieces left in the
     supply (max − placed), for the UI. The placed counts themselves are not exposed.
-  * `public void collectResource(ResourceCardType type, int amount)`
+  * `public void collectResource(ResourceCardType type, int amount)`: Adds to the count for `type`.
   * `public void useResource(ResourceCardType type, int amount)`: Throws `IllegalStateException` if the player does
     not have enough.
-  * `public int getResourceCount(ResourceCardType type)`
+  * `public int getResourceCount(ResourceCardType type)`: 0 if the player has none of that type.
+  * The resource methods throw `IllegalArgumentException` for a `null` type or an `amount` below 1.
   * `public int getTotalResourceCount()`: When robber is rolled, check if >7
   * `public void collectDevCard(DevCardType type, int amount)`
   * `public void useDevCard(DevCardType type, int amount)`
@@ -150,6 +151,21 @@ Encapsulates Catan's hexagonal board topology using an intersection/edge graph r
   * **`BuildingType` (Enum)**: `NONE`, `SETTLEMENT`, `CITY`.
   * **`HarborType` (Enum)**: `NONE`, `GENERIC_THREE_FOR_ONE`, `LUMBER_TWO_FOR_ONE`, `WOOL_TWO_FOR_ONE`, `GRAIN_TWO_FOR_ONE`, `BRICK_TWO_FOR_ONE`, `ORE_TWO_FOR_ONE`.
 
+#### Story 1: Game setup UI
+
+`BeginnerBoard` holds the starting layout from [Illustration A](https://cdn.1j1ju.com/medias/7a/18/fd-catan-rulebook.pdf#page=3).
+The five rows contain the terrain and dice numbers in tile ID order, with the robber on tile 9.
+The setup includes starting roads and settlements and the nine harbors. The white star marks the settlement used
+to determine each color's starting resources, corresponding to the second settlement in the regular setup.
+`BeginnerBoard()` includes all four colors. `createForThreePlayers()` omits red's pieces and starting resource marker.
+Settlements and resource markers use corner IDs, while roads and harbors use edge IDs.
+
+`BoardGeometry` derives the 54 corners and 72 sides from the same tile rows. Shared corners and sides get one ID each.
+Corners are numbered from top to bottom and then left to right. Sides follow the same order by midpoint.
+The home screen's **New Game** button opens `GameSetupView` in the selected language. Players choose 3 or 4 and a
+board setup. **Start Game** becomes available after a count is selected with **Beginner board**. Selecting **Manual
+setup** disables **Start Game**. Starting a beginner game opens `BoardView`
+with the board for the selected count. Color selection and the award of starting resources belong to Story 2.
 
 ---
 
@@ -161,13 +177,35 @@ Handles game card reserves and initial resource payouts.
   * `DevCardType` (Enum): (`KNIGHT`, `VICTORY_POINT`, `ROAD_BUILDING`, `YEAR_OF_PLENTY`, `MONOPOLY`)
 * **`DevelopmentDeck`: Stack of `DevCardType` values, shuffled upon initialization:**
   * Contains 14 knights, 5 victory points, 2 road building, 2 year of plenty, and 2 monopoly
+  * `public DevelopmentDeck(Random random)`: The `Random` is passed in so tests can control the shuffle.
   * `public DevCardType draw()`: Removes and returns top card; throws exception if depleted.
-  * `public int remainingCount()`
+  * `public int getRemainingCount()`
 * **`Bank` Responsibilities:**
   * Maintain resource card supply stacks (19 of each type: Lumber, Wool, Grain, Brick, Ore).
   * Maintain the 25-card development card deck.
   * Execute initial resource payouts based on tiles surrounding a player's second settlement.
 * **`Bank` Key Methods:**
-  * `public void withdrawResource(ResourceCardType type)`: Removes one resource card from the respective pile.
+  * `public Bank(Random random)`: Builds its own `DevelopmentDeck` with this `Random`, so only the bank can draw from it.
+  * `public void withdrawResource(ResourceCardType type, int amount)`: Removes `amount` cards from that pile; throws
+    `IllegalStateException` if the bank has fewer than `amount`.
+  * `public void depositResource(ResourceCardType type, int amount)`: Returns `amount` cards to that pile (when a
+    player builds or trades); throws `IllegalStateException` if the pile would go above 19.
+  * `public int getResourceCount(ResourceCardType type)`
   * `public DevCardType withdrawDevelopmentCard()`: Removes and returns one development card from the top of the pile.
+  * `public int getDevelopmentCardsRemaining()`
+  * Throws `IllegalArgumentException` for a null type or `Random`, or an amount below 1.
 
+
+---
+
+### 3.5 Language support (i18n)
+The player picks a language on the home screen. Adding a language needs no Java changes (issue #15).
+
+* **`src/main/resources/languages.properties`**: `languages=en,es`, in menu order. The first language is selected at startup.
+* **`messages_<code>.properties`**: one file per language with every piece of user-visible text (`home.newGameButton=New Game`).
+  `MessageBundlesTest` fails the build if a listed language is missing its file or any key that English has.
+* **`LanguageOptions`** (package `language`): reads the language list and returns it as a read-only `List<Locale>`.
+  Throws `IllegalArgumentException` if the file is `null`, has no `languages` entry, or lists no languages.
+* **UI**: every screen gets its text from the `ResourceBundle` for the chosen `Locale`, never from hardcoded strings.
+  The language menu shows each language in its own language ("English", "Español").
+* **To add a language**: add its code to `languages.properties` and add `messages_<code>.properties` with every key.
