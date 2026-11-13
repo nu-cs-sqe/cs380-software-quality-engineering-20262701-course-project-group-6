@@ -130,4 +130,12 @@ public class TileTest {
         assertEquals(7, tile.getDiceNumber());
         assertEquals(6, tile.getCornerNodes().size());
     }
+
+    @Test
+    public void Tile_DesertIdMinus1_ThrowsIllegalArgumentException() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new Tile(-1, n1, n2, n3, n4, n5, n6);
+        });
+        assertEquals("ID must be between 0 and 18", exception.getMessage());
+    }
 }

@@ -43,7 +43,11 @@ public class Tile {
 
     // Desert tile constructor
     public Tile(int id, Node node1, Node node2, Node node3, Node node4, Node node5, Node node6) {
-        this.id = id;
+        if (id >= 0) {
+            this.id = id;
+        } else {
+            throw new IllegalArgumentException("ID must be between 0 and 18");
+        }
         resourceProduced = null;
         diceNumber = 7;
         cornerNodes = new ArrayList<>(List.of(node1, node2, node3, node4, node5, node6));
