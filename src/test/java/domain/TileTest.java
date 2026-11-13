@@ -70,4 +70,12 @@ public class TileTest {
         });
         assertEquals("resourceProduced cannot be null", exception.getMessage());
     }
+
+    @Test
+    public void Tile_DiceNumber1_ThrowsIllegalArgumentException() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new Tile(1, ResourceCardType.ORE, 1, n1, n2, n3, n4, n5, n6);
+        });
+        assertEquals("diceNumber must be between 2 and 12, excluding 7", exception.getMessage());
+    }
 }

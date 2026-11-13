@@ -28,7 +28,7 @@ Callers can inspect the hex via getters (which return immutable copies of the no
 | TC3 | id = -1, resourceProduced = LUMBER, diceNumber = 6, nodes = 6 distinct valid nodes | IllegalArgumentException with a message saying id is out of bounds | :white_check_mark: | 
 | TC4 | id = 19, resourceProduced = LUMBER, diceNumber = 6, nodes = 6 distinct valid nodes | IllegalArgumentException with a message saying id is out of bounds | :white_check_mark: | 
 | TC5 | id = 1, resourceProduced = null, diceNumber = 6, nodes = 6 distinct valid nodes | IllegalArgumentException with a message saying resourceProduced cannot be null for normal tiles | :white_check_mark: | 
-| TC6 | id = 1, resourceProduced = ORE, diceNumber = 1, nodes = 6 distinct valid nodes | IllegalArgumentException with a message saying diceNumber is out of bounds | :x: | 
+| TC6 | id = 1, resourceProduced = ORE, diceNumber = 1, nodes = 6 distinct valid nodes | IllegalArgumentException with a message saying diceNumber is out of bounds | :white_check_mark: | 
 | TC7 | id = 1, resourceProduced = GRAIN, diceNumber = 7, nodes = 6 distinct valid nodes | IllegalArgumentException with a message saying 7 is reserved for the desert | :x: | 
 | TC8 | id = 1, resourceProduced = WOOL, diceNumber = 13, nodes = 6 distinct valid nodes | IllegalArgumentException with a message saying diceNumber is out of bounds | :x: | 
 | TC9 | id = 1, resourceProduced = LUMBER, diceNumber = 6, node3 is null | IllegalArgumentException with a message saying corner nodes cannot be null | :x: | 

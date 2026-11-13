@@ -24,7 +24,12 @@ public class Tile {
             throw new IllegalArgumentException("resourceProduced cannot be null");
         }
 
-        this.diceNumber = diceNumber;
+        if (diceNumber >= 2) {
+            this.diceNumber = diceNumber;
+        } else {
+            throw new IllegalArgumentException("diceNumber must be between 2 and 12, excluding 7");
+        }
+
         this.cornerNodes = new ArrayList<>(List.of(node1, node2, node3, node4, node5, node6));
     }
 
