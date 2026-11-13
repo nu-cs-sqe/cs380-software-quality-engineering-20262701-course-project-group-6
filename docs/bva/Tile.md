@@ -49,7 +49,7 @@ Callers can inspect the hex via getters (which return immutable copies of the no
 
 |  | State of the System | Expected output | Implemented? | 
 | ----- | ----- | ----- | ----- | 
-| TC17 | Valid normal tile created, call getCornerNodes(), then call .clear() on returned list | UnsupportedOperationException is thrown (proves immutability of returned list) | :x: | 
+| TC17 | Valid normal tile created, call getCornerNodes(), then call .clear() on returned list | UnsupportedOperationException is thrown (proves immutability of returned list) | :white_check_mark: | 
 
 ##### Methods under test: getId(), getResourceProduced(), getDiceNumber()
 

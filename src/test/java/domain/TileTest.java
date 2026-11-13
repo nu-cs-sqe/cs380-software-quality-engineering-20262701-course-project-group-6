@@ -162,4 +162,12 @@ public class TileTest {
         });
         assertEquals("nodes must be distinct", exception.getMessage());
     }
+
+    @Test
+    public void getCornerNodes_AttemptToModify_ThrowsUnsupportedOperationException() {
+        Tile tile = new Tile(1, ResourceCardType.ORE, 6, n1, n2, n3, n4, n5, n6);
+        List<Node> retrievedNodes = tile.getCornerNodes();
+
+        assertThrows(UnsupportedOperationException.class, () -> retrievedNodes.clear());
+    }
 }

@@ -75,6 +75,6 @@ public class Tile {
     }
 
     public List<Node> getCornerNodes() {
-        return cornerNodes;
+        return List.copyOf(cornerNodes);
     }
 }
