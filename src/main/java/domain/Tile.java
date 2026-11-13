@@ -6,6 +6,11 @@ import java.util.Optional;
 import java.util.HashSet;
 
 public class Tile {
+    private static final int MAX_NODE_ID = 18;
+    private static final int MIN_DICE_NUM = 2;
+    private static final int MAX_DICE_NUM = 12;
+    private static final int DESERT_DICE_NUM = 7;
+    private static final int NUM_CORNER_NODES = 6;
     private final int id;
     private final ResourceCardType resourceProduced;
     private final int diceNumber;
@@ -13,7 +18,7 @@ public class Tile {
 
     public Tile(int id, ResourceCardType resourceProduced, int diceNumber,
                 Node node1, Node node2, Node node3, Node node4, Node node5, Node node6) {
-        if (id >= 0 && id <= 18) {
+        if (id >= 0 && id <= MAX_NODE_ID) {
             this.id = id;
         } else {
             throw new IllegalArgumentException("ID must be between 0 and 18");
@@ -25,7 +30,7 @@ public class Tile {
             throw new IllegalArgumentException("resourceProduced cannot be null");
         }
 
-        if (diceNumber >= 2 && diceNumber != 7 && diceNumber <= 12) {
+        if (diceNumber >= MIN_DICE_NUM && diceNumber != DESERT_DICE_NUM && diceNumber <= MAX_DICE_NUM) {
             this.diceNumber = diceNumber;
         } else {
             throw new IllegalArgumentException("diceNumber must be between 2 and 12, excluding 7");
@@ -36,14 +41,14 @@ public class Tile {
         } else {
             throw new IllegalArgumentException("node cannot be null");
         }
-        if (new HashSet<>(this.cornerNodes).size() != 6) {
+        if (new HashSet<>(this.cornerNodes).size() != NUM_CORNER_NODES) {
             throw new IllegalArgumentException("nodes must be distinct");
         }
     }
 
     // Desert tile constructor
     public Tile(int id, Node node1, Node node2, Node node3, Node node4, Node node5, Node node6) {
-        if (id >= 0 && id <= 18) {
+        if (id >= 0 && id <= MAX_NODE_ID) {
             this.id = id;
         } else {
             throw new IllegalArgumentException("ID must be between 0 and 18");
@@ -54,12 +59,12 @@ public class Tile {
         } else {
             throw new IllegalArgumentException("node cannot be null");
         }
-        if (new HashSet<>(this.cornerNodes).size() != 6) {
+        if (new HashSet<>(this.cornerNodes).size() != NUM_CORNER_NODES) {
             throw new IllegalArgumentException("nodes must be distinct");
         }
 
         resourceProduced = null;
-        diceNumber = 7;
+        diceNumber = DESERT_DICE_NUM;
     }
 
     public int getId() {
