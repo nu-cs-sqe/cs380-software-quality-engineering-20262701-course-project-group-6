@@ -18,7 +18,12 @@ public class Tile {
             throw new IllegalArgumentException("ID must be between 0 and 18");
         }
 
-        this.resourceProduced = resourceProduced;
+        if (resourceProduced != null) {
+            this.resourceProduced = resourceProduced;
+        } else {
+            throw new IllegalArgumentException("resourceProduced cannot be null");
+        }
+
         this.diceNumber = diceNumber;
         this.cornerNodes = new ArrayList<>(List.of(node1, node2, node3, node4, node5, node6));
     }

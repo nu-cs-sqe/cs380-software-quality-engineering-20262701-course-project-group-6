@@ -62,4 +62,12 @@ public class TileTest {
         });
         assertEquals("ID must be between 0 and 18", exception.getMessage());
     }
+
+    @Test
+    public void Tile_NullResourceProduced_ThrowsIllegalArgumentException() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new Tile(1, null, 6, n1, n2, n3, n4, n5, n6);
+        });
+        assertEquals("resourceProduced cannot be null", exception.getMessage());
+    }
 }
