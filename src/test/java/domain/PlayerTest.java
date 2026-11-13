@@ -351,4 +351,218 @@ public class PlayerTest {
 
         assertEquals(6, total);
     }
+
+    @Test
+    public void CollectDevCard_NewPlayerOneKnight_OneKnight() {
+        Player player = new Player(PlayerColor.BLUE);
+
+        player.collectDevCard(DevCardType.KNIGHT);
+
+        assertEquals(1, player.getDevCardCount(DevCardType.KNIGHT));
+    }
+
+    @Test
+    public void CollectDevCard_OneKnightCollectAnother_TwoKnights() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectDevCard(DevCardType.KNIGHT);
+
+        player.collectDevCard(DevCardType.KNIGHT);
+
+        assertEquals(2, player.getDevCardCount(DevCardType.KNIGHT));
+    }
+
+    @Test
+    public void CollectDevCard_NewPlayerOneKnight_MonopolyUnchanged() {
+        Player player = new Player(PlayerColor.BLUE);
+
+        player.collectDevCard(DevCardType.KNIGHT);
+
+        assertEquals(0, player.getDevCardCount(DevCardType.MONOPOLY));
+    }
+
+    @Test
+    public void CollectDevCard_NullType_ThrowsIllegalArgumentException() {
+        Player player = new Player(PlayerColor.BLUE);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> player.collectDevCard(null));
+
+        assertEquals("Development card type is required", exception.getMessage());
+    }
+
+    @ParameterizedTest
+    @EnumSource(DevCardType.class)
+    public void GetDevCardCount_NewPlayer_ReturnsZero(DevCardType type) {
+        Player player = new Player(PlayerColor.BLUE);
+
+        int count = player.getDevCardCount(type);
+
+        assertEquals(0, count);
+    }
+
+    @Test
+    public void GetDevCardCount_NullType_ThrowsIllegalArgumentException() {
+        Player player = new Player(PlayerColor.BLUE);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> player.getDevCardCount(null));
+
+        assertEquals("Development card type is required", exception.getMessage());
+    }
+
+    @Test
+    public void UseDevCard_KnightFromEarlierTurn_NoKnightsAndOneKnightPlayed() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectDevCard(DevCardType.KNIGHT);
+        player.endTurn();
+
+        player.useDevCard(DevCardType.KNIGHT);
+
+        assertEquals(0, player.getDevCardCount(DevCardType.KNIGHT));
+        assertEquals(1, player.getKnightsPlayed());
+    }
+
+    @Test
+    public void UseDevCard_TwoKnightsFromEarlierTurn_OneKnightLeft() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectDevCard(DevCardType.KNIGHT);
+        player.collectDevCard(DevCardType.KNIGHT);
+        player.endTurn();
+
+        player.useDevCard(DevCardType.KNIGHT);
+
+        assertEquals(1, player.getDevCardCount(DevCardType.KNIGHT));
+    }
+
+    @Test
+    public void UseDevCard_KnightBoughtThisTurn_ThrowsIllegalStateException() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectDevCard(DevCardType.KNIGHT);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> player.useDevCard(DevCardType.KNIGHT));
+
+        assertEquals("Player BLUE cannot play a KNIGHT on the turn it was bought", exception.getMessage());
+        assertEquals(1, player.getDevCardCount(DevCardType.KNIGHT));
+    }
+
+    @Test
+    public void UseDevCard_NoMonopoly_ThrowsIllegalStateException() {
+        Player player = new Player(PlayerColor.BLUE);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> player.useDevCard(DevCardType.MONOPOLY));
+
+        assertEquals("Player BLUE has no MONOPOLY to play", exception.getMessage());
+        assertEquals(0, player.getDevCardCount(DevCardType.MONOPOLY));
+    }
+
+    @Test
+    public void UseDevCard_SecondCardSameTurn_ThrowsIllegalStateException() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectDevCard(DevCardType.KNIGHT);
+        player.collectDevCard(DevCardType.KNIGHT);
+        player.endTurn();
+        player.useDevCard(DevCardType.KNIGHT);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> player.useDevCard(DevCardType.KNIGHT));
+
+        assertEquals("Player BLUE has already played a development card this turn", exception.getMessage());
+        assertEquals(1, player.getDevCardCount(DevCardType.KNIGHT));
+        assertEquals(1, player.getKnightsPlayed());
+    }
+
+    @Test
+    public void UseDevCard_VictoryPoint_ThrowsIllegalArgumentException() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectDevCard(DevCardType.VICTORY_POINT);
+        player.endTurn();
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> player.useDevCard(DevCardType.VICTORY_POINT));
+
+        assertEquals("Victory Point cards are never played; they count while held", exception.getMessage());
+        assertEquals(1, player.getDevCardCount(DevCardType.VICTORY_POINT));
+    }
+
+    @Test
+    public void UseDevCard_NullType_ThrowsIllegalArgumentException() {
+        Player player = new Player(PlayerColor.BLUE);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> player.useDevCard(null));
+
+        assertEquals("Development card type is required", exception.getMessage());
+    }
+
+    @Test
+    public void UseDevCard_MonopolyFromEarlierTurn_NoKnightPlayed() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectDevCard(DevCardType.MONOPOLY);
+        player.endTurn();
+
+        player.useDevCard(DevCardType.MONOPOLY);
+
+        assertEquals(0, player.getDevCardCount(DevCardType.MONOPOLY));
+        assertEquals(0, player.getKnightsPlayed());
+    }
+
+    @Test
+    public void UseDevCard_OneOldOneNewKnight_PlaysOldKnight() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectDevCard(DevCardType.KNIGHT);
+        player.endTurn();
+        player.collectDevCard(DevCardType.KNIGHT);
+
+        player.useDevCard(DevCardType.KNIGHT);
+
+        assertEquals(1, player.getDevCardCount(DevCardType.KNIGHT));
+    }
+
+    @Test
+    public void EndTurn_AfterPlayingCard_CanPlayAnotherNextTurn() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectDevCard(DevCardType.KNIGHT);
+        player.collectDevCard(DevCardType.KNIGHT);
+        player.endTurn();
+        player.useDevCard(DevCardType.KNIGHT);
+
+        player.endTurn();
+        player.useDevCard(DevCardType.KNIGHT);
+
+        assertEquals(0, player.getDevCardCount(DevCardType.KNIGHT));
+        assertEquals(2, player.getKnightsPlayed());
+    }
+
+    @Test
+    public void GetKnightsPlayed_NewPlayer_ReturnsZero() {
+        Player player = new Player(PlayerColor.BLUE);
+
+        int knightsPlayed = player.getKnightsPlayed();
+
+        assertEquals(0, knightsPlayed);
+    }
+
+    @Test
+    public void GetVictoryPointCount_VictoryPointBoughtThisTurn_ReturnsThree() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectDevCard(DevCardType.VICTORY_POINT);
+
+        int victoryPoints = player.getVictoryPointCount();
+
+        assertEquals(3, victoryPoints);
+    }
+
+    @Test
+    public void GetVictoryPointCount_TwoVictoryPointCards_ReturnsFour() {
+        Player player = new Player(PlayerColor.BLUE);
+        player.collectDevCard(DevCardType.VICTORY_POINT);
+        player.endTurn();
+        player.collectDevCard(DevCardType.VICTORY_POINT);
+
+        int victoryPoints = player.getVictoryPointCount();
+
+        assertEquals(4, victoryPoints);
+    }
 }
