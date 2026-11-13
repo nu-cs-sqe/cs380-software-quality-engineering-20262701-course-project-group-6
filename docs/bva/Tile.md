@@ -48,7 +48,7 @@ Callers can inspect the hex via getters (which return immutable copies of the no
 | TC15 | id = 9, node1 is null | IllegalArgumentException with a message saying corner nodes cannot be null | :white_check_mark: | 
 | TC16 | id = 9, node4 and node6 are the same Node | IllegalArgumentException with a message saying corner nodes must be distinct | :white_check_mark: | 
 | TC21 | id = 1, cornerNodes = 5 distinct valid nodes | IllegalArgumentException with a message saying their must be exactly 6 corner nodes | :white_check_mark: |
-| TC22 | id = 1, cornerNodes = 7 distinct valid nodes | IllegalArgumentException with a message saying their must be exactly 6 corner nodes | :x: |
+| TC22 | id = 1, cornerNodes = 7 distinct valid nodes | IllegalArgumentException with a message saying their must be exactly 6 corner nodes | :white_check_mark: |
 | TC23 | id = 1, cornerNodes = null | IllegalArgumentException with a message saying their must be exactly 6 corner nodes | :x: |
 
 
