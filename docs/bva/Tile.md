@@ -39,7 +39,7 @@ Callers can inspect the hex via getters (which return immutable copies of the no
 |  | State of the System | Expected output | Implemented? | 
 | ----- | ----- | ----- | ----- | 
 | TC11 | id = 0, nodes = 6 distinct valid nodes | getId() = 0, getResourceProduced() = `Optional.empty()`, getDiceNumber() = 7, getCornerNodes().size() = 6 | :white_check_mark: | 
-| TC12 | id = 18, nodes = 6 distinct valid nodes | getId() = 18, getResourceProduced() = `Optional.empty()`, getDiceNumber() = 7, getCornerNodes().size() = 6 | :x: | 
+| TC12 | id = 18, nodes = 6 distinct valid nodes | getId() = 18, getResourceProduced() = `Optional.empty()`, getDiceNumber() = 7, getCornerNodes().size() = 6 | :white_check_mark: | 
 | TC13 | id = -1, nodes = 6 distinct valid nodes | IllegalArgumentException with a message saying id is out of bounds | :x: |
 | TC14 | id = 19, nodes = 6 distinct valid nodes | IllegalArgumentException with a message saying id is out of bounds | :x: | 
 | TC15 | id = 9, node1 is null | IllegalArgumentException with a message saying corner nodes cannot be null | :x: | 

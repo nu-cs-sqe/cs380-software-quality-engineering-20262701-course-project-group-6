@@ -120,4 +120,14 @@ public class TileTest {
         assertEquals(7, tile.getDiceNumber());
         assertEquals(6, tile.getCornerNodes().size());
     }
+
+    @Test
+    public void Tile_DesertId18_InitializesCorrectly() {
+        Tile tile = new Tile(18, n1, n2, n3, n4, n5, n6);
+
+        assertEquals(18, tile.getId());
+        assertEquals(Optional.empty(), tile.getResourceProduced());
+        assertEquals(7, tile.getDiceNumber());
+        assertEquals(6, tile.getCornerNodes().size());
+    }
 }
