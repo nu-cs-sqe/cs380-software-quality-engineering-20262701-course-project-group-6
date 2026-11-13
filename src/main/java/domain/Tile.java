@@ -16,8 +16,7 @@ public class Tile {
     private final int diceNumber;
     private final List<Node> cornerNodes;
 
-    public Tile(int id, ResourceCardType resourceProduced, int diceNumber,
-                Node node1, Node node2, Node node3, Node node4, Node node5, Node node6) {
+    public Tile(int id, ResourceCardType resourceProduced, int diceNumber, List<Node> cornerNodes) {
         if (id >= 0 && id <= MAX_NODE_ID) {
             this.id = id;
         } else {
@@ -36,32 +35,20 @@ public class Tile {
             throw new IllegalArgumentException("diceNumber must be between 2 and 12, excluding 7");
         }
 
-        if (node1 != null && node2 != null && node3 != null && node4 != null && node5 != null && node6 != null) {
-            this.cornerNodes = new ArrayList<>(List.of(node1, node2, node3, node4, node5, node6));
-        } else {
-            throw new IllegalArgumentException("node cannot be null");
-        }
-        if (new HashSet<>(this.cornerNodes).size() != NUM_CORNER_NODES) {
-            throw new IllegalArgumentException("nodes must be distinct");
-        }
+        validateCornerNodes(cornerNodes);
+        this.cornerNodes = List.copyOf(cornerNodes);
     }
 
     // Desert tile constructor
-    public Tile(int id, Node node1, Node node2, Node node3, Node node4, Node node5, Node node6) {
+    public Tile(int id, List<Node> cornerNodes) {
         if (id >= 0 && id <= MAX_NODE_ID) {
             this.id = id;
         } else {
             throw new IllegalArgumentException("ID must be between 0 and 18");
         }
 
-        if (node1 != null && node2 != null && node3 != null && node4 != null && node5 != null && node6 != null) {
-            this.cornerNodes = new ArrayList<>(List.of(node1, node2, node3, node4, node5, node6));
-        } else {
-            throw new IllegalArgumentException("node cannot be null");
-        }
-        if (new HashSet<>(this.cornerNodes).size() != NUM_CORNER_NODES) {
-            throw new IllegalArgumentException("nodes must be distinct");
-        }
+        validateCornerNodes(cornerNodes);
+        this.cornerNodes = List.copyOf(cornerNodes);
 
         resourceProduced = null;
         diceNumber = DESERT_DICE_NUM;
@@ -82,4 +69,21 @@ public class Tile {
     public List<Node> getCornerNodes() {
         return List.copyOf(cornerNodes);
     }
+
+    private void validateCornerNodes(List<Node> nodes) {
+        if (nodes == null || nodes.size() != NUM_CORNER_NODES) {
+            throw new IllegalArgumentException("cornerNodes must have exactly 6 corner nodes");
+        }
+
+        for (Node node : nodes) {
+            if (node == null) {
+                throw new IllegalArgumentException("nodes cannot be null");
+            }
+        }
+
+        if (new HashSet<>(nodes).size() != NUM_CORNER_NODES) {
+            throw new IllegalArgumentException("nodes must be distinct");
+        }
+    }
+
 }
