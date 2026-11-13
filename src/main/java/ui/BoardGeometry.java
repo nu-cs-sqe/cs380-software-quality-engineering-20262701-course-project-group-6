@@ -19,8 +19,12 @@ final class BoardGeometry {
     private static final int ROW_STEP = 3;
     private static final int COLUMN_STEP = 2;
     // Integer coordinates keep shared corners and edge midpoints identical before conversion to pixels.
-    private static final List<Point2D> CORNER_OFFSETS = List.of(new Point2D(0, -2), new Point2D(1, -1),
-            new Point2D(1, 1), new Point2D(0, 2), new Point2D(-1, 1), new Point2D(-1, -1));
+    private static final List<Point2D> CORNER_OFFSETS = List.of(new Point2D(0, -2),
+                                                                new Point2D(1, -1),
+                                                                new Point2D(1, 1),
+                                                                new Point2D(0, 2),
+                                                                new Point2D(-1, 1),
+                                                                new Point2D(-1, -1));
     private static final Comparator<Point2D> BOARD_ORDER = Comparator.comparingDouble(Point2D::getY)
             .thenComparingDouble(Point2D::getX);
 
