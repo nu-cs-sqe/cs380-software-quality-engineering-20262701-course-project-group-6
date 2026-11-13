@@ -30,7 +30,11 @@ public class Tile {
             throw new IllegalArgumentException("diceNumber must be between 2 and 12, excluding 7");
         }
 
-        this.cornerNodes = new ArrayList<>(List.of(node1, node2, node3, node4, node5, node6));
+        if (node1 != null &&  node2 != null && node3 != null && node4 != null && node5 != null && node6 != null) {
+            this.cornerNodes = new ArrayList<>(List.of(node1, node2, node3, node4, node5, node6));
+        } else {
+            throw new IllegalArgumentException("node cannot be null");
+        }
     }
 
     public int getId() {

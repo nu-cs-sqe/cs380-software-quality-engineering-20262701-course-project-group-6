@@ -31,7 +31,7 @@ Callers can inspect the hex via getters (which return immutable copies of the no
 | TC6 | id = 1, resourceProduced = ORE, diceNumber = 1, nodes = 6 distinct valid nodes | IllegalArgumentException with a message saying diceNumber is out of bounds | :white_check_mark: | 
 | TC7 | id = 1, resourceProduced = GRAIN, diceNumber = 7, nodes = 6 distinct valid nodes | IllegalArgumentException with a message saying 7 is reserved for the desert | :white_check_mark: | 
 | TC8 | id = 1, resourceProduced = WOOL, diceNumber = 13, nodes = 6 distinct valid nodes | IllegalArgumentException with a message saying diceNumber is out of bounds | :white_check_mark: | 
-| TC9 | id = 1, resourceProduced = LUMBER, diceNumber = 6, node3 is null | IllegalArgumentException with a message saying corner nodes cannot be null | :x: | 
+| TC9 | id = 1, resourceProduced = LUMBER, diceNumber = 6, node3 is null | IllegalArgumentException with a message saying corner nodes cannot be null | :white_check_mark: | 
 | TC10 | id = 1, resourceProduced = LUMBER, diceNumber = 6, node2 and node5 are the same Node | IllegalArgumentException with a message saying corner nodes must be distinct | :x: | 
 
 ##### Method under test: Tile(int id, Node node1, Node node2, Node node3, Node node4, Node node5, Node node6) (Desert Overload)

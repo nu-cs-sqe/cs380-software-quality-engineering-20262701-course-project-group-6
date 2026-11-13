@@ -94,4 +94,12 @@ public class TileTest {
         });
         assertEquals("diceNumber must be between 2 and 12, excluding 7", exception.getMessage());
     }
+
+    @Test
+    public void Tile_NullCornerNode_ThrowsIllegalArgumentException() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new Tile(1, ResourceCardType.LUMBER, 6, n1, n2, null, n4, n5, n6);
+        });
+        assertEquals("node cannot be null", exception.getMessage());
+    }
 }
