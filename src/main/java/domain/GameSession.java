@@ -48,6 +48,9 @@ public class GameSession {
     }
 
     public void pickColor(PlayerColor color) {
+        if (players.containsKey(color)) {
+            throw new IllegalStateException(color + " is already taken");
+        }
         Player player = new Player(color);
         for (ResourceCardType type : board.getStartingResources(color)) {
             bank.withdrawResource(type, 1);

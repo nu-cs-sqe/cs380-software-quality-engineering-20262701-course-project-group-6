@@ -132,4 +132,17 @@ public class GameSessionTest {
         assertEquals(19, game.getBankResourceCount(ResourceCardType.WOOL));
         assertEquals(order.get(1), game.getSeatToPick());
     }
+
+    @Test
+    public void PickColor_ColorAlreadyTaken_ThrowsIllegalStateException() {
+        GameSession game = new GameSession(4, new Random());
+        List<Integer> order = game.rollForStartingOrder();
+        game.pickColor(PlayerColor.BLUE);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> game.pickColor(PlayerColor.BLUE));
+
+        assertEquals("BLUE is already taken", exception.getMessage());
+        assertEquals(order.get(1), game.getSeatToPick());
+    }
 }
