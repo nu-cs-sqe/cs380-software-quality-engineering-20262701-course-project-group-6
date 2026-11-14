@@ -46,9 +46,7 @@ public class GameSession {
     }
 
     public void pickColor(PlayerColor color) {
-        if (color == null) {
-            throw new IllegalArgumentException("Player color is required");
-        }
+        requireColor(color);
         requirePicking();
         if (!board.getSettlements().containsValue(color)) {
             throw new IllegalStateException(color + " is not in play");
@@ -95,11 +93,18 @@ public class GameSession {
     }
 
     private Player playerFor(PlayerColor color) {
+        requireColor(color);
         Player player = players.get(color);
         if (player == null) {
             throw new IllegalArgumentException("No player has picked " + color);
         }
         return player;
+    }
+
+    private static void requireColor(PlayerColor color) {
+        if (color == null) {
+            throw new IllegalArgumentException("Player color is required");
+        }
     }
 
     private void requirePicking() {

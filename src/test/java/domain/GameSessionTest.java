@@ -232,4 +232,14 @@ public class GameSessionTest {
 
         assertEquals("No player has picked ORANGE", exception.getMessage());
     }
+
+    @Test
+    public void GetVictoryPointCount_NullColor_ThrowsIllegalArgumentException() {
+        GameSession game = new GameSession(4, new Random());
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> game.getVictoryPointCount(null));
+
+        assertEquals("Player color is required", exception.getMessage());
+    }
 }
