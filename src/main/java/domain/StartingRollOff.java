@@ -1,10 +1,15 @@
 package domain;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class StartingRollOff {
     private static final int MIN_SEATS = 2;
+    private static final int DIE_SIDES = 6;
 
     private final Random random;
 
@@ -20,6 +25,21 @@ public class StartingRollOff {
             throw new IllegalArgumentException(
                     "At least " + MIN_SEATS + " seats are needed to roll for starting order (was " + seatCount + ")");
         }
-        return List.of();
+        Map<Integer, Integer> rolls = new HashMap<>();
+        List<Integer> seats = new ArrayList<>();
+        for (int seat = 1; seat <= seatCount; seat++) {
+            rolls.put(seat, rollTwoDice());
+            seats.add(seat);
+        }
+        seats.sort(Comparator.comparing(rolls::get, Comparator.reverseOrder()));
+        return seats;
+    }
+
+    private int rollTwoDice() {
+        return rollDie() + rollDie();
+    }
+
+    private int rollDie() {
+        return random.nextInt(DIE_SIDES) + 1;
     }
 }

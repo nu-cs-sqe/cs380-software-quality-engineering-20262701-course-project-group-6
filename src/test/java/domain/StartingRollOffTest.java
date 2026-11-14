@@ -3,7 +3,9 @@ package domain;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.List;
 import java.util.Random;
+import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
 
 public class StartingRollOffTest {
@@ -24,5 +26,27 @@ public class StartingRollOffTest {
                 () -> rollOff.rollOrder(1));
 
         assertEquals("At least 2 seats are needed to roll for starting order (was 1)", exception.getMessage());
+    }
+
+    @Test
+    public void RollOrder_TwoSeatsRollThreeAndEight_SecondSeatFirst() {
+        Random dice = diceRolling(3, 8);
+        StartingRollOff rollOff = new StartingRollOff(dice);
+
+        List<Integer> order = rollOff.rollOrder(2);
+
+        assertEquals(List.of(2, 1), order);
+        EasyMock.verify(dice);
+    }
+
+    private static Random diceRolling(int... totals) {
+        Random dice = EasyMock.createStrictMock(Random.class);
+        for (int total : totals) {
+            int firstDie = total / 2;
+            EasyMock.expect(dice.nextInt(6)).andReturn(firstDie - 1);
+            EasyMock.expect(dice.nextInt(6)).andReturn(total - firstDie - 1);
+        }
+        EasyMock.replay(dice);
+        return dice;
     }
 }
