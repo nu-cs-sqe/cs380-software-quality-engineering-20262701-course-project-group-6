@@ -50,6 +50,17 @@ public class StartingRollOffTest {
         EasyMock.verify(dice);
     }
 
+    @Test
+    public void RollOrder_FourSeatsNoTies_HighestFirst() {
+        Random dice = diceRolling(6, 9, 4, 11);
+        StartingRollOff rollOff = new StartingRollOff(dice);
+
+        List<Integer> order = rollOff.rollOrder(4);
+
+        assertEquals(List.of(4, 2, 1, 3), order);
+        EasyMock.verify(dice);
+    }
+
     private static Random diceRolling(int... totals) {
         Random dice = EasyMock.createStrictMock(Random.class);
         for (int total : totals) {
