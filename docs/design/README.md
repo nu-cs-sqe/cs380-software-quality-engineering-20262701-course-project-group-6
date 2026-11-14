@@ -86,12 +86,13 @@ for each color in play during setup (Story 1); in Story 2, picking a color means
   * `private int citiesPlaced` (init: 0)
   * `private int roadsPlaced` (init: 2)
   * `private int longestRoadLength`
-  * `private int armySize`
+  * `private int knightsPlayed`
   * `private boolean hasLongestRoad`
   * `private boolean hasLargestArmy`
-  * `private int victoryPointDevCards`
   * `private final Map<ResourceCardType, Integer> resources`
-  * `private final Map<DevCardType, Integer> devCards`
+  * `private final Map<DevCardType, Integer> playableDevCards`
+  * `private final Map<DevCardType, Integer> newDevCards` (bought this turn)
+  * `private boolean playedDevCardThisTurn`
 * **`Player` Key Methods:**
   * `public Player(PlayerColor color)`: Throws `IllegalArgumentException` if `color` is `null`.
   * `public void placeSettlementPiece()`: Increments `settlementsPlaced`; throws `IllegalStateException` if already 5.
@@ -107,9 +108,15 @@ for each color in play during setup (Story 1); in Story 2, picking a color means
   * `public int getResourceCount(ResourceCardType type)`: 0 if the player has none of that type.
   * The resource methods throw `IllegalArgumentException` for a `null` type or an `amount` below 1.
   * `public int getTotalResourceCount()`: When robber is rolled, check if >7
-  * `public void collectDevCard(DevCardType type, int amount)`
-  * `public void useDevCard(DevCardType type, int amount)`
-  * `public int getDevCardCount()`
+  * `public void collectDevCard(DevCardType type)`: Adds one card. It cannot be played until the next turn.
+  * `public void useDevCard(DevCardType type)`: Removes one playable card; a Knight adds 1 to the army. Throws
+    `IllegalStateException` if the player has no playable copy (none, or only one bought this turn) or has already
+    played a card this turn, and `IllegalArgumentException` for `VICTORY_POINT` (never played).
+  * `public int getDevCardCount(DevCardType type)`: Every copy held, including ones bought this turn.
+  * `public int getKnightsPlayed()`: For Largest Army.
+  * `public void endTurn()`: Makes cards bought this turn playable and resets the one-card-per-turn limit.
+  * `getVictoryPointCount()` also adds 1 for each Victory Point card held.
+  * The development card methods throw `IllegalArgumentException` for a `null` type.
 
 ---
 

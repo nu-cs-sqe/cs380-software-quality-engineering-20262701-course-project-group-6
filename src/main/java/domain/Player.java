@@ -16,6 +16,10 @@ public class Player {
     private int citiesPlaced;
     private int roadsPlaced;
     private final Map<ResourceCardType, Integer> resources = new EnumMap<>(ResourceCardType.class);
+    private final Map<DevCardType, Integer> playableDevCards = new EnumMap<>(DevCardType.class);
+    private final Map<DevCardType, Integer> newDevCards = new EnumMap<>(DevCardType.class);
+    private int knightsPlayed;
+    private boolean playedDevCardThisTurn;
 
     public Player(PlayerColor color) {
         if (color == null) {
@@ -71,8 +75,37 @@ public class Player {
         resources.put(type, count - amount);
     }
 
+    public void collectDevCard(DevCardType type) {
+        requireDevCardType(type);
+        newDevCards.merge(type, 1, Integer::sum);
+    }
+
+    public void useDevCard(DevCardType type) {
+        requirePlayable(type);
+        playableDevCards.merge(type, -1, Integer::sum);
+        playedDevCardThisTurn = true;
+        if (type == DevCardType.KNIGHT) {
+            knightsPlayed++;
+        }
+    }
+
+    public void endTurn() {
+        newDevCards.forEach((type, count) -> playableDevCards.merge(type, count, Integer::sum));
+        newDevCards.clear();
+        playedDevCardThisTurn = false;
+    }
+
+    public int getDevCardCount(DevCardType type) {
+        requireDevCardType(type);
+        return playableDevCards.getOrDefault(type, 0) + newDevCards.getOrDefault(type, 0);
+    }
+
+    public int getKnightsPlayed() {
+        return knightsPlayed;
+    }
+
     public int getVictoryPointCount() {
-        return settlementsPlaced + citiesPlaced * CITY_VICTORY_POINTS;
+        return settlementsPlaced + citiesPlaced * CITY_VICTORY_POINTS + getDevCardCount(DevCardType.VICTORY_POINT);
     }
 
     public PlayerColor getColor() {
@@ -102,6 +135,33 @@ public class Player {
             total += count;
         }
         return total;
+    }
+
+    private void requirePlayable(DevCardType type) {
+        requireDevCardType(type);
+        if (type == DevCardType.VICTORY_POINT) {
+            throw new IllegalArgumentException("Victory Point cards are never played; they count while held");
+        }
+        if (playedDevCardThisTurn) {
+            throw new IllegalStateException("Player " + color + " has already played a development card this turn");
+        }
+        if (playableDevCards.getOrDefault(type, 0) == 0) {
+            throw noPlayableCopy(type);
+        }
+    }
+
+    private IllegalStateException noPlayableCopy(DevCardType type) {
+        if (newDevCards.containsKey(type)) {
+            return new IllegalStateException(
+                    "Player " + color + " cannot play a " + type + " on the turn it was bought");
+        }
+        return new IllegalStateException("Player " + color + " has no " + type + " to play");
+    }
+
+    private static void requireDevCardType(DevCardType type) {
+        if (type == null) {
+            throw new IllegalArgumentException("Development card type is required");
+        }
     }
 
     private int countOf(ResourceCardType type) {
