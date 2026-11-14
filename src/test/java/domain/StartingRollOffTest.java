@@ -94,6 +94,17 @@ public class StartingRollOffTest {
         EasyMock.verify(dice);
     }
 
+    @Test
+    public void RollOrder_TieTwiceInARow_ReRollsUntilBroken() {
+        Random dice = diceRolling(5, 5, 8, 8, 3, 11);
+        StartingRollOff rollOff = new StartingRollOff(dice);
+
+        List<Integer> order = rollOff.rollOrder(2);
+
+        assertEquals(List.of(2, 1), order);
+        EasyMock.verify(dice);
+    }
+
     private static Random diceRolling(int... totals) {
         Random dice = EasyMock.createStrictMock(Random.class);
         for (int total : totals) {
