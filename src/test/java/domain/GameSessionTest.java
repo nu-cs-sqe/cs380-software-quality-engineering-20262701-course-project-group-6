@@ -196,4 +196,17 @@ public class GameSessionTest {
 
         assertEquals("Players are not picking colors", exception.getMessage());
     }
+
+    @Test
+    public void PickColor_FirstSeatPicksRed_GetsTwoLumber() {
+        GameSession game = new GameSession(4, new Random());
+        game.rollForStartingOrder();
+
+        game.pickColor(PlayerColor.RED);
+
+        assertEquals(1, game.getResourceCount(PlayerColor.RED, ResourceCardType.GRAIN));
+        assertEquals(2, game.getResourceCount(PlayerColor.RED, ResourceCardType.LUMBER));
+        assertEquals(18, game.getBankResourceCount(ResourceCardType.GRAIN));
+        assertEquals(17, game.getBankResourceCount(ResourceCardType.LUMBER));
+    }
 }
