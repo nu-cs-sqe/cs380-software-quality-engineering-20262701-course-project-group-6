@@ -39,6 +39,17 @@ public class StartingRollOffTest {
         EasyMock.verify(dice);
     }
 
+    @Test
+    public void RollOrder_ThreeSeatsWithTwelveAndTwo_TwelveFirstTwoLast() {
+        Random dice = diceRolling(5, 12, 2);
+        StartingRollOff rollOff = new StartingRollOff(dice);
+
+        List<Integer> order = rollOff.rollOrder(3);
+
+        assertEquals(List.of(2, 1, 3), order);
+        EasyMock.verify(dice);
+    }
+
     private static Random diceRolling(int... totals) {
         Random dice = EasyMock.createStrictMock(Random.class);
         for (int total : totals) {
