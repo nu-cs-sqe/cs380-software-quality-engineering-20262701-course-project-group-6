@@ -37,6 +37,10 @@ public class GameSession {
         return List.copyOf(pickOrder);
     }
 
+    public int getSeatToPick() {
+        return pickOrder.get(0);
+    }
+
     public List<PlayerColor> getAvailableColors() {
         return Arrays.stream(PlayerColor.values())
                 .filter(board.getSettlements()::containsValue)

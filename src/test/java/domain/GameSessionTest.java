@@ -71,4 +71,14 @@ public class GameSessionTest {
 
         assertEquals("The starting order was already rolled", exception.getMessage());
     }
+
+    @Test
+    public void GetSeatToPick_RolledNobodyPicked_FirstSeatInOrder() {
+        GameSession game = new GameSession(4, new Random());
+        List<Integer> order = game.rollForStartingOrder();
+
+        int seat = game.getSeatToPick();
+
+        assertEquals(order.get(0), seat);
+    }
 }
