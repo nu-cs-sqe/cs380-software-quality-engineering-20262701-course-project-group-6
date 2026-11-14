@@ -66,7 +66,11 @@ public class GameSession {
     }
 
     public List<PlayerColor> getTurnOrder() {
-        return List.of();
+        return List.copyOf(players.keySet());
+    }
+
+    public PlayerColor getCurrentColor() {
+        return getTurnOrder().get(0);
     }
 
     public List<PlayerColor> getAvailableColors() {

@@ -168,4 +168,18 @@ public class GameSessionTest {
 
         assertEquals("Player color is required", exception.getMessage());
     }
+
+    @Test
+    public void PickColor_LastSeatPicks_TurnOrderFollowsPickOrder() {
+        GameSession game = new GameSession(3, new Random());
+        game.rollForStartingOrder();
+        game.pickColor(PlayerColor.WHITE);
+        game.pickColor(PlayerColor.BLUE);
+
+        game.pickColor(PlayerColor.ORANGE);
+
+        assertEquals(List.of(PlayerColor.WHITE, PlayerColor.BLUE, PlayerColor.ORANGE), game.getTurnOrder());
+        assertEquals(PlayerColor.WHITE, game.getCurrentColor());
+        assertEquals(List.of(), game.getAvailableColors());
+    }
 }
