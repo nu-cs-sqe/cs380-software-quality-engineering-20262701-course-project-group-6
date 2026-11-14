@@ -2,6 +2,7 @@ package domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 import java.util.Map;
@@ -78,5 +79,15 @@ public class BeginnerBoardTest {
                 board.getStartingResources(PlayerColor.BLUE));
         assertEquals(List.of(ResourceCardType.ORE, ResourceCardType.GRAIN, ResourceCardType.GRAIN),
                 board.getStartingResources(PlayerColor.ORANGE));
+    }
+
+    @Test
+    public void GetStartingResources_RedOnThreePlayerBoard_ThrowsIllegalArgumentException() {
+        BeginnerBoard board = BeginnerBoard.createForThreePlayers();
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> board.getStartingResources(PlayerColor.RED));
+
+        assertEquals("RED is not on this board", exception.getMessage());
     }
 }

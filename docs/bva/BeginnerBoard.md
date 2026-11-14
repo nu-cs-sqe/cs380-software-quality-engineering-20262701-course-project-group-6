@@ -34,5 +34,5 @@ Illustration A. Fixed data until `GameBoard` can find the hexes next to a corner
 | ID | Method | State of the system | Expected output | Implemented? |
 |----|--------|---------------------|-----------------|--------------|
 | TC4 | `getStartingResources(color)` | New 4-player board, each color | white: `GRAIN, BRICK, LUMBER`; red: `GRAIN, LUMBER, LUMBER`; blue: `LUMBER, ORE, BRICK`; orange: `ORE, GRAIN, GRAIN` | :white_check_mark: |
-| TC5 | `getStartingResources(RED)` | 3-player board | `IllegalArgumentException` with a message saying red is not on this board | :x: |
+| TC5 | `getStartingResources(RED)` | 3-player board | `IllegalArgumentException` with a message saying red is not on this board | :white_check_mark: |
 | TC6 | `getStartingResources(null)` | New 4-player board | `IllegalArgumentException` with a message saying a color is required | :x: |
