@@ -242,4 +242,14 @@ public class GameSessionTest {
 
         assertEquals("Player color is required", exception.getMessage());
     }
+
+    @Test
+    public void GetBankResourceCount_NullType_ThrowsIllegalArgumentException() {
+        GameSession game = new GameSession(4, new Random());
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> game.getBankResourceCount(null));
+
+        assertEquals("Resource type is required", exception.getMessage());
+    }
 }
