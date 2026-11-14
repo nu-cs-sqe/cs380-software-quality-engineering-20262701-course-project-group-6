@@ -220,4 +220,16 @@ public class GameSessionTest {
 
         assertEquals("Players are still picking colors", exception.getMessage());
     }
+
+    @Test
+    public void GetResourceCount_ColorNotPicked_ThrowsIllegalArgumentException() {
+        GameSession game = new GameSession(4, new Random());
+        game.rollForStartingOrder();
+        game.pickColor(PlayerColor.BLUE);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> game.getResourceCount(PlayerColor.ORANGE, ResourceCardType.LUMBER));
+
+        assertEquals("No player has picked ORANGE", exception.getMessage());
+    }
 }

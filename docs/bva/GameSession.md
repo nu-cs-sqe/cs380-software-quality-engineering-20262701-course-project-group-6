@@ -121,6 +121,6 @@ Checked in TC1, TC12, TC16 and TC18. Only the error cases need their own tests.
 
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
-| TC20 | nobody picked `ORANGE`, ask for orange's lumber | `IllegalArgumentException` with a message saying no player has picked orange | :x: |
+| TC20 | nobody picked `ORANGE`, ask for orange's lumber | `IllegalArgumentException` with a message saying no player has picked orange | :white_check_mark: |
 | TC21 | `color` = `null` in `getVictoryPointCount` | `IllegalArgumentException` with a message saying a color is required | :x: |
 | TC22 | `type` = `null` in `getBankResourceCount` | `IllegalArgumentException` with a message saying the resource type is required | :x: |

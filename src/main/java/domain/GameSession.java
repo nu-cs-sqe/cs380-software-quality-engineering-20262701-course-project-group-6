@@ -83,15 +83,23 @@ public class GameSession {
     }
 
     public int getResourceCount(PlayerColor color, ResourceCardType type) {
-        return players.get(color).getResourceCount(type);
+        return playerFor(color).getResourceCount(type);
     }
 
     public int getVictoryPointCount(PlayerColor color) {
-        return players.get(color).getVictoryPointCount();
+        return playerFor(color).getVictoryPointCount();
     }
 
     public int getBankResourceCount(ResourceCardType type) {
         return bank.getResourceCount(type);
+    }
+
+    private Player playerFor(PlayerColor color) {
+        Player player = players.get(color);
+        if (player == null) {
+            throw new IllegalArgumentException("No player has picked " + color);
+        }
+        return player;
     }
 
     private void requirePicking() {
