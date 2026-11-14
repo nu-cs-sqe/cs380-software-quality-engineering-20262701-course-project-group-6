@@ -90,4 +90,14 @@ public class GameSessionTest {
 
         assertEquals("Players are not picking colors", exception.getMessage());
     }
+
+    @Test
+    public void GetTurnOrder_RolledNobodyPicked_Empty() {
+        GameSession game = new GameSession(4, new Random());
+        game.rollForStartingOrder();
+
+        List<PlayerColor> turnOrder = game.getTurnOrder();
+
+        assertEquals(List.of(), turnOrder);
+    }
 }

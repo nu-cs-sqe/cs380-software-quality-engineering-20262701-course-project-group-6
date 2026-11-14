@@ -88,7 +88,7 @@ For whole numbers, the catalog's "LOW − ε" and "HIGH + ε" are LOW − 1 and 
 
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
-| TC10 | rolled, nobody has picked | empty list | :x: |
+| TC10 | rolled, nobody has picked | empty list | :white_check_mark: |
 
 ### Method under test: `getAvailableColors()`
 

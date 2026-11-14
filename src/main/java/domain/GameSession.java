@@ -44,6 +44,10 @@ public class GameSession {
         return pickOrder.get(0);
     }
 
+    public List<PlayerColor> getTurnOrder() {
+        return List.of();
+    }
+
     public List<PlayerColor> getAvailableColors() {
         return Arrays.stream(PlayerColor.values())
                 .filter(board.getSettlements()::containsValue)
