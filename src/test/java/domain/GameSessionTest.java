@@ -100,4 +100,15 @@ public class GameSessionTest {
 
         assertEquals(List.of(), turnOrder);
     }
+
+    @Test
+    public void GetAvailableColors_FirstSeatPickedBlue_BlueNoLongerAvailable() {
+        GameSession game = new GameSession(4, new Random());
+        game.rollForStartingOrder();
+        game.pickColor(PlayerColor.BLUE);
+
+        List<PlayerColor> available = game.getAvailableColors();
+
+        assertEquals(List.of(PlayerColor.ORANGE, PlayerColor.WHITE, PlayerColor.RED), available);
+    }
 }

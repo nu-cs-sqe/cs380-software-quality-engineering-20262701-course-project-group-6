@@ -1,7 +1,9 @@
 package domain;
 
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -14,6 +16,7 @@ public class GameSession {
     private final StartingRollOff rollOff;
     private final int playerCount;
     private List<Integer> pickOrder = List.of();
+    private final Map<PlayerColor, Player> players = new LinkedHashMap<>();
 
     public GameSession(int playerCount, Random random) {
         if (playerCount < MIN_PLAYERS || playerCount > MAX_PLAYERS) {
@@ -44,6 +47,10 @@ public class GameSession {
         return pickOrder.get(0);
     }
 
+    public void pickColor(PlayerColor color) {
+        players.put(color, new Player(color));
+    }
+
     public List<PlayerColor> getTurnOrder() {
         return List.of();
     }
@@ -51,6 +58,7 @@ public class GameSession {
     public List<PlayerColor> getAvailableColors() {
         return Arrays.stream(PlayerColor.values())
                 .filter(board.getSettlements()::containsValue)
+                .filter(color -> !players.containsKey(color))
                 .collect(Collectors.toUnmodifiableList());
     }
 
