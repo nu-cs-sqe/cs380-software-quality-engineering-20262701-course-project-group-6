@@ -11,6 +11,9 @@ public class GameSession {
 
     private final Bank bank;
     private final BeginnerBoard board;
+    private final StartingRollOff rollOff;
+    private final int playerCount;
+    private List<Integer> pickOrder = List.of();
 
     public GameSession(int playerCount, Random random) {
         if (playerCount < MIN_PLAYERS || playerCount > MAX_PLAYERS) {
@@ -21,7 +24,14 @@ public class GameSession {
             throw new IllegalArgumentException("Random is required to start a game");
         }
         bank = new Bank(random);
+        rollOff = new StartingRollOff(random);
+        this.playerCount = playerCount;
         board = playerCount == MIN_PLAYERS ? BeginnerBoard.createForThreePlayers() : new BeginnerBoard();
+    }
+
+    public List<Integer> rollForStartingOrder() {
+        pickOrder = rollOff.rollOrder(playerCount);
+        return List.copyOf(pickOrder);
     }
 
     public List<PlayerColor> getAvailableColors() {

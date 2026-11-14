@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 public class GameSessionTest {
@@ -49,5 +50,15 @@ public class GameSessionTest {
                 () -> new GameSession(4, null));
 
         assertEquals("Random is required to start a game", exception.getMessage());
+    }
+
+    @Test
+    public void RollForStartingOrder_FourPlayers_EachSeatOnce() {
+        GameSession game = new GameSession(4, new Random());
+
+        List<Integer> order = game.rollForStartingOrder();
+
+        assertEquals(Set.of(1, 2, 3, 4), Set.copyOf(order));
+        assertEquals(4, order.size());
     }
 }
