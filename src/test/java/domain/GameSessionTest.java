@@ -111,4 +111,25 @@ public class GameSessionTest {
 
         assertEquals(List.of(PlayerColor.ORANGE, PlayerColor.WHITE, PlayerColor.RED), available);
     }
+
+    @Test
+    public void PickColor_FirstSeatPicksBlue_GetsStartingResourcesFromBank() {
+        GameSession game = new GameSession(4, new Random());
+        List<Integer> order = game.rollForStartingOrder();
+
+        game.pickColor(PlayerColor.BLUE);
+
+        assertEquals(1, game.getResourceCount(PlayerColor.BLUE, ResourceCardType.LUMBER));
+        assertEquals(1, game.getResourceCount(PlayerColor.BLUE, ResourceCardType.ORE));
+        assertEquals(1, game.getResourceCount(PlayerColor.BLUE, ResourceCardType.BRICK));
+        assertEquals(0, game.getResourceCount(PlayerColor.BLUE, ResourceCardType.GRAIN));
+        assertEquals(0, game.getResourceCount(PlayerColor.BLUE, ResourceCardType.WOOL));
+        assertEquals(2, game.getVictoryPointCount(PlayerColor.BLUE));
+        assertEquals(18, game.getBankResourceCount(ResourceCardType.LUMBER));
+        assertEquals(18, game.getBankResourceCount(ResourceCardType.ORE));
+        assertEquals(18, game.getBankResourceCount(ResourceCardType.BRICK));
+        assertEquals(19, game.getBankResourceCount(ResourceCardType.GRAIN));
+        assertEquals(19, game.getBankResourceCount(ResourceCardType.WOOL));
+        assertEquals(order.get(1), game.getSeatToPick());
+    }
 }

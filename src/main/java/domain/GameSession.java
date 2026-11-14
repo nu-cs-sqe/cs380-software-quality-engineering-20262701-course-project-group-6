@@ -44,11 +44,16 @@ public class GameSession {
         if (pickOrder.isEmpty()) {
             throw new IllegalStateException("Players are not picking colors");
         }
-        return pickOrder.get(0);
+        return pickOrder.get(players.size());
     }
 
     public void pickColor(PlayerColor color) {
-        players.put(color, new Player(color));
+        Player player = new Player(color);
+        for (ResourceCardType type : board.getStartingResources(color)) {
+            bank.withdrawResource(type, 1);
+            player.collectResource(type, 1);
+        }
+        players.put(color, player);
     }
 
     public List<PlayerColor> getTurnOrder() {
@@ -60,6 +65,14 @@ public class GameSession {
                 .filter(board.getSettlements()::containsValue)
                 .filter(color -> !players.containsKey(color))
                 .collect(Collectors.toUnmodifiableList());
+    }
+
+    public int getResourceCount(PlayerColor color, ResourceCardType type) {
+        return players.get(color).getResourceCount(type);
+    }
+
+    public int getVictoryPointCount(PlayerColor color) {
+        return players.get(color).getVictoryPointCount();
     }
 
     public int getBankResourceCount(ResourceCardType type) {
