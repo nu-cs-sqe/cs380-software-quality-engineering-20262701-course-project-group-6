@@ -34,4 +34,12 @@ public class GameSessionTest {
 
         assertEquals(List.of(PlayerColor.BLUE, PlayerColor.ORANGE, PlayerColor.WHITE), game.getAvailableColors());
     }
+
+    @Test
+    public void Constructor_FivePlayers_ThrowsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> new GameSession(5, new Random()));
+
+        assertEquals("A game needs 3 or 4 players (was 5)", exception.getMessage());
+    }
 }

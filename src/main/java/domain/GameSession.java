@@ -13,7 +13,7 @@ public class GameSession {
     private final BeginnerBoard board;
 
     public GameSession(int playerCount, Random random) {
-        if (playerCount < MIN_PLAYERS) {
+        if (playerCount < MIN_PLAYERS || playerCount > MAX_PLAYERS) {
             throw new IllegalArgumentException(
                     "A game needs " + MIN_PLAYERS + " or " + MAX_PLAYERS + " players (was " + playerCount + ")");
         }
