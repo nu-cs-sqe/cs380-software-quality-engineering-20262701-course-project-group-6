@@ -90,4 +90,14 @@ public class BeginnerBoardTest {
 
         assertEquals("RED is not on this board", exception.getMessage());
     }
+
+    @Test
+    public void GetStartingResources_NullColor_ThrowsIllegalArgumentException() {
+        BeginnerBoard board = new BeginnerBoard();
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> board.getStartingResources(null));
+
+        assertEquals("Player color is required", exception.getMessage());
+    }
 }

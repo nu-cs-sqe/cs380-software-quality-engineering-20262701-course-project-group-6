@@ -90,6 +90,9 @@ public final class BeginnerBoard {
     }
 
     public List<ResourceCardType> getStartingResources(PlayerColor color) {
+        if (color == null) {
+            throw new IllegalArgumentException("Player color is required");
+        }
         if (!settlements.containsValue(color)) {
             throw new IllegalArgumentException(color + " is not on this board");
         }
