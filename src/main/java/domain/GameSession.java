@@ -41,9 +41,7 @@ public class GameSession {
     }
 
     public int getSeatToPick() {
-        if (pickOrder.isEmpty()) {
-            throw new IllegalStateException("Players are not picking colors");
-        }
+        requirePicking();
         return pickOrder.get(players.size());
     }
 
@@ -51,6 +49,7 @@ public class GameSession {
         if (color == null) {
             throw new IllegalArgumentException("Player color is required");
         }
+        requirePicking();
         if (!board.getSettlements().containsValue(color)) {
             throw new IllegalStateException(color + " is not in play");
         }
@@ -90,5 +89,11 @@ public class GameSession {
 
     public int getBankResourceCount(ResourceCardType type) {
         return bank.getResourceCount(type);
+    }
+
+    private void requirePicking() {
+        if (pickOrder.isEmpty() || players.size() == playerCount) {
+            throw new IllegalStateException("Players are not picking colors");
+        }
     }
 }

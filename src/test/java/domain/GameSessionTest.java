@@ -182,4 +182,18 @@ public class GameSessionTest {
         assertEquals(PlayerColor.WHITE, game.getCurrentColor());
         assertEquals(List.of(), game.getAvailableColors());
     }
+
+    @Test
+    public void PickColor_EveryonePicked_ThrowsIllegalStateException() {
+        GameSession game = new GameSession(3, new Random());
+        game.rollForStartingOrder();
+        game.pickColor(PlayerColor.WHITE);
+        game.pickColor(PlayerColor.BLUE);
+        game.pickColor(PlayerColor.ORANGE);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> game.pickColor(PlayerColor.RED));
+
+        assertEquals("Players are not picking colors", exception.getMessage());
+    }
 }
