@@ -61,7 +61,7 @@ Rolls are written as each seat's total; the stub returns the matching die values
 
 |     | State of the System | Expected output | Implemented? |
 |-----|---------------------|-----------------|--------------|
-| TC1 | `random` = `null` | `IllegalArgumentException` with a message saying a `Random` is required | :x: |
+| TC1 | `random` = `null` | `IllegalArgumentException` with a message saying a `Random` is required | :white_check_mark: |
 
 ### Method under test: `rollOrder(int seatCount)`
 
