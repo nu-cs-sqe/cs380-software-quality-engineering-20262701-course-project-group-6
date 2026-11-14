@@ -72,6 +72,6 @@ Rolls are written as each seat's total; the stub returns the matching die values
 | TC4 | 3 seats roll 5, 12 (6 + 6), 2 (1 + 1) | `[2, 1, 3]` | :white_check_mark: |
 | TC5 | 4 seats roll 6, 9, 4, 11 | `[4, 2, 1, 3]` | :white_check_mark: |
 | TC6 | 3 seats roll 8, 5, 8 (seats 1 and 3 tie for first); re-roll: seat 1 → 4, seat 3 → 10 | `[3, 1, 2]` | :white_check_mark: |
-| TC7 | 4 seats roll 10, 6, 3, 6 (seats 2 and 4 tie for second); re-roll: seat 2 → 9, seat 4 → 7 | `[1, 2, 4, 3]` | :x: |
+| TC7 | 4 seats roll 10, 6, 3, 6 (seats 2 and 4 tie for second); re-roll: seat 2 → 9, seat 4 → 7 | `[1, 2, 4, 3]` | :white_check_mark: |
 | TC8 | 3 seats roll 7, 7, 7 (all tie); re-roll: 4, 9, 6 | `[2, 3, 1]` | :x: |
 | TC9 | 2 seats roll 5, 5; re-roll 8, 8; re-roll 3, 11 | `[2, 1]` | :x: |

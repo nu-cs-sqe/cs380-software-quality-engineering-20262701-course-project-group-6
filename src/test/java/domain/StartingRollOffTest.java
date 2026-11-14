@@ -72,6 +72,17 @@ public class StartingRollOffTest {
         EasyMock.verify(dice);
     }
 
+    @Test
+    public void RollOrder_TieInTheMiddle_TiedPairKeepsItsPlace() {
+        Random dice = diceRolling(10, 6, 3, 6, 9, 7);
+        StartingRollOff rollOff = new StartingRollOff(dice);
+
+        List<Integer> order = rollOff.rollOrder(4);
+
+        assertEquals(List.of(1, 2, 4, 3), order);
+        EasyMock.verify(dice);
+    }
+
     private static Random diceRolling(int... totals) {
         Random dice = EasyMock.createStrictMock(Random.class);
         for (int total : totals) {
