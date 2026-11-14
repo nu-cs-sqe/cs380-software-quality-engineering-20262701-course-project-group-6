@@ -2,10 +2,10 @@ package domain;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.TreeMap;
 
 public class StartingRollOff {
     private static final int MIN_SEATS = 2;
@@ -25,14 +25,24 @@ public class StartingRollOff {
             throw new IllegalArgumentException(
                     "At least " + MIN_SEATS + " seats are needed to roll for starting order (was " + seatCount + ")");
         }
-        Map<Integer, Integer> rolls = new HashMap<>();
         List<Integer> seats = new ArrayList<>();
         for (int seat = 1; seat <= seatCount; seat++) {
-            rolls.put(seat, rollTwoDice());
             seats.add(seat);
         }
-        seats.sort(Comparator.comparing(rolls::get, Comparator.reverseOrder()));
-        return seats;
+        return order(seats);
+    }
+
+    // Seats that tie roll again among themselves; each tied group keeps its place in the overall order.
+    private List<Integer> order(List<Integer> seats) {
+        Map<Integer, List<Integer>> seatsByRoll = new TreeMap<>(Comparator.reverseOrder());
+        for (int seat : seats) {
+            seatsByRoll.computeIfAbsent(rollTwoDice(), roll -> new ArrayList<>()).add(seat);
+        }
+        List<Integer> ordered = new ArrayList<>();
+        for (List<Integer> sameRoll : seatsByRoll.values()) {
+            ordered.addAll(sameRoll.size() == 1 ? sameRoll : order(sameRoll));
+        }
+        return ordered;
     }
 
     private int rollTwoDice() {
