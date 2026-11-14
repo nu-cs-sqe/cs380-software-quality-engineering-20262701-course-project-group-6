@@ -75,7 +75,7 @@ For whole numbers, the catalog's "LOW − ε" and "HIGH + ε" are LOW − 1 and 
 |     | State of the System | Expected output | Implemented? |
 |-----|---------------------|-----------------|--------------|
 | TC6 | new 4-player game | a list of seats 1–4, each once | :white_check_mark: |
-| TC7 | already rolled | `IllegalStateException` with a message saying the starting order was already rolled | :x: |
+| TC7 | already rolled | `IllegalStateException` with a message saying the starting order was already rolled | :white_check_mark: |
 
 ### Method under test: `getSeatToPick()`
 

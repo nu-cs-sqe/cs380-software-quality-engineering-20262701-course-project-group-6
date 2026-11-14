@@ -30,6 +30,9 @@ public class GameSession {
     }
 
     public List<Integer> rollForStartingOrder() {
+        if (!pickOrder.isEmpty()) {
+            throw new IllegalStateException("The starting order was already rolled");
+        }
         pickOrder = rollOff.rollOrder(playerCount);
         return List.copyOf(pickOrder);
     }

@@ -61,4 +61,14 @@ public class GameSessionTest {
         assertEquals(Set.of(1, 2, 3, 4), Set.copyOf(order));
         assertEquals(4, order.size());
     }
+
+    @Test
+    public void RollForStartingOrder_AlreadyRolled_ThrowsIllegalStateException() {
+        GameSession game = new GameSession(4, new Random());
+        game.rollForStartingOrder();
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, game::rollForStartingOrder);
+
+        assertEquals("The starting order was already rolled", exception.getMessage());
+    }
 }
