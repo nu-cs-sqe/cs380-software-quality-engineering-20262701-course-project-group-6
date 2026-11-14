@@ -38,6 +38,9 @@ public class GameSession {
     }
 
     public int getSeatToPick() {
+        if (pickOrder.isEmpty()) {
+            throw new IllegalStateException("Players are not picking colors");
+        }
         return pickOrder.get(0);
     }
 

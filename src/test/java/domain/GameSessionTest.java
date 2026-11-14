@@ -81,4 +81,13 @@ public class GameSessionTest {
 
         assertEquals(order.get(0), seat);
     }
+
+    @Test
+    public void GetSeatToPick_NotRolledYet_ThrowsIllegalStateException() {
+        GameSession game = new GameSession(4, new Random());
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, game::getSeatToPick);
+
+        assertEquals("Players are not picking colors", exception.getMessage());
+    }
 }

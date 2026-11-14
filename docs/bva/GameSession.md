@@ -82,7 +82,7 @@ For whole numbers, the catalog's "LOW − ε" and "HIGH + ε" are LOW − 1 and 
 |     | State of the System | Expected output | Implemented? |
 |-----|---------------------|-----------------|--------------|
 | TC8 | rolled, nobody has picked | the first seat in the rolled order | :white_check_mark: |
-| TC9 | not rolled yet | `IllegalStateException` with a message saying players are not picking colors | :x: |
+| TC9 | not rolled yet | `IllegalStateException` with a message saying players are not picking colors | :white_check_mark: |
 
 ### Method under test: `getTurnOrder()`
 
