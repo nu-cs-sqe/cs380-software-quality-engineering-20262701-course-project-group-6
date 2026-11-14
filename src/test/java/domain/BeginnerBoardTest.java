@@ -65,4 +65,18 @@ public class BeginnerBoardTest {
         return tile.getResource().map(resource -> resource.name() + " " + tile.getDiceNumber().orElseThrow())
                 .orElse("DESERT");
     }
+
+    @Test
+    public void GetStartingResources_EachColor_MatchesStarredSettlement() {
+        BeginnerBoard board = new BeginnerBoard();
+
+        assertEquals(List.of(ResourceCardType.GRAIN, ResourceCardType.BRICK, ResourceCardType.LUMBER),
+                board.getStartingResources(PlayerColor.WHITE));
+        assertEquals(List.of(ResourceCardType.GRAIN, ResourceCardType.LUMBER, ResourceCardType.LUMBER),
+                board.getStartingResources(PlayerColor.RED));
+        assertEquals(List.of(ResourceCardType.LUMBER, ResourceCardType.ORE, ResourceCardType.BRICK),
+                board.getStartingResources(PlayerColor.BLUE));
+        assertEquals(List.of(ResourceCardType.ORE, ResourceCardType.GRAIN, ResourceCardType.GRAIN),
+                board.getStartingResources(PlayerColor.ORANGE));
+    }
 }
