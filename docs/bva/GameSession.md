@@ -113,7 +113,7 @@ For whole numbers, the catalog's "LOW − ε" and "HIGH + ε" are LOW − 1 and 
 
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
-| TC19 | rolled, still picking | `IllegalStateException` with a message saying players are still picking colors | :x: |
+| TC19 | rolled, still picking | `IllegalStateException` with a message saying players are still picking colors | :white_check_mark: |
 
 ### Methods under test: `getResourceCount(PlayerColor, ResourceCardType)`, `getVictoryPointCount(PlayerColor)`, `getBankResourceCount(ResourceCardType)`
 

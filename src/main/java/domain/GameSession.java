@@ -69,6 +69,9 @@ public class GameSession {
     }
 
     public PlayerColor getCurrentColor() {
+        if (players.size() < playerCount) {
+            throw new IllegalStateException("Players are still picking colors");
+        }
         return getTurnOrder().get(0);
     }
 

@@ -209,4 +209,15 @@ public class GameSessionTest {
         assertEquals(18, game.getBankResourceCount(ResourceCardType.GRAIN));
         assertEquals(17, game.getBankResourceCount(ResourceCardType.LUMBER));
     }
+
+    @Test
+    public void GetCurrentColor_StillPicking_ThrowsIllegalStateException() {
+        GameSession game = new GameSession(4, new Random());
+        game.rollForStartingOrder();
+        game.pickColor(PlayerColor.BLUE);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, game::getCurrentColor);
+
+        assertEquals("Players are still picking colors", exception.getMessage());
+    }
 }
