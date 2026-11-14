@@ -103,7 +103,7 @@ For whole numbers, the catalog's "LOW − ε" and "HIGH + ε" are LOW − 1 and 
 | TC12 | 4 players, rolled, first seat picks `BLUE` | blue has 1 lumber, 1 ore, 1 brick, 0 grain, 0 wool, and 2 victory points; the bank has 18 lumber, 18 ore, 18 brick, 19 grain, 19 wool; the second seat in the rolled order picks next | :white_check_mark: |
 | TC13 | first seat picked `BLUE`, second seat picks `BLUE` | `IllegalStateException` with a message saying blue is already taken; still the second seat to pick | :white_check_mark: |
 | TC14 | 3 players, first seat picks `RED` | `IllegalStateException` with a message saying red is not in play; still the first seat to pick | :white_check_mark: |
-| TC15 | `color` = `null` | `IllegalArgumentException` with a message saying a color is required | :x: |
+| TC15 | `color` = `null` | `IllegalArgumentException` with a message saying a color is required | :white_check_mark: |
 | TC16 | 3 players, seats pick `WHITE`, `BLUE`, `ORANGE` in rolled order | turn order `WHITE, BLUE, ORANGE`; current color `WHITE`; no colors available | :x: |
 | TC17 | 3 players, all 3 have picked, `pickColor(RED)` | `IllegalStateException` with a message saying players are not picking colors | :x: |
 | TC18 | 4 players, first seat picks `RED` | red has 1 grain and 2 lumber; the bank has 18 grain and 17 lumber | :x: |

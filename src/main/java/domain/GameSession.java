@@ -48,6 +48,9 @@ public class GameSession {
     }
 
     public void pickColor(PlayerColor color) {
+        if (color == null) {
+            throw new IllegalArgumentException("Player color is required");
+        }
         if (!board.getSettlements().containsValue(color)) {
             throw new IllegalStateException(color + " is not in play");
         }

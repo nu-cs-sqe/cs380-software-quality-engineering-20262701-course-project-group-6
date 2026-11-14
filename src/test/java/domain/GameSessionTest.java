@@ -157,4 +157,15 @@ public class GameSessionTest {
         assertEquals("RED is not in play", exception.getMessage());
         assertEquals(order.get(0), game.getSeatToPick());
     }
+
+    @Test
+    public void PickColor_NullColor_ThrowsIllegalArgumentException() {
+        GameSession game = new GameSession(4, new Random());
+        game.rollForStartingOrder();
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> game.pickColor(null));
+
+        assertEquals("Player color is required", exception.getMessage());
+    }
 }
