@@ -18,7 +18,7 @@ public class GameSession {
                     "A game needs " + MIN_PLAYERS + " or " + MAX_PLAYERS + " players (was " + playerCount + ")");
         }
         bank = new Bank(random);
-        board = new BeginnerBoard();
+        board = playerCount == MIN_PLAYERS ? BeginnerBoard.createForThreePlayers() : new BeginnerBoard();
     }
 
     public List<PlayerColor> getAvailableColors() {

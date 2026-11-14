@@ -27,4 +27,11 @@ public class GameSessionTest {
 
         assertEquals("A game needs 3 or 4 players (was 2)", exception.getMessage());
     }
+
+    @Test
+    public void Constructor_ThreePlayers_RedNotAvailable() {
+        GameSession game = new GameSession(3, new Random());
+
+        assertEquals(List.of(PlayerColor.BLUE, PlayerColor.ORANGE, PlayerColor.WHITE), game.getAvailableColors());
+    }
 }
