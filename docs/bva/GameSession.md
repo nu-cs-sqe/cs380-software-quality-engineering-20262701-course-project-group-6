@@ -107,7 +107,7 @@ For whole numbers, the catalog's "LOW − ε" and "HIGH + ε" are LOW − 1 and 
 | TC16 | 3 players, seats pick `WHITE`, `BLUE`, `ORANGE` in rolled order | turn order `WHITE, BLUE, ORANGE`; current color `WHITE`; no colors available | :white_check_mark: |
 | TC17 | 3 players, all 3 have picked, `pickColor(RED)` | `IllegalStateException` with a message saying players are not picking colors | :white_check_mark: |
 | TC18 | 4 players, first seat picks `RED` | red has 1 grain and 2 lumber; the bank has 18 grain and 17 lumber | :white_check_mark: |
-| TC23 | not rolled yet, `pickColor(BLUE)` | `IllegalStateException` with a message saying players are not picking colors; blue is still available | :x: |
+| TC23 | not rolled yet, `pickColor(BLUE)` | `IllegalStateException` with a message saying players are not picking colors; blue is still available | :white_check_mark: |
 
 ### Method under test: `getCurrentColor()`
 

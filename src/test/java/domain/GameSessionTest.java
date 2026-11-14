@@ -252,4 +252,16 @@ public class GameSessionTest {
 
         assertEquals("Resource type is required", exception.getMessage());
     }
+
+    @Test
+    public void PickColor_NotRolledYet_ThrowsIllegalStateException() {
+        GameSession game = new GameSession(4, new Random());
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> game.pickColor(PlayerColor.BLUE));
+
+        assertEquals("Players are not picking colors", exception.getMessage());
+        assertEquals(List.of(PlayerColor.BLUE, PlayerColor.ORANGE, PlayerColor.WHITE, PlayerColor.RED),
+                game.getAvailableColors());
+    }
 }
