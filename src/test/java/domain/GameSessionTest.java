@@ -1,6 +1,7 @@
 package domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 import java.util.Random;
@@ -17,5 +18,13 @@ public class GameSessionTest {
         for (ResourceCardType type : ResourceCardType.values()) {
             assertEquals(19, game.getBankResourceCount(type));
         }
+    }
+
+    @Test
+    public void Constructor_TwoPlayers_ThrowsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> new GameSession(2, new Random()));
+
+        assertEquals("A game needs 3 or 4 players (was 2)", exception.getMessage());
     }
 }

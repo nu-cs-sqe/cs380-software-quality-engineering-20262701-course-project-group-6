@@ -6,10 +6,17 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 public class GameSession {
+    private static final int MIN_PLAYERS = 3;
+    private static final int MAX_PLAYERS = 4;
+
     private final Bank bank;
     private final BeginnerBoard board;
 
     public GameSession(int playerCount, Random random) {
+        if (playerCount < MIN_PLAYERS) {
+            throw new IllegalArgumentException(
+                    "A game needs " + MIN_PLAYERS + " or " + MAX_PLAYERS + " players (was " + playerCount + ")");
+        }
         bank = new Bank(random);
         board = new BeginnerBoard();
     }
