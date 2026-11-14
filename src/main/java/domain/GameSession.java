@@ -17,6 +17,9 @@ public class GameSession {
             throw new IllegalArgumentException(
                     "A game needs " + MIN_PLAYERS + " or " + MAX_PLAYERS + " players (was " + playerCount + ")");
         }
+        if (random == null) {
+            throw new IllegalArgumentException("Random is required to start a game");
+        }
         bank = new Bank(random);
         board = playerCount == MIN_PLAYERS ? BeginnerBoard.createForThreePlayers() : new BeginnerBoard();
     }

@@ -42,4 +42,12 @@ public class GameSessionTest {
 
         assertEquals("A game needs 3 or 4 players (was 5)", exception.getMessage());
     }
+
+    @Test
+    public void Constructor_NullRandom_ThrowsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> new GameSession(4, null));
+
+        assertEquals("Random is required to start a game", exception.getMessage());
+    }
 }

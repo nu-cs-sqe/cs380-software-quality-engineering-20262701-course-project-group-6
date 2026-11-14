@@ -68,7 +68,7 @@ For whole numbers, the catalog's "LOW − ε" and "HIGH + ε" are LOW − 1 and 
 | TC2 | `playerCount` = 2 | `IllegalArgumentException` with a message saying a game needs 3 or 4 players (was 2) | :white_check_mark: |
 | TC3 | `playerCount` = 3 | available colors: `BLUE, ORANGE, WHITE` (no red) | :white_check_mark: |
 | TC4 | `playerCount` = 5 | `IllegalArgumentException` with a message saying a game needs 3 or 4 players (was 5) | :white_check_mark: |
-| TC5 | `random` = `null` | `IllegalArgumentException` with a message saying a `Random` is required | :x: |
+| TC5 | `random` = `null` | `IllegalArgumentException` with a message saying a `Random` is required | :white_check_mark: |
 
 ### Method under test: `rollForStartingOrder()`
 
