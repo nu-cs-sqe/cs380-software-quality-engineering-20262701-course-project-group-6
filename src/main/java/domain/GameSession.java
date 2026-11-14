@@ -48,6 +48,9 @@ public class GameSession {
     }
 
     public void pickColor(PlayerColor color) {
+        if (!board.getSettlements().containsValue(color)) {
+            throw new IllegalStateException(color + " is not in play");
+        }
         if (players.containsKey(color)) {
             throw new IllegalStateException(color + " is already taken");
         }

@@ -145,4 +145,16 @@ public class GameSessionTest {
         assertEquals("BLUE is already taken", exception.getMessage());
         assertEquals(order.get(1), game.getSeatToPick());
     }
+
+    @Test
+    public void PickColor_RedInThreePlayerGame_ThrowsIllegalStateException() {
+        GameSession game = new GameSession(3, new Random());
+        List<Integer> order = game.rollForStartingOrder();
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> game.pickColor(PlayerColor.RED));
+
+        assertEquals("RED is not in play", exception.getMessage());
+        assertEquals(order.get(0), game.getSeatToPick());
+    }
 }
