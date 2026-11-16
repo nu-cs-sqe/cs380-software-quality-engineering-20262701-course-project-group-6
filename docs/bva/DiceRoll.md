@@ -42,4 +42,4 @@ why the game rolls two dice and keeps both faces.
 | TC4 | `secondDie` = 0 | `IllegalArgumentException` with a message saying a die must be between 1 and 6 (was 0) | :white_check_mark: |
 | TC5 | `secondDie` = 7 | `IllegalArgumentException` with a message saying a die must be between 1 and 6 (was 7) | :white_check_mark: |
 | TC6 | `firstDie` = 1, `secondDie` = 1 | total 2 | :white_check_mark: |
-| TC7 | `firstDie` = 6, `secondDie` = 6 | total 12 | :x: |
+| TC7 | `firstDie` = 6, `secondDie` = 6 | total 12 | :white_check_mark: |

@@ -52,4 +52,13 @@ public class DiceRollTest {
 
         assertEquals(2, total);
     }
+
+    @Test
+    public void GetTotal_TwoSixes_ReturnsTwelve() {
+        DiceRoll roll = new DiceRoll(6, 6);
+
+        int total = roll.getTotal();
+
+        assertEquals(12, total);
+    }
 }
