@@ -22,4 +22,11 @@ public class DiceRollTest {
 
         assertEquals("A die must be between 1 and 6 (was 0)", exception.getMessage());
     }
+
+    @Test
+    public void Constructor_FirstDieSeven_ThrowsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new DiceRoll(7, 3));
+
+        assertEquals("A die must be between 1 and 6 (was 7)", exception.getMessage());
+    }
 }

@@ -38,7 +38,7 @@ why the game rolls two dice and keeps both faces.
 |-----|---------------------|-----------------|--------------|
 | TC1 | `firstDie` = 4, `secondDie` = 3 | first die 4, second die 3, total 7 | :white_check_mark: |
 | TC2 | `firstDie` = 0 | `IllegalArgumentException` with a message saying a die must be between 1 and 6 (was 0) | :white_check_mark: |
-| TC3 | `firstDie` = 7 | `IllegalArgumentException` with a message saying a die must be between 1 and 6 (was 7) | :x: |
+| TC3 | `firstDie` = 7 | `IllegalArgumentException` with a message saying a die must be between 1 and 6 (was 7) | :white_check_mark: |
 | TC4 | `secondDie` = 0 | `IllegalArgumentException` with a message saying a die must be between 1 and 6 (was 0) | :x: |
 | TC5 | `secondDie` = 7 | `IllegalArgumentException` with a message saying a die must be between 1 and 6 (was 7) | :x: |
 | TC6 | `firstDie` = 1, `secondDie` = 1 | total 2 | :x: |

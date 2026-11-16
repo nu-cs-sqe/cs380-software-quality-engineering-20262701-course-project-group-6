@@ -8,7 +8,7 @@ public final class DiceRoll {
     private final int secondDie;
 
     public DiceRoll(int firstDie, int secondDie) {
-        if (firstDie < LOWEST_FACE) {
+        if (firstDie < LOWEST_FACE || firstDie > HIGHEST_FACE) {
             throw new IllegalArgumentException(
                     "A die must be between " + LOWEST_FACE + " and " + HIGHEST_FACE + " (was " + firstDie + ")");
         }
