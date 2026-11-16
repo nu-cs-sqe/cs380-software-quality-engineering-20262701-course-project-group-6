@@ -8,10 +8,8 @@ public final class DiceRoll {
     private final int secondDie;
 
     public DiceRoll(int firstDie, int secondDie) {
-        if (firstDie < LOWEST_FACE || firstDie > HIGHEST_FACE) {
-            throw new IllegalArgumentException(
-                    "A die must be between " + LOWEST_FACE + " and " + HIGHEST_FACE + " (was " + firstDie + ")");
-        }
+        requireFace(firstDie);
+        requireFace(secondDie);
         this.firstDie = firstDie;
         this.secondDie = secondDie;
     }
@@ -26,5 +24,12 @@ public final class DiceRoll {
 
     public int getTotal() {
         return firstDie + secondDie;
+    }
+
+    private static void requireFace(int face) {
+        if (face < LOWEST_FACE || face > HIGHEST_FACE) {
+            throw new IllegalArgumentException(
+                    "A die must be between " + LOWEST_FACE + " and " + HIGHEST_FACE + " (was " + face + ")");
+        }
     }
 }
