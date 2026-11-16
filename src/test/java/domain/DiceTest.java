@@ -27,6 +27,17 @@ public class DiceTest {
         EasyMock.verify(random);
     }
 
+    @Test
+    public void Roll_BothDiceShowSix_ReturnsTwelve() {
+        Random random = randomReturning(5, 5);
+        Dice dice = new Dice(random);
+
+        int total = dice.roll();
+
+        assertEquals(12, total);
+        EasyMock.verify(random);
+    }
+
     private static Random randomReturning(int firstDie, int secondDie) {
         Random random = EasyMock.createStrictMock(Random.class);
         EasyMock.expect(random.nextInt(6)).andReturn(firstDie);
