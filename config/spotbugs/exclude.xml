@@ -5,4 +5,10 @@
     <Match>
         <Bug pattern="CT_CONSTRUCTOR_THROW"/>
     </Match>
+    <!-- Dice keeps the Random it is given on purpose: the coding standard says to inject random dependencies so tests
+         can stub them, and Dice never exposes it. -->
+    <Match>
+        <Class name="domain.Dice"/>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+    </Match>
 </FindBugsFilter>

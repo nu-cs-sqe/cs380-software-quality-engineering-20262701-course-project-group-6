@@ -9,15 +9,14 @@ import java.util.TreeMap;
 
 public class StartingRollOff {
     private static final int MIN_SEATS = 2;
-    private static final int DIE_SIDES = 6;
 
-    private final Random random;
+    private final Dice dice;
 
     public StartingRollOff(Random random) {
         if (random == null) {
             throw new IllegalArgumentException("Random is required to roll for starting order");
         }
-        this.random = random;
+        dice = new Dice(random);
     }
 
     public List<Integer> rollOrder(int seatCount) {
@@ -36,20 +35,12 @@ public class StartingRollOff {
     private List<Integer> order(List<Integer> seats) {
         Map<Integer, List<Integer>> seatsByRoll = new TreeMap<>(Comparator.reverseOrder());
         for (int seat : seats) {
-            seatsByRoll.computeIfAbsent(rollTwoDice(), roll -> new ArrayList<>()).add(seat);
+            seatsByRoll.computeIfAbsent(dice.roll(), roll -> new ArrayList<>()).add(seat);
         }
         List<Integer> ordered = new ArrayList<>();
         for (List<Integer> sameRoll : seatsByRoll.values()) {
             ordered.addAll(sameRoll.size() == 1 ? sameRoll : order(sameRoll));
         }
         return ordered;
-    }
-
-    private int rollTwoDice() {
-        return rollDie() + rollDie();
-    }
-
-    private int rollDie() {
-        return random.nextInt(DIE_SIDES) + 1;
     }
 }
