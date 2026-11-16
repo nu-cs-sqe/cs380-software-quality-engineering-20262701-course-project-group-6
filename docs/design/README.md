@@ -94,7 +94,10 @@ development cards, the robber, winning) is added in a later PR once `GameBoard` 
 
 * **`Dice`:** two six-sided dice with an injected `Random` (each die is `nextInt(6) + 1`).
   * `public Dice(Random random)`: `IllegalArgumentException` if `random` is `null`.
-  * `public int roll()`: the total of both dice, 2 to 12. Reused for turn rolls in a later PR.
+  * `public DiceRoll roll()`: both faces and their total (2 to 12), so the UI can show both dice. Reused for turn
+    rolls in a later PR.
+* **`DiceRoll`:** immutable result of a roll: `getFirstDie()`, `getSecondDie()`, `getTotal()`. The constructor throws
+  `IllegalArgumentException` if a face is outside 1 to 6.
 
 ---
 

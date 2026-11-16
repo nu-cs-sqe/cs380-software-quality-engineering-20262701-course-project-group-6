@@ -1,6 +1,7 @@
 # BVA: `Dice`
 
-Two six-sided dice. `roll()` returns their total. Each die is `random.nextInt(6) + 1`, with the `Random` passed in so
+Two six-sided dice. `roll()` returns a `DiceRoll` with both faces and their total, so the UI can show both dice
+(team decision 11/16; see `DiceRoll.md`). Each die is `random.nextInt(6) + 1`, with the `Random` passed in so
 tests can stub it (coding standard: inject random dependencies). `StartingRollOff` uses it now; turn rolls in a later
 `GameSession` PR will use it too, where the total matters for payouts and the robber's 7.
 
@@ -14,7 +15,7 @@ directly kills it.
 |---|---|
 | **Inputs** | `random` (constructor) |
 | **State** | the next two values `random.nextInt(6)` returns |
-| **Outputs** | the total of the two dice, or an exception |
+| **Outputs** | a `DiceRoll` (both faces and the total), or an exception |
 
 ## Steps 2–3: Catalog types and boundary values
 
@@ -51,6 +52,6 @@ Tests stub `Random` with EasyMock and expect `nextInt(6)` exactly, so the number
 
 |     | State of the System | Expected output | Implemented? |
 |-----|---------------------|-----------------|--------------|
-| TC2 | `nextInt(6)` returns 0, 0 | 2 (1 + 1) | :white_check_mark: |
-| TC3 | `nextInt(6)` returns 5, 5 | 12 (6 + 6) | :white_check_mark: |
-| TC4 | `nextInt(6)` returns 1, 4 | 7 (2 + 5) | :white_check_mark: |
+| TC2 | `nextInt(6)` returns 0, 0 | dice 1 and 1, total 2 | :x: |
+| TC3 | `nextInt(6)` returns 5, 5 | dice 6 and 6, total 12 | :x: |
+| TC4 | `nextInt(6)` returns 1, 4 | dice 2 and 5 (in that order), total 7 | :x: |
