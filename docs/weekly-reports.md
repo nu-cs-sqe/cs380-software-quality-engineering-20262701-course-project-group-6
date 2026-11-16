@@ -51,6 +51,28 @@
 21. [not started] Omar: Ask the professor about the language file approach, integration test scope, and null in private fields (no PR, questions for professor)
 22. [not started] Omar: Implement Bank and DevelopmentDeck with BVA and TDD (no PR yet)
 
+# Week 7 (11/09/2026-11/15/2026)
+**Planning and Progress Tracking**:
+1. [done] Omar: Merged the week 6 report after Ryan approved it (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/21)
+2. [done] Omar: Implemented Bank and DevelopmentDeck with BVA and TDD, and updated every BVA file so each boundary value (LOW-1, LOW, HIGH, HIGH+1) maps to a test case (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/22)
+3. [done] Daniel: Reviewed and approved Omar's Bank and DevelopmentDeck PR, and suggested a test for withdrawing more than the bank's remaining supply, which Omar added as TC16 (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/22)
+4. [done] Omar: Asked the professor about the language file and trading. Answers: the languages.properties approach is approved, and trading is not required for the game to be playable (no PR, question for professor)
+5. [done] Omar: Added a rule to the coding standard that UI text with values uses MessageFormat placeholders in the language files instead of string concatenation (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/23)
+6. [done] Ryan: Reviewed and approved the coding standard update (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/23)
+7. [done] Daniel: Built the Story 1 game setup UI: the New Game setup screen and the beginner board with tiles, numbers, harbors, robber, and starting pieces, in English and Spanish (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/24)
+8. [done] Omar: Reviewed and approved Daniel's setup UI after checking it against the rulebook, and opened an issue so the board screen reads corner and road IDs from GameBoard once it exists (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/24, https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/issues/25)
+9. [done] Omar: Added development cards to Player (buy, play one per turn, cannot play on the turn bought, knights played, victory point cards) with BVA and TDD (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/26)
+10. [done] Ryan: Reviewed and approved Omar's development cards PR, and suggested that GameSession track who holds Longest Road and Largest Army (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/26)
+11. [done] Omar: Reviewed and merged the professor's week 7 code review (no violations found) (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/27)
+12. [done] Omar: Applied the professor's formatting suggestion in BoardGeometry (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/28)
+13. [done] Ryan: Reviewed and approved the formatting fix (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/28)
+14. [90% done] Ryan: Implemented Tile, Node, and Edge with BVA and TDD, approved and waiting to be merged (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/20)
+15. [done] Omar: Reviewed Ryan's Tile, Node, and Edge PR and requested changes (desert dice number, constant name). Ryan renamed the constant and explained that GameSession will handle a roll of 7 before paying out, so Omar approved (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/20)
+16. [90% done] Omar: Implemented GameSession for Stories 1 and 2 (3 or 4 players, roll for starting order with tie re-rolls, pick colors, starting resources, turn order), plus StartingRollOff, Dice, and BeginnerBoard starting resources, with BVA and TDD, waiting on review (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/pull/29)
+17. [not started] Ryan: Implement GameBoard (no PR yet)
+18. [not started] Omar: Write the feature list in docs/requirements and the first integration test (https://github.com/nu-cs-sqe/cs380-software-quality-engineering-20262701-course-project-group-6/issues/14)
+19. [not started] Omar: Ask the professor about null in private fields, whether every development card effect is required, and the final deadline (no PR, questions for professor)
+
 # One section per week until the last week of class (the week before the Finals week)
 
 
