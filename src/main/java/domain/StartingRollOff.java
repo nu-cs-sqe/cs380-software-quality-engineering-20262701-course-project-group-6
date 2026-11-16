@@ -35,7 +35,7 @@ public class StartingRollOff {
     private List<Integer> order(List<Integer> seats) {
         Map<Integer, List<Integer>> seatsByRoll = new TreeMap<>(Comparator.reverseOrder());
         for (int seat : seats) {
-            seatsByRoll.computeIfAbsent(dice.roll(), roll -> new ArrayList<>()).add(seat);
+            seatsByRoll.computeIfAbsent(dice.roll().getTotal(), roll -> new ArrayList<>()).add(seat);
         }
         List<Integer> ordered = new ArrayList<>();
         for (List<Integer> sameRoll : seatsByRoll.values()) {

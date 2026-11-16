@@ -17,35 +17,41 @@ public class DiceTest {
     }
 
     @Test
-    public void Roll_BothDiceShowOne_ReturnsTwo() {
+    public void Roll_BothDiceShowOne_OnesTotalTwo() {
         Random random = randomReturning(0, 0);
         Dice dice = new Dice(random);
 
-        int total = dice.roll();
+        DiceRoll roll = dice.roll();
 
-        assertEquals(2, total);
+        assertEquals(1, roll.getFirstDie());
+        assertEquals(1, roll.getSecondDie());
+        assertEquals(2, roll.getTotal());
         EasyMock.verify(random);
     }
 
     @Test
-    public void Roll_BothDiceShowSix_ReturnsTwelve() {
+    public void Roll_BothDiceShowSix_SixesTotalTwelve() {
         Random random = randomReturning(5, 5);
         Dice dice = new Dice(random);
 
-        int total = dice.roll();
+        DiceRoll roll = dice.roll();
 
-        assertEquals(12, total);
+        assertEquals(6, roll.getFirstDie());
+        assertEquals(6, roll.getSecondDie());
+        assertEquals(12, roll.getTotal());
         EasyMock.verify(random);
     }
 
     @Test
-    public void Roll_TwoAndFive_ReturnsSeven() {
+    public void Roll_TwoThenFive_FacesInOrderTotalSeven() {
         Random random = randomReturning(1, 4);
         Dice dice = new Dice(random);
 
-        int total = dice.roll();
+        DiceRoll roll = dice.roll();
 
-        assertEquals(7, total);
+        assertEquals(2, roll.getFirstDie());
+        assertEquals(5, roll.getSecondDie());
+        assertEquals(7, roll.getTotal());
         EasyMock.verify(random);
     }
 

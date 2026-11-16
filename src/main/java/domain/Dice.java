@@ -14,8 +14,8 @@ public class Dice {
         this.random = random;
     }
 
-    public int roll() {
-        return rollOne() + rollOne();
+    public DiceRoll roll() {
+        return new DiceRoll(rollOne(), rollOne());
     }
 
     private int rollOne() {
