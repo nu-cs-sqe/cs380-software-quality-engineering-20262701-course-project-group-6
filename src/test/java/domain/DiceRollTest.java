@@ -15,4 +15,11 @@ public class DiceRollTest {
         assertEquals(3, roll.getSecondDie());
         assertEquals(7, roll.getTotal());
     }
+
+    @Test
+    public void Constructor_FirstDieZero_ThrowsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new DiceRoll(0, 3));
+
+        assertEquals("A die must be between 1 and 6 (was 0)", exception.getMessage());
+    }
 }
