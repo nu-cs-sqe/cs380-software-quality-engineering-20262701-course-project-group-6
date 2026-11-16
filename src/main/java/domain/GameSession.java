@@ -55,10 +55,7 @@ public class GameSession {
             throw new IllegalStateException(color + " is already taken");
         }
         Player player = new Player(color);
-        for (ResourceCardType type : board.getStartingResources(color)) {
-            bank.withdrawResource(type, 1);
-            player.collectResource(type, 1);
-        }
+        payStartingResources(player, color);
         players.put(color, player);
     }
 
@@ -90,6 +87,13 @@ public class GameSession {
 
     public int getBankResourceCount(ResourceCardType type) {
         return bank.getResourceCount(type);
+    }
+
+    private void payStartingResources(Player player, PlayerColor color) {
+        for (ResourceCardType type : board.getStartingResources(color)) {
+            bank.withdrawResource(type, 1);
+            player.collectResource(type, 1);
+        }
     }
 
     private Player playerFor(PlayerColor color) {
