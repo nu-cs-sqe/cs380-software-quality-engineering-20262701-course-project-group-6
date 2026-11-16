@@ -43,4 +43,13 @@ public class DiceRollTest {
 
         assertEquals("A die must be between 1 and 6 (was 7)", exception.getMessage());
     }
+
+    @Test
+    public void GetTotal_TwoOnes_ReturnsTwo() {
+        DiceRoll roll = new DiceRoll(1, 1);
+
+        int total = roll.getTotal();
+
+        assertEquals(2, total);
+    }
 }
