@@ -139,12 +139,25 @@ Encapsulates Catan's hexagonal board topology using an intersection/edge graph r
   * `public List<Tile> getAdjacentTiles(int nodeId)`: Returns tiles bordering an intersection for resource distribution during setup phase.
   * `public void moveRobber(int tileId)`: Moves robber to different tile.
 
-* **Board Subcomponents:**
-  * `Tile`: Holds `ResourceCardType` (`LUMBER`, `WOOL`, `GRAIN`, `BRICK`, `ORE`) or unassigned (`null`) for the desert tile, `int diceNumber`, `int tileId`,  and bounded `Node` references.
+* **`Tile` Subcomponent (Terrain Hexes):**
+  * State: Holds `int id`, `ResourceCardType resourceProduced` (null for desert tile), `int diceNumber`, and a collection of `Node` references for its corners.
+  * Encapsulation Strategy: All the attributes (`id`, `resourceProduced`, `diceNumber`, and `cornerNodes`) are permanent upon initialization (assumes that `GameBoard` creates Nodes before creating Tiles).
+  * Accessors: Exposes public getters for its fields, utilizing `List.copyOf()` for its corner node collection to prevent external modification, and `Optional<ResourceCardType>` to prevent returning `null` when calling `getResourceProduced` on the desert tile.
+
+* **`Node` Subcomponent (Intersection):**
+  * State: Holds `int id`, a collection of incident `Edge` references, `BuildingType buildingType` (default `NONE`), `PlayerColor buildingColor` (`null` when vacant), and `HarborType harborType` (default `NONE`).
+  * Encapsulation Strategy: The `placeBuilding` and `addIncidentEdge` mutators are package-private to restrict setup and placement logic exclusively to `GameBoard`.
+  * Accessors: Exposes public getters for its fields (using `List.copyOf()` for the edge collection to prevent external modification) and provides topological helper method `public boolean isOccupied()`.
+
+* **`Edge` Subcomponent (Paths):**
+  * State: Holds `int id`, the two fixed endpoint `Node` references (node1, node2), and `PlayerColor roadColor` (`null` when no road is built).   
+  * Encapsulation Strategy: The `setRoadColor` mutator is package-private to restrict placement logic exclusively to `GameBoard`.
+  * Accessors: Exposes public getters for its fields and provides topological helper method `public boolean isOccupied()`.
+
+* **Board Subcomponent Enums:**
   * **`BuildingType` (Enum)**: `NONE`, `SETTLEMENT`, `CITY`.
   * **`HarborType` (Enum)**: `NONE`, `GENERIC_THREE_FOR_ONE`, `LUMBER_TWO_FOR_ONE`, `WOOL_TWO_FOR_ONE`, `GRAIN_TWO_FOR_ONE`, `BRICK_TWO_FOR_ONE`, `ORE_TWO_FOR_ONE`.
-  * **`Node` (Intersections)**: Holds `int nodeId`, incident `Edge` references, neighboring `Tile` references, `BuildingType buildingType` (default `NONE`), `Integer ownerPlayerId` (`null` when vacant, or the integer ID of the player who owns the settlement/city), and `HarborType harborType` (default `NONE`).
-  * **`Edge` (Paths)**: Holds `int edgeId`, the two endpoint `Node` references, and `Integer roadOwnerPlayerId` (`null` when no road is built, or the integer ID of the player who owns the road).
+
 #### Story 1: Game setup UI
 
 `BeginnerBoard` holds the starting layout from [Illustration A](https://cdn.1j1ju.com/medias/7a/18/fd-catan-rulebook.pdf#page=3).
