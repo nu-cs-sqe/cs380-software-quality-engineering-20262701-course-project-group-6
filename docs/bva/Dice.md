@@ -51,6 +51,6 @@ Tests stub `Random` with EasyMock and expect `nextInt(6)` exactly, so the number
 
 |     | State of the System | Expected output | Implemented? |
 |-----|---------------------|-----------------|--------------|
-| TC2 | `nextInt(6)` returns 0, 0 | 2 (1 + 1) | :x: |
+| TC2 | `nextInt(6)` returns 0, 0 | 2 (1 + 1) | :white_check_mark: |
 | TC3 | `nextInt(6)` returns 5, 5 | 12 (6 + 6) | :x: |
 | TC4 | `nextInt(6)` returns 1, 4 | 7 (2 + 5) | :x: |
