@@ -4,7 +4,7 @@ Story 2 (house rule): every seat rolls 2 dice, the highest roll picks a color fi
 Seats that tie roll again among themselves until the tie is broken, and the tied group keeps its place relative to
 everyone else (for example, two seats tied for second place re-roll to decide second and third).
 
-Seats are numbered 1 to `seatCount`. Each die is `random.nextInt(6) + 1`. Seats roll in seat order (die 1, then die 2),
+Seats are numbered 1 to `seatCount`. The dice come from `Dice` (each die is `random.nextInt(6) + 1`). Seats roll in seat order (die 1, then die 2),
 and a tied group re-rolls in seat order too. Tests stub `Random` with EasyMock so every roll is known, and expect
 `nextInt(6)` exactly, so the number of sides is checked too.
 

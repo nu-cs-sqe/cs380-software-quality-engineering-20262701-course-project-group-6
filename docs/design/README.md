@@ -86,11 +86,15 @@ development cards, the robber, winning) is added in a later PR once `GameBoard` 
     that color.
   * `public int getBankResourceCount(ResourceCardType type)`: for the UI and for Story 2 criterion 6.
 
-* **`StartingRollOff`:** rolls for starting order with an injected `Random` (two dice, each `nextInt(6) + 1`).
+* **`StartingRollOff`:** rolls for starting order with an injected `Random`, through `Dice`.
   * `public StartingRollOff(Random random)`: `IllegalArgumentException` if `random` is `null`.
   * `public List<Integer> rollOrder(int seatCount)`: seats `1..seatCount`, highest roll first. Seats that tie roll
     again among themselves (repeating until the tie is broken) and keep their place relative to everyone else.
     `IllegalArgumentException` if `seatCount` is below 2.
+
+* **`Dice`:** two six-sided dice with an injected `Random` (each die is `nextInt(6) + 1`).
+  * `public Dice(Random random)`: `IllegalArgumentException` if `random` is `null`.
+  * `public int roll()`: the total of both dice, 2 to 12. Reused for turn rolls in a later PR.
 
 ---
 
