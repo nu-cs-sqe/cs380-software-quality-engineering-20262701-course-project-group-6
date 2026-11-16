@@ -45,7 +45,7 @@ Tests stub `Random` with EasyMock and expect `nextInt(6)` exactly, so the number
 
 |     | State of the System | Expected output | Implemented? |
 |-----|---------------------|-----------------|--------------|
-| TC1 | `random` = `null` | `IllegalArgumentException` with a message saying a `Random` is required | :x: |
+| TC1 | `random` = `null` | `IllegalArgumentException` with a message saying a `Random` is required | :white_check_mark: |
 
 ### Method under test: `roll()`
 
