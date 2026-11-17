@@ -2,6 +2,7 @@ package domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 import java.util.Map;
@@ -64,5 +65,39 @@ public class BeginnerBoardTest {
     private static String describeTile(BeginnerBoard.TileSetup tile) {
         return tile.getResource().map(resource -> resource.name() + " " + tile.getDiceNumber().orElseThrow())
                 .orElse("DESERT");
+    }
+
+    @Test
+    public void GetStartingResources_EachColor_MatchesStarredSettlement() {
+        BeginnerBoard board = new BeginnerBoard();
+
+        assertEquals(List.of(ResourceCardType.GRAIN, ResourceCardType.BRICK, ResourceCardType.LUMBER),
+                board.getStartingResources(PlayerColor.WHITE));
+        assertEquals(List.of(ResourceCardType.GRAIN, ResourceCardType.LUMBER, ResourceCardType.LUMBER),
+                board.getStartingResources(PlayerColor.RED));
+        assertEquals(List.of(ResourceCardType.LUMBER, ResourceCardType.ORE, ResourceCardType.BRICK),
+                board.getStartingResources(PlayerColor.BLUE));
+        assertEquals(List.of(ResourceCardType.ORE, ResourceCardType.GRAIN, ResourceCardType.GRAIN),
+                board.getStartingResources(PlayerColor.ORANGE));
+    }
+
+    @Test
+    public void GetStartingResources_RedOnThreePlayerBoard_ThrowsIllegalArgumentException() {
+        BeginnerBoard board = BeginnerBoard.createForThreePlayers();
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> board.getStartingResources(PlayerColor.RED));
+
+        assertEquals("RED is not on this board", exception.getMessage());
+    }
+
+    @Test
+    public void GetStartingResources_NullColor_ThrowsIllegalArgumentException() {
+        BeginnerBoard board = new BeginnerBoard();
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> board.getStartingResources(null));
+
+        assertEquals("Player color is required", exception.getMessage());
     }
 }

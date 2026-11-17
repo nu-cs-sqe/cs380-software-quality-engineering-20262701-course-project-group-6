@@ -41,6 +41,11 @@ public final class BeginnerBoard {
     private static final Map<Integer, PlayerColor> ROADS = Map.of(
             13, RED, 41, RED, 15, ORANGE, 58, ORANGE, 56, BLUE, 52, BLUE, 25, WHITE, 37, WHITE);
     private static final Set<Integer> STARTING_RESOURCE_NODES = Set.of(17, 28, 39, 40);
+    // Resources of the hexes next to each starred settlement, in tile ID order (Illustration A). Fixed data until
+    // GameBoard can find the hexes next to a corner (issue #25).
+    private static final Map<PlayerColor, List<ResourceCardType>> STARTING_RESOURCES = Map.of(
+            WHITE, List.of(GRAIN, BRICK, LUMBER), RED, List.of(GRAIN, LUMBER, LUMBER),
+            BLUE, List.of(LUMBER, ORE, BRICK), ORANGE, List.of(ORE, GRAIN, GRAIN));
     private static final Map<Integer, HarborType> HARBORS = Map.of(
             0, GENERIC_THREE_FOR_ONE, 3, GRAIN_TWO_FOR_ONE, 17, ORE_TWO_FOR_ONE, 18, LUMBER_TWO_FOR_ONE,
             38, GENERIC_THREE_FOR_ONE, 49, BRICK_TWO_FOR_ONE, 61, WOOL_TWO_FOR_ONE,
@@ -82,6 +87,16 @@ public final class BeginnerBoard {
         return STARTING_RESOURCE_NODES.stream()
                 .filter(settlements::containsKey)
                 .collect(Collectors.toUnmodifiableSet());
+    }
+
+    public List<ResourceCardType> getStartingResources(PlayerColor color) {
+        if (color == null) {
+            throw new IllegalArgumentException("Player color is required");
+        }
+        if (!settlements.containsValue(color)) {
+            throw new IllegalArgumentException(color + " is not on this board");
+        }
+        return STARTING_RESOURCES.get(color);
     }
 
     public Map<Integer, HarborType> getHarbors() {
