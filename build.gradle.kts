@@ -44,6 +44,12 @@ tasks.compileJava {
     options.release = 11
 }
 
+// Source files are UTF-8. Without this, javac on Windows with Java 11 reads them as Windows-1252 and garbles
+// characters like the bullet and star in BoardView (i18n lecture: configure the encoding explicitly).
+tasks.withType<JavaCompile>().configureEach {
+    options.encoding = "UTF-8"
+}
+
 tasks.test {
     useJUnitPlatform()
     finalizedBy(tasks.jacocoTestReport) // coverage report is always generated after tests run
