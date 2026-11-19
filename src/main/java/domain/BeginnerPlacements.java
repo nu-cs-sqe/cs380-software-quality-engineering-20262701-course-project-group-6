@@ -1,6 +1,7 @@
 package domain;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static domain.PlayerColor.RED;
 import static domain.PlayerColor.ORANGE;
@@ -24,6 +25,11 @@ public class BeginnerPlacements {
     private static final BeginnerPlacements FOUR_PLAYERS =
             new BeginnerPlacements(SETTLEMENTS, ROADS, STARTING_RESOURCE_NODE_IDS);
 
+    private static final BeginnerPlacements THREE_PLAYERS = new BeginnerPlacements(
+            omitRedValues(SETTLEMENTS),
+            omitRedValues(ROADS),
+            omitRedKey(STARTING_RESOURCE_NODE_IDS));
+
     private final Map<Integer, PlayerColor> settlements;
     private final Map<Integer, PlayerColor> roads;
     private final Map<PlayerColor, Integer> startingResourceNodeIds;
@@ -40,6 +46,10 @@ public class BeginnerPlacements {
         return FOUR_PLAYERS;
     }
 
+    public static BeginnerPlacements forThreePlayers() {
+        return THREE_PLAYERS;
+    }
+
     Map<Integer, PlayerColor> getSettlements() {
         return settlements;
     }
@@ -50,5 +60,17 @@ public class BeginnerPlacements {
 
     Map<PlayerColor, Integer> getStartingResourceNodeIds() {
         return startingResourceNodeIds;
+    }
+
+    private static Map<Integer, PlayerColor> omitRedValues(Map<Integer, PlayerColor> placements) {
+        return placements.entrySet().stream()
+                .filter(entry -> entry.getValue() != RED)
+                .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    private static Map<PlayerColor, Integer> omitRedKey(Map<PlayerColor, Integer> nodeIds) {
+        return nodeIds.entrySet().stream()
+                .filter(entry -> entry.getKey() != RED)
+                .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }

@@ -26,14 +26,14 @@ such as `GameBoard`.
 
 |  | State of the System | Expected output | Implemented? |
 | ----- | ----- | ----- | ----- |
-| TC1 | Call `BeginnerPlacements.forFourPlayers()` | Returns non-null instance with 8 settlements, 8 roads, and 4 starting resource node IDs across `RED`, `ORANGE`, `BLUE`, and `WHITE` | :x: |
-| TC2 | Call `BeginnerPlacements.forFourPlayers()` twice | Returns consistent 4-player placements without mutability | :x: |
+| TC1 | Call `BeginnerPlacements.forFourPlayers()` | Returns non-null instance with 8 settlements, 8 roads, and 4 starting resource node IDs across `RED`, `ORANGE`, `BLUE`, and `WHITE` | :white_check_mark: |
+| TC2 | Call `BeginnerPlacements.forFourPlayers()` twice | Returns consistent 4-player placements without mutability | :white_check_mark: |
 
 ### Method under test: `forThreePlayers()`
 
 |  | State of the System | Expected output | Implemented? |
 | ----- | ----- | ----- | ----- |
-| TC3 | Call `BeginnerPlacements.forThreePlayers()` | Returns non-null instance with 6 settlements, 6 roads, and 3 starting resource node IDs (`ORANGE`, `BLUE`, `WHITE`), with `RED` absent | :x: |
+| TC3 | Call `BeginnerPlacements.forThreePlayers()` | Returns non-null instance with 6 settlements, 6 roads, and 3 starting resource node IDs (`ORANGE`, `BLUE`, `WHITE`), with `RED` absent | :white_check_mark: |
 
 ### Methods under test: `getSettlements()`, `getRoads()`, `getStartingResourceNodeIds()`
 
