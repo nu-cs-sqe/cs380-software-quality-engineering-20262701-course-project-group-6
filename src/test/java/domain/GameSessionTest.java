@@ -332,6 +332,19 @@ public class GameSessionTest {
         assertEquals(PlayerColor.BLUE, game.getCurrentColor());
     }
 
+    @Test
+    public void EndTurn_LastPlayerEndsTurn_WrapsToFirstPlayer() {
+        GameSession game = startedThreePlayerGame();
+        for (int turn = 0; turn < 3; turn++) {
+            game.rollDice();
+            game.endTurn();
+        }
+
+        PlayerColor current = game.getCurrentColor();
+
+        assertEquals(PlayerColor.WHITE, current);
+    }
+
     private static GameSession startedThreePlayerGame() {
         GameSession game = new GameSession(3, new Random());
         game.rollForStartingOrder();

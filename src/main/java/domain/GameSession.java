@@ -86,7 +86,7 @@ public class GameSession {
             throw new IllegalStateException(getCurrentColor() + " must roll before ending the turn");
         }
         rolledThisTurn = false;
-        currentTurnIndex++;
+        currentTurnIndex = (currentTurnIndex + 1) % playerCount;
     }
 
     public List<PlayerColor> getAvailableColors() {
