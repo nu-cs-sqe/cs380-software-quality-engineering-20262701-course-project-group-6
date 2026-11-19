@@ -5,14 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import domain.GameSession;
-import domain.PlayerColor;
 import domain.ResourceCardType;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 // Step definitions for F1.feature (F1: set up a new game). Uses the real classes, no mocks.
 public class F1Tests {
@@ -31,7 +27,7 @@ public class F1Tests {
     @Then("^the colors to pick from are (.+)$")
     public void theColorsToPickFromAre(String colors) {
         assertNull(startError);
-        assertEquals(parseColors(colors), game.getAvailableColors());
+        assertEquals(ColorList.parse(colors), game.getAvailableColors());
     }
 
     @Then("the bank has {int} of every resource")
@@ -45,12 +41,5 @@ public class F1Tests {
     public void theGameIsRejectedWithTheMessage(String message) {
         assertNotNull(startError);
         assertEquals(message, startError.getMessage());
-    }
-
-    static List<PlayerColor> parseColors(String colors) {
-        return Arrays.stream(colors.split(","))
-                .map(String::trim)
-                .map(PlayerColor::valueOf)
-                .collect(Collectors.toList());
     }
 }
