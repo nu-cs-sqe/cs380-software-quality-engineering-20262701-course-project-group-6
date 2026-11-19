@@ -8,6 +8,9 @@ public final class TileSetup {
     private final OptionalInt diceNumber;
 
     TileSetup(ResourceCardType resource, int diceNumber) {
+        if (resource == null) {
+            throw new IllegalArgumentException("resource cannot be null");
+        }
         this.resource = Optional.of(resource);
         this.diceNumber = OptionalInt.of(diceNumber);
     }
