@@ -345,6 +345,17 @@ public class GameSessionTest {
         assertEquals(PlayerColor.WHITE, current);
     }
 
+    @Test
+    public void EndTurn_StillPicking_ThrowsIllegalStateException() {
+        GameSession game = new GameSession(3, new Random());
+        game.rollForStartingOrder();
+        game.pickColor(PlayerColor.WHITE);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, game::endTurn);
+
+        assertEquals("Players are still picking colors", exception.getMessage());
+    }
+
     private static GameSession startedThreePlayerGame() {
         GameSession game = new GameSession(3, new Random());
         game.rollForStartingOrder();
