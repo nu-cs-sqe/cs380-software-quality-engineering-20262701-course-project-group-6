@@ -301,6 +301,17 @@ public class GameSessionTest {
         assertEquals("WHITE already rolled this turn", exception.getMessage());
     }
 
+    @Test
+    public void RollDice_NextPlayersTurn_CanRollAgain() {
+        GameSession game = startedThreePlayerGame();
+        game.rollDice();
+        game.endTurn();
+
+        DiceRoll roll = game.rollDice();
+
+        assertTrue(roll.getTotal() >= 2 && roll.getTotal() <= 12);
+    }
+
     private static GameSession startedThreePlayerGame() {
         GameSession game = new GameSession(3, new Random());
         game.rollForStartingOrder();

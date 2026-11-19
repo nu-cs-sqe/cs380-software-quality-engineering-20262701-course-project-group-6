@@ -80,6 +80,10 @@ public class GameSession {
         return dice.roll();
     }
 
+    public void endTurn() {
+        rolledThisTurn = false;
+    }
+
     public List<PlayerColor> getAvailableColors() {
         return Arrays.stream(PlayerColor.values())
                 .filter(board.getSettlements()::containsValue)
