@@ -1,9 +1,11 @@
 package domain;
 
+import static domain.ResourceCardType.BRICK;
 import static domain.ResourceCardType.ORE;
 import static domain.ResourceCardType.WOOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Map;
@@ -18,6 +20,8 @@ class BeginnerLayoutTest {
     private static final int DESERT_TILE_ID = 9;
     private static final int LAST_TILE_ID = 18;
     private static final int LAST_TILE_DICE = 11;
+    private static final int EXTRA_TILE_ID = 99;
+    private static final int SAMPLE_DICE = 6;
 
     @Test
     void GetTiles_DefaultBeginnerLayout_ReturnsAllNineteenTilesIncludingDesert() {
@@ -42,5 +46,14 @@ class BeginnerLayoutTest {
         assertNotNull(lastTile);
         assertEquals(Optional.of(WOOL), lastTile.getResource());
         assertEquals(OptionalInt.of(LAST_TILE_DICE), lastTile.getDiceNumber());
+    }
+
+    @Test
+    void GetTiles_DefaultBeginnerLayout_ReturnsUnmodifiableMap() {
+        BeginnerLayout layout = new BeginnerLayout();
+        Map<Integer, TileSetup> tiles = layout.getTiles();
+
+        assertThrows(UnsupportedOperationException.class,
+                () -> tiles.put(EXTRA_TILE_ID, new TileSetup(BRICK, SAMPLE_DICE)));
     }
 }

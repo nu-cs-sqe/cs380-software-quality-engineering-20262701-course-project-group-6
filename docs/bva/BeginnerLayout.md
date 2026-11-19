@@ -24,7 +24,7 @@ instances on the board graph.
 |  | State of the System | Expected output | Implemented? |
 | ----- | ----- | ----- | ----- |
 | TC1 | Construct `BeginnerLayout` and call `getTiles()` | Returns non-null map with 19 entries (`0`..`18`) matching the beginner layout (including Tile `0` = `ORE` / `10`, desert Tile `9` = empty resource & dice number, Tile `18` = `WOOL` / `11`) | :white_check_mark: |
-| TC2 | Construct `BeginnerLayout`, call `getTiles()`, and attempt to insert a new entry | Throws `UnsupportedOperationException` without modifying the layout map | :x: |
+| TC2 | Construct `BeginnerLayout`, call `getTiles()`, and attempt to insert a new entry | Throws `UnsupportedOperationException` without modifying the layout map | :white_check_mark: |
 
 ## Next section (to be added before that code is written)
 
