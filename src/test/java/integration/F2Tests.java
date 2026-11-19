@@ -15,8 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-// Step definitions for F2.feature (F2: choose starting positions). Uses the real classes, no mocks; the dice are real,
-// so the steps read the rolled order instead of expecting particular rolls.
+
 public class F2Tests {
     private GameSession game;
     private List<Integer> rollOrder;

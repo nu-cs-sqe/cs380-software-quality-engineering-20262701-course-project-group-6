@@ -10,7 +10,6 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.util.Random;
 
-// Step definitions for F1.feature (F1: set up a new game). Uses the real classes, no mocks.
 public class F1Tests {
     private GameSession game;
     private IllegalArgumentException startError;
