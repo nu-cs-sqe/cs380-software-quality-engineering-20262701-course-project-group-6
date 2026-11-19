@@ -18,6 +18,7 @@ public class GameSession {
     private final int playerCount;
     private List<Integer> pickOrder = List.of();
     private final Map<PlayerColor, Player> players = new LinkedHashMap<>();
+    private int currentTurnIndex;
     private boolean rolledThisTurn;
 
     public GameSession(int playerCount, Random random) {
@@ -68,7 +69,7 @@ public class GameSession {
 
     public PlayerColor getCurrentColor() {
         requirePlaying();
-        return getTurnOrder().get(0);
+        return getTurnOrder().get(currentTurnIndex);
     }
 
     public DiceRoll rollDice() {
@@ -85,6 +86,7 @@ public class GameSession {
             throw new IllegalStateException(getCurrentColor() + " must roll before ending the turn");
         }
         rolledThisTurn = false;
+        currentTurnIndex++;
     }
 
     public List<PlayerColor> getAvailableColors() {

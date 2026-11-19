@@ -322,6 +322,16 @@ public class GameSessionTest {
         assertEquals(PlayerColor.WHITE, game.getCurrentColor());
     }
 
+    @Test
+    public void EndTurn_WhiteRolled_BluesTurn() {
+        GameSession game = startedThreePlayerGame();
+        game.rollDice();
+
+        game.endTurn();
+
+        assertEquals(PlayerColor.BLUE, game.getCurrentColor());
+    }
+
     private static GameSession startedThreePlayerGame() {
         GameSession game = new GameSession(3, new Random());
         game.rollForStartingOrder();
