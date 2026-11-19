@@ -14,6 +14,7 @@ public class GameSession {
     private final Bank bank;
     private final BeginnerBoard board;
     private final StartingRollOff rollOff;
+    private final Dice dice;
     private final int playerCount;
     private List<Integer> pickOrder = List.of();
     private final Map<PlayerColor, Player> players = new LinkedHashMap<>();
@@ -28,6 +29,7 @@ public class GameSession {
         }
         bank = new Bank(random);
         rollOff = new StartingRollOff(random);
+        dice = new Dice(random);
         this.playerCount = playerCount;
         board = playerCount == MIN_PLAYERS ? BeginnerBoard.createForThreePlayers() : new BeginnerBoard();
     }
@@ -64,10 +66,13 @@ public class GameSession {
     }
 
     public PlayerColor getCurrentColor() {
-        if (players.size() < playerCount) {
-            throw new IllegalStateException("Players are still picking colors");
-        }
+        requirePlaying();
         return getTurnOrder().get(0);
+    }
+
+    public DiceRoll rollDice() {
+        requirePlaying();
+        return dice.roll();
     }
 
     public List<PlayerColor> getAvailableColors() {
@@ -108,6 +113,12 @@ public class GameSession {
     private static void requireColor(PlayerColor color) {
         if (color == null) {
             throw new IllegalArgumentException("Player color is required");
+        }
+    }
+
+    private void requirePlaying() {
+        if (players.size() < playerCount) {
+            throw new IllegalStateException("Players are still picking colors");
         }
     }
 

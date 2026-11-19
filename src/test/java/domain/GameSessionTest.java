@@ -264,4 +264,24 @@ public class GameSessionTest {
         assertEquals(List.of(PlayerColor.BLUE, PlayerColor.ORANGE, PlayerColor.WHITE, PlayerColor.RED),
                 game.getAvailableColors());
     }
+
+    @Test
+    public void RollDice_StillPicking_ThrowsIllegalStateException() {
+        GameSession game = new GameSession(3, new Random());
+        game.rollForStartingOrder();
+        game.pickColor(PlayerColor.WHITE);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, game::rollDice);
+
+        assertEquals("Players are still picking colors", exception.getMessage());
+    }
+
+    private static GameSession startedThreePlayerGame() {
+        GameSession game = new GameSession(3, new Random());
+        game.rollForStartingOrder();
+        game.pickColor(PlayerColor.WHITE);
+        game.pickColor(PlayerColor.BLUE);
+        game.pickColor(PlayerColor.ORANGE);
+        return game;
+    }
 }
