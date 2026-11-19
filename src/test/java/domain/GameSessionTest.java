@@ -312,6 +312,16 @@ public class GameSessionTest {
         assertTrue(roll.getTotal() >= 2 && roll.getTotal() <= 12);
     }
 
+    @Test
+    public void EndTurn_NotRolledYet_ThrowsIllegalStateException() {
+        GameSession game = startedThreePlayerGame();
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, game::endTurn);
+
+        assertEquals("WHITE must roll before ending the turn", exception.getMessage());
+        assertEquals(PlayerColor.WHITE, game.getCurrentColor());
+    }
+
     private static GameSession startedThreePlayerGame() {
         GameSession game = new GameSession(3, new Random());
         game.rollForStartingOrder();

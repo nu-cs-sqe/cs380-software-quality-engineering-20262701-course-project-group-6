@@ -171,7 +171,7 @@ Tests set up a 3-player game where the seats pick `WHITE`, `BLUE`, `ORANGE`, so 
 
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
-| TC28 | `WHITE`'s turn, not rolled yet | `IllegalStateException` with a message saying white must roll before ending the turn; still `WHITE`'s turn | :x: |
+| TC28 | `WHITE`'s turn, not rolled yet | `IllegalStateException` with a message saying white must roll before ending the turn; still `WHITE`'s turn | :white_check_mark: |
 | TC29 | `WHITE` rolled | current color is `BLUE` | :x: |
 | TC30 | `WHITE`, `BLUE`, `ORANGE` each rolled and ended their turn | current color is `WHITE` again (wraps after the last player) | :x: |
 | TC31 | rolled for order, still picking | `IllegalStateException` with a message saying players are still picking colors | :x: |

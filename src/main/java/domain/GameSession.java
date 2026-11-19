@@ -81,6 +81,9 @@ public class GameSession {
     }
 
     public void endTurn() {
+        if (!rolledThisTurn) {
+            throw new IllegalStateException(getCurrentColor() + " must roll before ending the turn");
+        }
         rolledThisTurn = false;
     }
 
