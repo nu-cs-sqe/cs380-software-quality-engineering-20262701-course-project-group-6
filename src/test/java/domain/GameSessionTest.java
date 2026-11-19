@@ -2,6 +2,7 @@ package domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.Random;
@@ -274,6 +275,20 @@ public class GameSessionTest {
         IllegalStateException exception = assertThrows(IllegalStateException.class, game::rollDice);
 
         assertEquals("Players are still picking colors", exception.getMessage());
+    }
+
+    @Test
+    public void RollDice_WhitesTurn_ReturnsTwoDiceAndPaysNothingYet() {
+        GameSession game = startedThreePlayerGame();
+
+        DiceRoll roll = game.rollDice();
+
+        assertTrue(roll.getFirstDie() >= 1 && roll.getFirstDie() <= 6);
+        assertTrue(roll.getSecondDie() >= 1 && roll.getSecondDie() <= 6);
+        assertEquals(roll.getFirstDie() + roll.getSecondDie(), roll.getTotal());
+        assertEquals(1, game.getResourceCount(PlayerColor.WHITE, ResourceCardType.GRAIN));
+        assertEquals(1, game.getResourceCount(PlayerColor.WHITE, ResourceCardType.BRICK));
+        assertEquals(1, game.getResourceCount(PlayerColor.WHITE, ResourceCardType.LUMBER));
     }
 
     private static GameSession startedThreePlayerGame() {
