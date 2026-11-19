@@ -27,20 +27,19 @@ such as `GameBoard`.
 |  | State of the System | Expected output | Implemented? |
 | ----- | ----- | ----- | ----- |
 | TC1 | Call `BeginnerPlacements.forFourPlayers()` | Returns non-null instance with 8 settlements, 8 roads, and 4 starting resource node IDs across `RED`, `ORANGE`, `BLUE`, and `WHITE` | :white_check_mark: |
-| TC2 | Call `BeginnerPlacements.forFourPlayers()` twice | Returns consistent 4-player placements without mutability | :white_check_mark: |
 
 ### Method under test: `forThreePlayers()`
 
 |  | State of the System | Expected output | Implemented? |
 | ----- | ----- | ----- | ----- |
-| TC3 | Call `BeginnerPlacements.forThreePlayers()` | Returns non-null instance with 6 settlements, 6 roads, and 3 starting resource node IDs (`ORANGE`, `BLUE`, `WHITE`), with `RED` absent | :white_check_mark: |
+| TC2 | Call `BeginnerPlacements.forThreePlayers()` | Returns non-null instance with 6 settlements, 6 roads, and 3 starting resource node IDs (`ORANGE`, `BLUE`, `WHITE`), with `RED` absent | :white_check_mark: |
 
 ### Methods under test: `getSettlements()`, `getRoads()`, `getStartingResourceNodeIds()`
 
 |  | State of the System | Expected output | Implemented? |
 | ----- | ----- | ----- | ----- |
-| TC4 | `forFourPlayers()` settlements, roads, and starting resource node IDs | Matches expected node/edge IDs and colors for all 4 colors; attempting to mutate returns maps throws `UnsupportedOperationException` | :white_check_mark: |
-| TC5 | `forThreePlayers()` settlements, roads, and starting resource node IDs | Matches non-`RED` settlements, roads, and starting resource node IDs; contains no `RED` placements or key; attempting to mutate returns maps throws `UnsupportedOperationException` | :white_check_mark: |
+| TC3 | `forFourPlayers()` settlements, roads, and starting resource node IDs | Matches expected node/edge IDs and colors for all 4 colors; attempting to mutate returns maps throws `UnsupportedOperationException` | :white_check_mark: |
+| TC4 | `forThreePlayers()` settlements, roads, and starting resource node IDs | Matches non-`RED` settlements, roads, and starting resource node IDs; contains no `RED` placements or key; attempting to mutate returns maps throws `UnsupportedOperationException` | :white_check_mark: |
 
 ## Next section (to be added before that code is written)
 

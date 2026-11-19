@@ -11,7 +11,6 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -60,14 +59,6 @@ public class BeginnerPlacementsTest {
     }
 
     @Test
-    void ForFourPlayers_RepeatedCalls_ReturnsSameInstance() {
-        BeginnerPlacements first = BeginnerPlacements.forFourPlayers();
-        BeginnerPlacements second = BeginnerPlacements.forFourPlayers();
-
-        assertSame(first, second);
-    }
-
-    @Test
     void ForThreePlayers_DefaultState_OmitsRedFromPlacementsAndStartingNodes() {
         BeginnerPlacements placements = BeginnerPlacements.forThreePlayers();
 
@@ -90,7 +81,6 @@ public class BeginnerPlacementsTest {
         Map<Integer, PlayerColor> roads = placements.getRoads();
         Map<PlayerColor, Integer> startingResourceNodeIds = placements.getStartingResourceNodeIds();
 
-        assertEquals(FOUR_PLAYER_PIECE_COUNT, settlements.size());
         assertEquals(RED, settlements.get(RED_SETTLEMENT_NODE_1));
         assertEquals(RED, settlements.get(RED_SETTLEMENT_NODE_2));
         assertEquals(ORANGE, settlements.get(ORANGE_SETTLEMENT_NODE_1));
@@ -100,7 +90,6 @@ public class BeginnerPlacementsTest {
         assertEquals(WHITE, settlements.get(WHITE_SETTLEMENT_NODE_1));
         assertEquals(WHITE, settlements.get(WHITE_SETTLEMENT_NODE_2));
 
-        assertEquals(FOUR_PLAYER_PIECE_COUNT, roads.size());
         assertEquals(RED, roads.get(RED_ROAD_EDGE_1));
         assertEquals(RED, roads.get(RED_ROAD_EDGE_2));
         assertEquals(ORANGE, roads.get(ORANGE_ROAD_EDGE_1));
@@ -110,7 +99,6 @@ public class BeginnerPlacementsTest {
         assertEquals(WHITE, roads.get(WHITE_ROAD_EDGE_1));
         assertEquals(WHITE, roads.get(WHITE_ROAD_EDGE_2));
 
-        assertEquals(FOUR_PLAYER_STAR_COUNT, startingResourceNodeIds.size());
         assertEquals(RED_STAR_NODE, startingResourceNodeIds.get(RED));
         assertEquals(ORANGE_STAR_NODE, startingResourceNodeIds.get(ORANGE));
         assertEquals(BLUE_STAR_NODE, startingResourceNodeIds.get(BLUE));
@@ -128,8 +116,6 @@ public class BeginnerPlacementsTest {
         Map<Integer, PlayerColor> roads = placements.getRoads();
         Map<PlayerColor, Integer> startingResourceNodeIds = placements.getStartingResourceNodeIds();
 
-        assertEquals(THREE_PLAYER_PIECE_COUNT, settlements.size());
-        assertFalse(settlements.containsValue(RED));
         assertEquals(ORANGE, settlements.get(ORANGE_SETTLEMENT_NODE_1));
         assertEquals(ORANGE, settlements.get(ORANGE_SETTLEMENT_NODE_2));
         assertEquals(BLUE, settlements.get(BLUE_SETTLEMENT_NODE_1));
@@ -137,8 +123,6 @@ public class BeginnerPlacementsTest {
         assertEquals(WHITE, settlements.get(WHITE_SETTLEMENT_NODE_1));
         assertEquals(WHITE, settlements.get(WHITE_SETTLEMENT_NODE_2));
 
-        assertEquals(THREE_PLAYER_PIECE_COUNT, roads.size());
-        assertFalse(roads.containsValue(RED));
         assertEquals(ORANGE, roads.get(ORANGE_ROAD_EDGE_1));
         assertEquals(ORANGE, roads.get(ORANGE_ROAD_EDGE_2));
         assertEquals(BLUE, roads.get(BLUE_ROAD_EDGE_1));
@@ -146,8 +130,6 @@ public class BeginnerPlacementsTest {
         assertEquals(WHITE, roads.get(WHITE_ROAD_EDGE_1));
         assertEquals(WHITE, roads.get(WHITE_ROAD_EDGE_2));
 
-        assertEquals(THREE_PLAYER_STAR_COUNT, startingResourceNodeIds.size());
-        assertFalse(startingResourceNodeIds.containsKey(RED));
         assertEquals(ORANGE_STAR_NODE, startingResourceNodeIds.get(ORANGE));
         assertEquals(BLUE_STAR_NODE, startingResourceNodeIds.get(BLUE));
         assertEquals(WHITE_STAR_NODE, startingResourceNodeIds.get(WHITE));

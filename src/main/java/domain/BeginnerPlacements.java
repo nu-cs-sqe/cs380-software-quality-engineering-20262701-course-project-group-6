@@ -22,14 +22,6 @@ public class BeginnerPlacements {
     private static final Map<PlayerColor, Integer> STARTING_RESOURCE_NODE_IDS = Map.of(
             RED, 29, ORANGE, 42, BLUE, 40, WHITE, 19);
 
-    private static final BeginnerPlacements FOUR_PLAYERS =
-            new BeginnerPlacements(SETTLEMENTS, ROADS, STARTING_RESOURCE_NODE_IDS);
-
-    private static final BeginnerPlacements THREE_PLAYERS = new BeginnerPlacements(
-            omitRedValues(SETTLEMENTS),
-            omitRedValues(ROADS),
-            omitRedKey(STARTING_RESOURCE_NODE_IDS));
-
     private final Map<Integer, PlayerColor> settlements;
     private final Map<Integer, PlayerColor> roads;
     private final Map<PlayerColor, Integer> startingResourceNodeIds;
@@ -43,11 +35,14 @@ public class BeginnerPlacements {
     }
 
     public static BeginnerPlacements forFourPlayers() {
-        return FOUR_PLAYERS;
+        return new BeginnerPlacements(SETTLEMENTS, ROADS, STARTING_RESOURCE_NODE_IDS);
     }
 
     public static BeginnerPlacements forThreePlayers() {
-        return THREE_PLAYERS;
+        return new BeginnerPlacements(
+                omitRedValues(SETTLEMENTS),
+                omitRedValues(ROADS),
+                omitRedKey(STARTING_RESOURCE_NODE_IDS));
     }
 
     Map<Integer, PlayerColor> getSettlements() {
