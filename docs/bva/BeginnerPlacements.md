@@ -40,7 +40,7 @@ such as `GameBoard`.
 |  | State of the System | Expected output | Implemented? |
 | ----- | ----- | ----- | ----- |
 | TC4 | `forFourPlayers()` settlements, roads, and starting resource node IDs | Matches expected node/edge IDs and colors for all 4 colors; attempting to mutate returns maps throws `UnsupportedOperationException` | :white_check_mark: |
-| TC5 | `forThreePlayers()` settlements, roads, and starting resource node IDs | Matches non-`RED` settlements, roads, and starting resource node IDs; contains no `RED` placements or key; attempting to mutate returns maps throws `UnsupportedOperationException` | :x: |
+| TC5 | `forThreePlayers()` settlements, roads, and starting resource node IDs | Matches non-`RED` settlements, roads, and starting resource node IDs; contains no `RED` placements or key; attempting to mutate returns maps throws `UnsupportedOperationException` | :white_check_mark: |
 
 ## Next section (to be added before that code is written)
 
