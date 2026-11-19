@@ -26,4 +26,12 @@ public class TileSetupTest {
 
         assertEquals("resource cannot be null", exception.getMessage());
     }
+
+    @Test
+    void Constructor_DesertTile_SetsEmptyResourceAndDiceNumber() {
+        TileSetup tileSetup = new TileSetup();
+
+        assertEquals(Optional.empty(), tileSetup.getResource());
+        assertEquals(OptionalInt.empty(), tileSetup.getDiceNumber());
+    }
 }
