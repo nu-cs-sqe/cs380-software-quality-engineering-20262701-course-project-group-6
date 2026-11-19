@@ -7,10 +7,13 @@ import static domain.PlayerColor.WHITE;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class BeginnerPlacementsTest {
     private static final int FOUR_PLAYER_PIECE_COUNT = 8;
@@ -21,6 +24,26 @@ public class BeginnerPlacementsTest {
     private static final int ORANGE_STAR_NODE = 42;
     private static final int BLUE_STAR_NODE = 40;
     private static final int WHITE_STAR_NODE = 19;
+    private static final int SAMPLE_NODE_ID = 99;
+    private static final int SAMPLE_EDGE_ID = 99;
+
+    private static final int RED_SETTLEMENT_NODE_1 = 10;
+    private static final int RED_SETTLEMENT_NODE_2 = 29;
+    private static final int ORANGE_SETTLEMENT_NODE_1 = 13;
+    private static final int ORANGE_SETTLEMENT_NODE_2 = 42;
+    private static final int BLUE_SETTLEMENT_NODE_1 = 40;
+    private static final int BLUE_SETTLEMENT_NODE_2 = 44;
+    private static final int WHITE_SETTLEMENT_NODE_1 = 19;
+    private static final int WHITE_SETTLEMENT_NODE_2 = 35;
+
+    private static final int RED_ROAD_EDGE_1 = 13;
+    private static final int RED_ROAD_EDGE_2 = 41;
+    private static final int ORANGE_ROAD_EDGE_1 = 15;
+    private static final int ORANGE_ROAD_EDGE_2 = 58;
+    private static final int BLUE_ROAD_EDGE_1 = 56;
+    private static final int BLUE_ROAD_EDGE_2 = 52;
+    private static final int WHITE_ROAD_EDGE_1 = 25;
+    private static final int WHITE_ROAD_EDGE_2 = 37;
 
     @Test
     void ForFourPlayers_DefaultState_ReturnsAllFourColorsAndExpectedCounts() {
@@ -58,5 +81,43 @@ public class BeginnerPlacementsTest {
         assertEquals(ORANGE_STAR_NODE, placements.getStartingResourceNodeIds().get(ORANGE));
         assertEquals(BLUE_STAR_NODE, placements.getStartingResourceNodeIds().get(BLUE));
         assertEquals(WHITE_STAR_NODE, placements.getStartingResourceNodeIds().get(WHITE));
+    }
+
+    @Test
+    void GetPlacements_ForFourPlayers_MatchesExpectedEntriesAndIsUnmodifiable() {
+        BeginnerPlacements placements = BeginnerPlacements.forFourPlayers();
+        Map<Integer, PlayerColor> settlements = placements.getSettlements();
+        Map<Integer, PlayerColor> roads = placements.getRoads();
+        Map<PlayerColor, Integer> startingResourceNodeIds = placements.getStartingResourceNodeIds();
+
+        assertEquals(FOUR_PLAYER_PIECE_COUNT, settlements.size());
+        assertEquals(RED, settlements.get(RED_SETTLEMENT_NODE_1));
+        assertEquals(RED, settlements.get(RED_SETTLEMENT_NODE_2));
+        assertEquals(ORANGE, settlements.get(ORANGE_SETTLEMENT_NODE_1));
+        assertEquals(ORANGE, settlements.get(ORANGE_SETTLEMENT_NODE_2));
+        assertEquals(BLUE, settlements.get(BLUE_SETTLEMENT_NODE_1));
+        assertEquals(BLUE, settlements.get(BLUE_SETTLEMENT_NODE_2));
+        assertEquals(WHITE, settlements.get(WHITE_SETTLEMENT_NODE_1));
+        assertEquals(WHITE, settlements.get(WHITE_SETTLEMENT_NODE_2));
+
+        assertEquals(FOUR_PLAYER_PIECE_COUNT, roads.size());
+        assertEquals(RED, roads.get(RED_ROAD_EDGE_1));
+        assertEquals(RED, roads.get(RED_ROAD_EDGE_2));
+        assertEquals(ORANGE, roads.get(ORANGE_ROAD_EDGE_1));
+        assertEquals(ORANGE, roads.get(ORANGE_ROAD_EDGE_2));
+        assertEquals(BLUE, roads.get(BLUE_ROAD_EDGE_1));
+        assertEquals(BLUE, roads.get(BLUE_ROAD_EDGE_2));
+        assertEquals(WHITE, roads.get(WHITE_ROAD_EDGE_1));
+        assertEquals(WHITE, roads.get(WHITE_ROAD_EDGE_2));
+
+        assertEquals(FOUR_PLAYER_STAR_COUNT, startingResourceNodeIds.size());
+        assertEquals(RED_STAR_NODE, startingResourceNodeIds.get(RED));
+        assertEquals(ORANGE_STAR_NODE, startingResourceNodeIds.get(ORANGE));
+        assertEquals(BLUE_STAR_NODE, startingResourceNodeIds.get(BLUE));
+        assertEquals(WHITE_STAR_NODE, startingResourceNodeIds.get(WHITE));
+
+        assertThrows(UnsupportedOperationException.class, () -> settlements.put(SAMPLE_NODE_ID, WHITE));
+        assertThrows(UnsupportedOperationException.class, () -> roads.put(SAMPLE_EDGE_ID, WHITE));
+        assertThrows(UnsupportedOperationException.class, () -> startingResourceNodeIds.put(WHITE, SAMPLE_NODE_ID));
     }
 }
