@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-
 public class F2Tests {
     private GameSession game;
     private List<Integer> rollOrder;
