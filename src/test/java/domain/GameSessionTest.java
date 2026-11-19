@@ -291,6 +291,16 @@ public class GameSessionTest {
         assertEquals(1, game.getResourceCount(PlayerColor.WHITE, ResourceCardType.LUMBER));
     }
 
+    @Test
+    public void RollDice_AlreadyRolledThisTurn_ThrowsIllegalStateException() {
+        GameSession game = startedThreePlayerGame();
+        game.rollDice();
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, game::rollDice);
+
+        assertEquals("WHITE already rolled this turn", exception.getMessage());
+    }
+
     private static GameSession startedThreePlayerGame() {
         GameSession game = new GameSession(3, new Random());
         game.rollForStartingOrder();

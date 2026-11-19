@@ -164,7 +164,7 @@ Tests set up a 3-player game where the seats pick `WHITE`, `BLUE`, `ORANGE`, so 
 |------|---------------------|-----------------|--------------|
 | TC24 | rolled for order, still picking | `IllegalStateException` with a message saying players are still picking colors | :white_check_mark: |
 | TC25 | `WHITE`'s turn, not rolled yet | a `DiceRoll` with both faces between 1 and 6 and the total equal to their sum; resources unchanged (no payouts yet) | :white_check_mark: |
-| TC26 | `WHITE` already rolled this turn | `IllegalStateException` with a message saying white already rolled this turn | :x: |
+| TC26 | `WHITE` already rolled this turn | `IllegalStateException` with a message saying white already rolled this turn | :white_check_mark: |
 | TC27 | `WHITE` rolled and ended the turn; `BLUE` rolls | returns a `DiceRoll` (the flag reset for the new turn) | :x: |
 
 ### Method under test: `endTurn()`

@@ -18,6 +18,7 @@ public class GameSession {
     private final int playerCount;
     private List<Integer> pickOrder = List.of();
     private final Map<PlayerColor, Player> players = new LinkedHashMap<>();
+    private boolean rolledThisTurn;
 
     public GameSession(int playerCount, Random random) {
         if (playerCount < MIN_PLAYERS || playerCount > MAX_PLAYERS) {
@@ -72,6 +73,10 @@ public class GameSession {
 
     public DiceRoll rollDice() {
         requirePlaying();
+        if (rolledThisTurn) {
+            throw new IllegalStateException(getCurrentColor() + " already rolled this turn");
+        }
+        rolledThisTurn = true;
         return dice.roll();
     }
 
