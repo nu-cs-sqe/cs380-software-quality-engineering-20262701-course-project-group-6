@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 public class BeginnerPlacementsTest {
     private static final int FOUR_PLAYER_PIECE_COUNT = 8;
@@ -30,5 +31,13 @@ public class BeginnerPlacementsTest {
         assertEquals(ORANGE_STAR_NODE, placements.getStartingResourceNodeIds().get(ORANGE));
         assertEquals(BLUE_STAR_NODE, placements.getStartingResourceNodeIds().get(BLUE));
         assertEquals(WHITE_STAR_NODE, placements.getStartingResourceNodeIds().get(WHITE));
+    }
+
+    @Test
+    void ForFourPlayers_RepeatedCalls_ReturnsSameInstance() {
+        BeginnerPlacements first = BeginnerPlacements.forFourPlayers();
+        BeginnerPlacements second = BeginnerPlacements.forFourPlayers();
+
+        assertSame(first, second);
     }
 }
