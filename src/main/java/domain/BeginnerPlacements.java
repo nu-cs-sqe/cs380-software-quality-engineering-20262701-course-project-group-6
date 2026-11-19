@@ -45,16 +45,16 @@ public class BeginnerPlacements {
                 omitRedKey(STARTING_RESOURCE_NODE_IDS));
     }
 
-    Map<Integer, PlayerColor> getSettlements() {
-        return settlements;
+    public Map<Integer, PlayerColor> getSettlements() {
+        return Map.copyOf(settlements);
     }
 
-    Map<Integer, PlayerColor> getRoads() {
-        return roads;
+    public Map<Integer, PlayerColor> getRoads() {
+        return Map.copyOf(roads);
     }
 
-    Map<PlayerColor, Integer> getStartingResourceNodeIds() {
-        return startingResourceNodeIds;
+    public Map<PlayerColor, Integer> getStartingResourceNodeIds() {
+        return Map.copyOf(startingResourceNodeIds);
     }
 
     private static Map<Integer, PlayerColor> omitRedValues(Map<Integer, PlayerColor> placements) {
