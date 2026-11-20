@@ -249,6 +249,15 @@ class GameBoardTest {
         assertEquals("RED has no 2nd starting settlement on this board", exception.getMessage());
     }
 
+    @Test
+    void Getters_BeforeGenerateBoard_ThrowIllegalStateException() {
+        GameBoard gameBoard = new GameBoard();
+
+        Exception exception = assertThrows(IllegalStateException.class, () -> gameBoard.getTiles());
+
+        assertEquals("Board has not been generated yet", exception.getMessage());
+    }
+
     private TileLayout stubLayoutWithTileCount(int count) {
         Map<Integer, TileSetup> map = new LinkedHashMap<>();
         for (int i = 0; i < count; i++) {

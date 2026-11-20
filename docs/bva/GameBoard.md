@@ -61,6 +61,13 @@ All collection getters return unmodifiable copies.
 | TC20 | Board generated with `BeginnerPlacements.forThreePlayers()`, `color` = `PlayerColor.RED` | `IllegalArgumentException` with message `"RED has no starting settlement on this board"` | :white_check_mark: |
 
 ### Methods under test: `getTiles()`, `getNodes()`, `getEdges()`, `getRobberTileId()`, `getHarborNodes()`
+|  | State of the System | Expected output | Implemented? |
+| ----- | ----- | ----- | ----- |
+| TC21 | Board has not been generated yet (`generated` = `false`), `getTiles()` is called | `IllegalStateException` with message `"Board has not been generated yet"` | :x: |
+| TC22 | Board has not been generated yet (`generated` = `false`), `getNodes()` is called | `IllegalStateException` with message `"Board has not been generated yet"` | :x: |
+| TC23 | Board has not been generated yet (`generated` = `false`), `getEdges()` is called | `IllegalStateException` with message `"Board has not been generated yet"` | :x: |
+| TC24 | Board has not been generated yet (`generated` = `false`), `getRobberTileId()` is called | `IllegalStateException` with message `"Board has not been generated yet"` | :x: |
+| TC25 | Board has not been generated yet (`generated` = `false`), `getHarborNodes()` is called | `IllegalStateException` with message `"Board has not been generated yet"` | :x: |
 
 Read-only getters for `BoardView` and `GameSession`. Verified in TC1 and harbor assertions, plus `IllegalStateException` checks when called before `generateBoard(...)` on generated-state getters (TC22).
 
