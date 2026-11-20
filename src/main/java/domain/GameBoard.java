@@ -129,13 +129,21 @@ public class GameBoard {
         }
         int desertTileId = UNSET_DESERT_ID;
         for (int tileId = 0; tileId < NUM_TILES; tileId++) {
-            TileSetup setup = tileMap.get(tileId);
+            TileSetup setup = requireTileSetup(tileMap, tileId);
             tiles.put(tileId, buildTile(tileId, setup));
             if (setup.getResource().isEmpty()) {
                 desertTileId = tileId;
             }
         }
         robberTileId = desertTileId == UNSET_DESERT_ID ? 0 : desertTileId;
+    }
+
+    private TileSetup requireTileSetup(Map<Integer, TileSetup> tileMap, int tileId) {
+        TileSetup setup = tileMap.get(tileId);
+        if (setup == null) {
+            throw new IllegalArgumentException("Missing tile setup for tileId " + tileId);
+        }
+        return setup;
     }
 
     private Tile buildTile(int tileId, TileSetup setup) {

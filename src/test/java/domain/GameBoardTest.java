@@ -33,6 +33,7 @@ class GameBoardTest {
     private static final int BOTTOM_RIGHT_INCIDENT_EDGE_2 = 71;
     private static final int RED_ROAD_EDGE = 13;
     private static final int ORANGE_ROAD_EDGE = 15;
+    private static final int MISSING_TILE_GAP_ID = 99;
     private static final int SAMPLE_DICE = 6;
 
     @Test
@@ -118,6 +119,22 @@ class GameBoardTest {
                 () -> gameBoard.generateBoard(twentyTiles, BeginnerPlacements.forFourPlayers()));
 
         assertEquals("Expected 19 tiles, got 20", exception.getMessage());
+    }
+
+    @Test
+    void GenerateBoard_MissingTileIdKey_ThrowsIllegalArgumentException() {
+        GameBoard gameBoard = new GameBoard();
+        Map<Integer, TileSetup> incompleteMap = new LinkedHashMap<>();
+        for (int i = 0; i < EXPECTED_TILES - 1; i++) {
+            incompleteMap.put(i, new TileSetup(ORE, SAMPLE_DICE));
+        }
+        incompleteMap.put(MISSING_TILE_GAP_ID, new TileSetup(ORE, SAMPLE_DICE));
+        TileLayout gappedLayout = () -> incompleteMap;
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> gameBoard.generateBoard(gappedLayout, BeginnerPlacements.forFourPlayers()));
+
+        assertEquals("Missing tile setup for tileId " + (EXPECTED_TILES - 1), exception.getMessage());
     }
 
     private TileLayout stubLayoutWithTileCount(int count) {
