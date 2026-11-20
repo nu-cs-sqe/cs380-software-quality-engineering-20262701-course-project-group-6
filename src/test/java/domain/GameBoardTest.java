@@ -1,0 +1,64 @@
+package domain;
+
+import static domain.PlayerColor.ORANGE;
+import static domain.PlayerColor.RED;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.List;
+import java.util.Optional;
+import org.junit.jupiter.api.Test;
+
+class GameBoardTest {
+    private static final int EXPECTED_TILES = 19;
+    private static final int EXPECTED_NODES = 54;
+    private static final int EXPECTED_EDGES = 72;
+    private static final int EXPECTED_HARBOR_NODES = 18;
+    private static final int BEGINNER_ROBBER_TILE = 9;
+    private static final int TOP_LEFT_NODE = 0;
+    private static final int TOP_LEFT_INCIDENT_EDGE_1 = 0;
+    private static final int TOP_LEFT_INCIDENT_EDGE_2 = 6;
+    private static final int GRAIN_HARBOR_NODE = 3;
+    private static final int ORE_HARBOR_NODE = 14;
+    private static final int LUMBER_HARBOR_NODE = 17;
+    private static final int DESERT_ADJACENT_NODE = 33;
+    private static final int WHITE_STAR_NODE = 19;
+    private static final int THREE_FOR_ONE_SOUTH_NODE = 50;
+    private static final int BOTTOM_RIGHT_NODE = 53;
+    private static final int BOTTOM_RIGHT_INCIDENT_EDGE_1 = 65;
+    private static final int BOTTOM_RIGHT_INCIDENT_EDGE_2 = 71;
+    private static final int RED_ROAD_EDGE = 13;
+    private static final int ORANGE_ROAD_EDGE = 15;
+
+    @Test
+    void GenerateBoard_ValidBeginnerLayoutAndPlacements_BuildsFullGraphAndHarbors() {
+        GameBoard gameBoard = new GameBoard();
+        BeginnerLayout layout = new BeginnerLayout();
+        BeginnerPlacements placements = BeginnerPlacements.forFourPlayers();
+
+        gameBoard.generateBoard(layout, placements);
+        List<Tile> tiles = gameBoard.getTiles();
+        List<Node> nodes = gameBoard.getNodes();
+        List<Edge> edges = gameBoard.getEdges();
+
+        assertEquals(EXPECTED_TILES, tiles.size());
+        assertEquals(EXPECTED_NODES, nodes.size());
+        assertEquals(EXPECTED_EDGES, edges.size());
+        assertEquals(EXPECTED_HARBOR_NODES, gameBoard.getHarborNodes().size());
+        assertEquals(BEGINNER_ROBBER_TILE, gameBoard.getRobberTileId());
+        assertEquals(HarborType.GENERIC_THREE_FOR_ONE, gameBoard.getNodes().get(TOP_LEFT_NODE).getHarborType());
+        assertEquals(HarborType.GRAIN_TWO_FOR_ONE, gameBoard.getNodes().get(GRAIN_HARBOR_NODE).getHarborType());
+        assertEquals(HarborType.ORE_TWO_FOR_ONE, gameBoard.getNodes().get(ORE_HARBOR_NODE).getHarborType());
+        assertEquals(HarborType.LUMBER_TWO_FOR_ONE, gameBoard.getNodes().get(LUMBER_HARBOR_NODE).getHarborType());
+        assertEquals(HarborType.GENERIC_THREE_FOR_ONE,
+                gameBoard.getNodes().get(THREE_FOR_ONE_SOUTH_NODE).getHarborType());
+        assertEquals(HarborType.NONE, gameBoard.getNodes().get(DESERT_ADJACENT_NODE).getHarborType());
+        assertTrue(gameBoard.getNodes().get(WHITE_STAR_NODE).isOccupied());
+        assertEquals(TOP_LEFT_INCIDENT_EDGE_1, nodes.get(TOP_LEFT_NODE).getIncidentEdges().get(0).getId());
+        assertEquals(TOP_LEFT_INCIDENT_EDGE_2, nodes.get(TOP_LEFT_NODE).getIncidentEdges().get(1).getId());
+        assertEquals(BOTTOM_RIGHT_INCIDENT_EDGE_1, nodes.get(BOTTOM_RIGHT_NODE).getIncidentEdges().get(0).getId());
+        assertEquals(BOTTOM_RIGHT_INCIDENT_EDGE_2, nodes.get(BOTTOM_RIGHT_NODE).getIncidentEdges().get(1).getId());
+        assertEquals(Optional.of(RED), edges.get(RED_ROAD_EDGE).getRoadColor());
+        assertEquals(Optional.of(ORANGE), edges.get(ORANGE_ROAD_EDGE).getRoadColor());
+    }
+}
