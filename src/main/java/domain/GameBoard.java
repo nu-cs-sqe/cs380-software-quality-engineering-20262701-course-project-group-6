@@ -66,9 +66,7 @@ public class GameBoard {
     private int robberTileId;
 
     public void generateBoard(TileLayout layout, BeginnerPlacements placements) {
-        if (layout == null) {
-            throw new IllegalArgumentException("layout cannot be null");
-        }
+        validateGenerateInputs(layout, placements);
         createNodes();
         createEdges();
         createTiles(layout.getTiles());
@@ -93,6 +91,15 @@ public class GameBoard {
 
     public Map<Integer, HarborType> getHarborNodes() {
         return Map.copyOf(HARBOR_NODES);
+    }
+
+    private void validateGenerateInputs(TileLayout layout, BeginnerPlacements placements) {
+        if (layout == null) {
+            throw new IllegalArgumentException("layout cannot be null");
+        }
+        if (placements == null) {
+            throw new IllegalArgumentException("placements cannot be null");
+        }
     }
 
     private void createNodes() {
