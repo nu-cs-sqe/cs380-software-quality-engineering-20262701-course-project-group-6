@@ -250,10 +250,19 @@ class GameBoardTest {
     }
 
     @Test
-    void Getters_BeforeGenerateBoard_ThrowIllegalStateException() {
+    void getTiles_BeforeGenerateBoard_ThrowIllegalStateException() {
         GameBoard gameBoard = new GameBoard();
 
         Exception exception = assertThrows(IllegalStateException.class, () -> gameBoard.getTiles());
+
+        assertEquals("Board has not been generated yet", exception.getMessage());
+    }
+
+    @Test
+    void getNodes_BeforeGenerateBoard_ThrowIllegalStateException() {
+        GameBoard gameBoard = new GameBoard();
+
+        Exception exception = assertThrows(IllegalStateException.class, () -> gameBoard.getNodes());
 
         assertEquals("Board has not been generated yet", exception.getMessage());
     }

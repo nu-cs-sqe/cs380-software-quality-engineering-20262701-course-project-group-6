@@ -107,6 +107,7 @@ public class GameBoard {
     }
 
     public List<Node> getNodes() {
+        requireGenerated();
         return List.copyOf(nodes.values());
     }
 

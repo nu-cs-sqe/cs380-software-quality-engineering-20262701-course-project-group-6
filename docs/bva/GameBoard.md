@@ -63,8 +63,8 @@ All collection getters return unmodifiable copies.
 ### Methods under test: `getTiles()`, `getNodes()`, `getEdges()`, `getRobberTileId()`, `getHarborNodes()`
 |  | State of the System | Expected output | Implemented? |
 | ----- | ----- | ----- | ----- |
-| TC21 | Board has not been generated yet (`generated` = `false`), `getTiles()` is called | `IllegalStateException` with message `"Board has not been generated yet"` | :x: |
-| TC22 | Board has not been generated yet (`generated` = `false`), `getNodes()` is called | `IllegalStateException` with message `"Board has not been generated yet"` | :x: |
+| TC21 | Board has not been generated yet (`generated` = `false`), `getTiles()` is called | `IllegalStateException` with message `"Board has not been generated yet"` | :white_check_mark: |
+| TC22 | Board has not been generated yet (`generated` = `false`), `getNodes()` is called | `IllegalStateException` with message `"Board has not been generated yet"` | :white_check_mark: |
 | TC23 | Board has not been generated yet (`generated` = `false`), `getEdges()` is called | `IllegalStateException` with message `"Board has not been generated yet"` | :x: |
 | TC24 | Board has not been generated yet (`generated` = `false`), `getRobberTileId()` is called | `IllegalStateException` with message `"Board has not been generated yet"` | :x: |
 | TC25 | Board has not been generated yet (`generated` = `false`), `getHarborNodes()` is called | `IllegalStateException` with message `"Board has not been generated yet"` | :x: |
