@@ -58,7 +58,7 @@ All collection getters return unmodifiable copies.
 | TC17 | Board generated with `BeginnerPlacements.forFourPlayers()`, `color` = `PlayerColor.ORANGE` | Returns `[ORE, GRAIN, GRAIN]` | :white_check_mark: |
 | TC18 | Board has not been generated yet (`generated` = `false`) | `IllegalStateException` with message `"Board has not been generated yet"` | :white_check_mark: |
 | TC19 | Board generated with `BeginnerLayout`, `color` = `null` | `IllegalArgumentException` with message `"Player color is required"` | :white_check_mark: |
-| TC20 | Board generated with `BeginnerPlacements.forThreePlayers()`, `color` = `PlayerColor.RED` | `IllegalArgumentException` with message `"RED has no starting settlement on this board"` | :x: |
+| TC20 | Board generated with `BeginnerPlacements.forThreePlayers()`, `color` = `PlayerColor.RED` | `IllegalArgumentException` with message `"RED has no starting settlement on this board"` | :white_check_mark: |
 
 ### Methods under test: `getTiles()`, `getNodes()`, `getEdges()`, `getRobberTileId()`, `getHarborNodes()`
 

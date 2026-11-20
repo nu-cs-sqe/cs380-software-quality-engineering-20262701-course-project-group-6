@@ -238,6 +238,17 @@ class GameBoardTest {
         assertEquals("Player color is required", exception.getMessage());
     }
 
+    @Test
+    void GetStartingResources_OmittedColorInThreePlayerGame_ThrowsIllegalArgumentException() {
+        GameBoard gameBoard = new GameBoard();
+        gameBoard.generateBoard(new BeginnerLayout(), BeginnerPlacements.forThreePlayers());
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> gameBoard.getStartingResources(RED));
+
+        assertEquals("RED has no 2nd starting settlement on this board", exception.getMessage());
+    }
+
     private TileLayout stubLayoutWithTileCount(int count) {
         Map<Integer, TileSetup> map = new LinkedHashMap<>();
         for (int i = 0; i < count; i++) {
