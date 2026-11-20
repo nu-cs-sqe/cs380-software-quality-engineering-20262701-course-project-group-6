@@ -3,6 +3,7 @@ package domain;
 import static domain.PlayerColor.ORANGE;
 import static domain.PlayerColor.RED;
 import static domain.ResourceCardType.ORE;
+import static domain.ResourceCardType.WOOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -137,11 +138,25 @@ class GameBoardTest {
         assertEquals("Missing tile setup for tileId " + (EXPECTED_TILES - 1), exception.getMessage());
     }
 
+    @Test
+    void GetAdjacentResources_CoastalBoundaryNodes_ReturnsSingleResource() {
+        GameBoard gameBoard = createGeneratedBeginnerBoard();
+
+        assertEquals(List.of(ORE), gameBoard.getAdjacentResources(TOP_LEFT_NODE));
+        assertEquals(List.of(WOOL), gameBoard.getAdjacentResources(BOTTOM_RIGHT_NODE));
+    }
+
     private TileLayout stubLayoutWithTileCount(int count) {
         Map<Integer, TileSetup> map = new LinkedHashMap<>();
         for (int i = 0; i < count; i++) {
             map.put(i, new TileSetup(ORE, SAMPLE_DICE));
         }
         return () -> map;
+    }
+
+    private GameBoard createGeneratedBeginnerBoard() {
+        GameBoard gameBoard = new GameBoard();
+        gameBoard.generateBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+        return gameBoard;
     }
 }

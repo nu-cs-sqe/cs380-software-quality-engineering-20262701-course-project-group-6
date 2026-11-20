@@ -1,9 +1,6 @@
 package domain;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class GameBoard {
     private static final int NUM_NODES = 54;
@@ -71,6 +68,14 @@ public class GameBoard {
         createEdges();
         createTiles(layout.getTiles());
         applyBeginnerPlacements(placements);
+    }
+
+    public List<ResourceCardType> getAdjacentResources(int nodeId) {
+        List<ResourceCardType> adjacentResources = new ArrayList<>();
+        for (int tileId = 0; tileId < NUM_TILES; tileId++) {
+            addTileResourceIfAdjacent(tiles.get(tileId), nodes.get(nodeId), adjacentResources);
+        }
+        return Collections.unmodifiableList(adjacentResources);
     }
 
     public List<Tile> getTiles() {
@@ -163,5 +168,11 @@ public class GameBoard {
                 nodes.get(nodeId).placeBuilding(BuildingType.SETTLEMENT, color));
         placements.getRoads().forEach((edgeId, color) ->
                 edges.get(edgeId).setRoadColor(color));
+    }
+
+    private void addTileResourceIfAdjacent(Tile tile, Node targetNode, List<ResourceCardType> resources) {
+        if (tile.getCornerNodes().contains(targetNode)) {
+            tile.getResourceProduced().ifPresent(resources::add);
+        }
     }
 }
