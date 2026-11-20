@@ -228,6 +228,16 @@ class GameBoardTest {
         assertEquals("Board has not been generated yet", exception.getMessage());
     }
 
+    @Test
+    void GetStartingResources_NullColor_ThrowsIllegalArgumentException() {
+        GameBoard gameBoard = createGeneratedBeginnerBoard();
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> gameBoard.getStartingResources(null));
+
+        assertEquals("Player color is required", exception.getMessage());
+    }
+
     private TileLayout stubLayoutWithTileCount(int count) {
         Map<Integer, TileSetup> map = new LinkedHashMap<>();
         for (int i = 0; i < count; i++) {

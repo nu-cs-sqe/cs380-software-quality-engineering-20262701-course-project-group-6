@@ -86,6 +86,9 @@ public class GameBoard {
 
     public List<ResourceCardType> getStartingResources(PlayerColor color) {
         requireGenerated();
+        if (color == null) {
+            throw new IllegalArgumentException("Player color is required");
+        }
         Integer secondPlacedSettlement = startingResourceNodes.get(color);
         if (secondPlacedSettlement == null) {
             throw new IllegalArgumentException(color + " has no 2nd starting settlement on this board");
