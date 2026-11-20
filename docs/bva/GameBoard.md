@@ -34,7 +34,7 @@ All collection getters return unmodifiable copies.
 | TC3 | Valid `layout`, `placements` = `null` | `IllegalArgumentException` with message `"placements cannot be null"` | :white_check_mark: |
 | TC4 | `layout.getTiles()` returns `null` | `IllegalArgumentException` with message `"layout tiles cannot be null"` | :white_check_mark: |
 | TC5 | `layout.getTiles()` contains 18 entries (below 19) | `IllegalArgumentException` with message `"Expected 19 tiles, got 18"` | :white_check_mark: |
-| TC6 | `layout.getTiles()` contains 20 entries (above 19) | `IllegalArgumentException` with message `"Expected 19 tiles, got 20"` | :x: |
+| TC6 | `layout.getTiles()` contains 20 entries (above 19) | `IllegalArgumentException` with message `"Expected 19 tiles, got 20"` | :white_check_mark: |
 | TC7 | `layout.getTiles()` has 19 entries but is missing a required tile ID (`0..18`) | `IllegalArgumentException` indicating missing tile setup | :x: |
 
 ### Method under test: `getAdjacentResources(int nodeId)`

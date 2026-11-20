@@ -109,6 +109,17 @@ class GameBoardTest {
         assertEquals("Expected 19 tiles, got 18", exception.getMessage());
     }
 
+    @Test
+    void GenerateBoard_TooManyTiles_ThrowsIllegalArgumentException() {
+        GameBoard gameBoard = new GameBoard();
+        TileLayout twentyTiles = stubLayoutWithTileCount(EXPECTED_TILES + 1);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> gameBoard.generateBoard(twentyTiles, BeginnerPlacements.forFourPlayers()));
+
+        assertEquals("Expected 19 tiles, got 20", exception.getMessage());
+    }
+
     private TileLayout stubLayoutWithTileCount(int count) {
         Map<Integer, TileSetup> map = new LinkedHashMap<>();
         for (int i = 0; i < count; i++) {
