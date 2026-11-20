@@ -66,6 +66,9 @@ public class GameBoard {
     private int robberTileId;
 
     public void generateBoard(TileLayout layout, BeginnerPlacements placements) {
+        if (layout == null) {
+            throw new IllegalArgumentException("layout cannot be null");
+        }
         createNodes();
         createEdges();
         createTiles(layout.getTiles());

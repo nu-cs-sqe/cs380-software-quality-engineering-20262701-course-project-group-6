@@ -4,6 +4,7 @@ import static domain.PlayerColor.ORANGE;
 import static domain.PlayerColor.RED;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 import java.util.Optional;
@@ -60,5 +61,15 @@ class GameBoardTest {
         assertEquals(BOTTOM_RIGHT_INCIDENT_EDGE_2, nodes.get(BOTTOM_RIGHT_NODE).getIncidentEdges().get(1).getId());
         assertEquals(Optional.of(RED), edges.get(RED_ROAD_EDGE).getRoadColor());
         assertEquals(Optional.of(ORANGE), edges.get(ORANGE_ROAD_EDGE).getRoadColor());
+    }
+
+    @Test
+    void GenerateBoard_NullLayout_ThrowsIllegalArgumentException() {
+        GameBoard gameBoard = new GameBoard();
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> gameBoard.generateBoard(null, BeginnerPlacements.forFourPlayers()));
+
+        assertEquals("layout cannot be null", exception.getMessage());
     }
 }
