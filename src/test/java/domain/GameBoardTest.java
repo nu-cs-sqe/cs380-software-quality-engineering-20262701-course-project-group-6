@@ -24,6 +24,7 @@ class GameBoardTest {
     private static final int EXPECTED_NODES = 54;
     private static final int EXPECTED_EDGES = 72;
     private static final int EXPECTED_HARBOR_NODES = 18;
+    private static final int EXPECTED_CORNERS_PER_TILE = 6;
     private static final int BEGINNER_ROBBER_TILE = 9;
     private static final int TOP_LEFT_NODE = 0;
     private static final int TOP_LEFT_INCIDENT_EDGE_1 = 0;
@@ -43,6 +44,7 @@ class GameBoardTest {
     private static final int SAMPLE_DICE = 6;
     private static final int INVALID_LOW_ID = -1;
     private static final int INVALID_HIGH_NODE_ID = 54;
+    private static final int MAX_ADJACENT_TILES_PER_NODE = 3;
 
     @Test
     void GenerateBoard_ValidBeginnerLayoutAndPlacements_BuildsFullGraphAndHarbors() {
@@ -73,6 +75,38 @@ class GameBoardTest {
         assertEquals(BOTTOM_RIGHT_INCIDENT_EDGE_2, nodes.get(BOTTOM_RIGHT_NODE).getIncidentEdges().get(1).getId());
         assertEquals(Optional.of(RED), edges.get(RED_ROAD_EDGE).getRoadColor());
         assertEquals(Optional.of(ORANGE), edges.get(ORANGE_ROAD_EDGE).getRoadColor());
+    }
+
+    @Test
+    void GenerateBoard_ValidBeginnerLayout_AllEdgesTilesAndHarborsHaveConsistentTopology() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+        List<Tile> tiles = gameBoard.getTiles();
+        List<Edge> edges = gameBoard.getEdges();
+        List<Node> nodes = gameBoard.getNodes();
+        Map<Integer, HarborType> harborNodes = gameBoard.getHarborNodes();
+
+        assertEquals(EXPECTED_EDGES, edges.size());
+        for (Edge edge : edges) {
+            Node first = edge.getNode1();
+            Node second = edge.getNode2();
+            boolean sharesTile = tiles.stream()
+                    .anyMatch(tile -> tile.getCornerNodes().contains(first)
+                            && tile.getCornerNodes().contains(second));
+            assertTrue(sharesTile,
+                    "Edge " + edge.getId() + " endpoints " + first.getId() + ", " + second.getId()
+                            + " do not share a tile");
+        }
+
+        for (Node node : nodes) {
+            long adjacentTileCount = tiles.stream().filter(tile -> tile.getCornerNodes().contains(node)).count();
+            assertTrue(adjacentTileCount >= 1 && adjacentTileCount <= MAX_ADJACENT_TILES_PER_NODE);
+            HarborType expectedHarbor = harborNodes.getOrDefault(node.getId(), HarborType.NONE);
+            assertEquals(expectedHarbor, node.getHarborType());
+            if (expectedHarbor != HarborType.NONE) {
+                assertTrue(adjacentTileCount < MAX_ADJACENT_TILES_PER_NODE,
+                        "Harbor node " + node.getId() + " should be on perimeter, not 3 tiles");
+            }
+        }
     }
 
     @Test
@@ -138,7 +172,7 @@ class GameBoardTest {
 
     @Test
     void GetAdjacentResources_CoastalBoundaryNodes_ReturnsSingleResource() {
-        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());;
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
 
         assertEquals(List.of(ORE), gameBoard.getAdjacentResources(TOP_LEFT_NODE));
         assertEquals(List.of(WOOL), gameBoard.getAdjacentResources(BOTTOM_RIGHT_NODE));
@@ -153,56 +187,56 @@ class GameBoardTest {
 
     @Test
     void GetAdjacentResources_NodeBorderingDesert_ExcludesDesert() {
-        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());;
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
 
         assertEquals(List.of(LUMBER, GRAIN), gameBoard.getAdjacentResources(DESERT_ADJACENT_NODE));
     }
 
     @Test
     void GetAdjacentResources_NegativeNodeId_ThrowsIllegalArgumentException() {
-        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());;
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
 
         assertThrows(IllegalArgumentException.class, () -> gameBoard.getAdjacentResources(INVALID_LOW_ID));
     }
 
     @Test
     void GetAdjacentResources_NodeIdAboveMax_ThrowsIllegalArgumentException() {
-        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());;
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
 
         assertThrows(IllegalArgumentException.class, () -> gameBoard.getAdjacentResources(INVALID_HIGH_NODE_ID));
     }
 
     @Test
     void GetStartingResources_White_ReturnsMatchingIllustrationAResources() {
-        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());;
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
 
         assertEquals(List.of(GRAIN, BRICK, LUMBER), gameBoard.getStartingResources(WHITE));
     }
 
     @Test
     void GetStartingResources_Red_ReturnsMatchingIllustrationAResources() {
-        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());;
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
 
         assertEquals(List.of(GRAIN, LUMBER, LUMBER), gameBoard.getStartingResources(RED));
     }
 
     @Test
     void GetStartingResources_Blue_ReturnsMatchingIllustrationAResources() {
-        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());;
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
 
         assertEquals(List.of(LUMBER, ORE, BRICK), gameBoard.getStartingResources(BLUE));
     }
 
     @Test
     void GetStartingResources_Orange_ReturnsMatchingIllustrationAResources() {
-        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());;
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
 
         assertEquals(List.of(ORE, GRAIN, GRAIN), gameBoard.getStartingResources(ORANGE));
     }
 
     @Test
     void GetStartingResources_NullColor_ThrowsIllegalArgumentException() {
-        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());;
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> gameBoard.getStartingResources(null));
