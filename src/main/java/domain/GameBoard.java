@@ -122,6 +122,7 @@ public class GameBoard {
     }
 
     public Map<Integer, HarborType> getHarborNodes() {
+        requireGenerated();
         return Map.copyOf(HARBOR_NODES);
     }
 
