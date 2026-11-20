@@ -20,6 +20,7 @@ public class GameBoard {
     private static final int CORNER_4 = 4;
     private static final int CORNER_5 = 5;
 
+    // see docs/design/map_ids_reference.jpg
     private static final Map<Integer, HarborType> HARBOR_NODES = Map.ofEntries(
             Map.entry(0, HarborType.GENERIC_THREE_FOR_ONE),
             Map.entry(1, HarborType.GENERIC_THREE_FOR_ONE),
@@ -40,6 +41,7 @@ public class GameBoard {
             Map.entry(7, HarborType.LUMBER_TWO_FOR_ONE),
             Map.entry(17, HarborType.LUMBER_TWO_FOR_ONE));
 
+    // Edges are ordered left to right, row by row, see docs/design/map_ids_reference.jpg
     private static final int[][] EDGE_ENDPOINTS = {
             {0, 1}, {1, 2}, {2, 3}, {3, 4}, {4, 5}, {5, 6},
             {0, 8}, {2, 10}, {4, 12}, {6, 14},
@@ -54,6 +56,7 @@ public class GameBoard {
             {47, 48}, {48, 49}, {49, 50}, {50, 51}, {51, 52}, {52, 53}
     };
 
+    // Corners are ordered clockwise starting from the upper-left corner, see docs/design/map_ids_reference.jpg
     private static final int[][] TILE_CORNERS = {
             {0, 1, 2, 10, 9, 8}, {2, 3, 4, 12, 11, 10}, {4, 5, 6, 14, 13, 12},
             {7, 8, 9, 19, 18, 17}, {9, 10, 11, 21, 20, 19}, {11, 12, 13, 23, 22, 21}, {13, 14, 15, 25, 24, 23},
