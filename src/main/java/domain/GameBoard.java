@@ -124,6 +124,9 @@ public class GameBoard {
         if (tileMap == null) {
             throw new IllegalArgumentException("layout tiles cannot be null");
         }
+        if (tileMap.size() != NUM_TILES) {
+            throw new IllegalArgumentException("Expected " + NUM_TILES + " tiles, got " + tileMap.size());
+        }
         int desertTileId = UNSET_DESERT_ID;
         for (int tileId = 0; tileId < NUM_TILES; tileId++) {
             TileSetup setup = tileMap.get(tileId);

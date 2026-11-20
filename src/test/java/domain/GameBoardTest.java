@@ -2,12 +2,15 @@ package domain;
 
 import static domain.PlayerColor.ORANGE;
 import static domain.PlayerColor.RED;
+import static domain.ResourceCardType.ORE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Map;
+import java.util.LinkedHashMap;
 import org.junit.jupiter.api.Test;
 
 class GameBoardTest {
@@ -30,6 +33,7 @@ class GameBoardTest {
     private static final int BOTTOM_RIGHT_INCIDENT_EDGE_2 = 71;
     private static final int RED_ROAD_EDGE = 13;
     private static final int ORANGE_ROAD_EDGE = 15;
+    private static final int SAMPLE_DICE = 6;
 
     @Test
     void GenerateBoard_ValidBeginnerLayoutAndPlacements_BuildsFullGraphAndHarbors() {
@@ -92,5 +96,24 @@ class GameBoardTest {
                 () -> gameBoard.generateBoard(nullMapLayout, BeginnerPlacements.forFourPlayers()));
 
         assertEquals("layout tiles cannot be null", exception.getMessage());
+    }
+
+    @Test
+    void GenerateBoard_TooFewTiles_ThrowsIllegalArgumentException() {
+        GameBoard gameBoard = new GameBoard();
+        TileLayout eighteenTiles = stubLayoutWithTileCount(EXPECTED_TILES - 1);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> gameBoard.generateBoard(eighteenTiles, BeginnerPlacements.forFourPlayers()));
+
+        assertEquals("Expected 19 tiles, got 18", exception.getMessage());
+    }
+
+    private TileLayout stubLayoutWithTileCount(int count) {
+        Map<Integer, TileSetup> map = new LinkedHashMap<>();
+        for (int i = 0; i < count; i++) {
+            map.put(i, new TileSetup(ORE, SAMPLE_DICE));
+        }
+        return () -> map;
     }
 }
