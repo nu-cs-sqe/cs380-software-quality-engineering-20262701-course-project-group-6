@@ -198,6 +198,13 @@ class GameBoardTest {
         assertEquals(List.of(GRAIN, BRICK, LUMBER), gameBoard.getStartingResources(WHITE));
     }
 
+    @Test
+    void GetStartingResources_Red_ReturnsMatchingIllustrationAResources() {
+        GameBoard gameBoard = createGeneratedBeginnerBoard();
+
+        assertEquals(List.of(GRAIN, LUMBER, LUMBER), gameBoard.getStartingResources(RED));
+    }
+
     private TileLayout stubLayoutWithTileCount(int count) {
         Map<Integer, TileSetup> map = new LinkedHashMap<>();
         for (int i = 0; i < count; i++) {

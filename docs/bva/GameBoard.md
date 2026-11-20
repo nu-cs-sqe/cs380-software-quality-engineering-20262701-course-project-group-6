@@ -53,7 +53,7 @@ All collection getters return unmodifiable copies.
 |  | State of the System | Expected output | Implemented? |
 | ----- | ----- | ----- | ----- |
 | TC14 | Board generated with `BeginnerPlacements.forFourPlayers()`, `color` = `PlayerColor.WHITE` | Returns `[GRAIN, BRICK, LUMBER]` | :white_check_mark: |
-| TC15 | Board generated with `BeginnerPlacements.forFourPlayers()`, `color` = `PlayerColor.RED` | Returns `[GRAIN, LUMBER, LUMBER]` | :x: |
+| TC15 | Board generated with `BeginnerPlacements.forFourPlayers()`, `color` = `PlayerColor.RED` | Returns `[GRAIN, LUMBER, LUMBER]` | :white_check_mark: |
 | TC16 | Board generated with `BeginnerPlacements.forFourPlayers()`, `color` = `PlayerColor.BLUE` | Returns `[LUMBER, ORE, BRICK]` | :x: |
 | TC17 | Board generated with `BeginnerPlacements.forFourPlayers()`, `color` = `PlayerColor.ORANGE` | Returns `[ORE, GRAIN, GRAIN]` | :x: |
 | TC18 | Board has not been generated yet (`generated` = `false`) | `IllegalStateException` with message `"Board has not been generated yet"` | :x: |
