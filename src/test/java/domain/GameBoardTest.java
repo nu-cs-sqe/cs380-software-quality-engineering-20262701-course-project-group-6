@@ -163,6 +163,16 @@ class GameBoardTest {
         assertEquals(List.of(LUMBER, GRAIN), gameBoard.getAdjacentResources(DESERT_ADJACENT_NODE));
     }
 
+    @Test
+    void GetAdjacentResources_BeforeGenerateBoard_ThrowsIllegalStateException() {
+        GameBoard gameBoard = new GameBoard();
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> gameBoard.getAdjacentResources(TOP_LEFT_NODE));
+
+        assertEquals("Board has not been generated yet", exception.getMessage());
+    }
+
     private TileLayout stubLayoutWithTileCount(int count) {
         Map<Integer, TileSetup> map = new LinkedHashMap<>();
         for (int i = 0; i < count; i++) {

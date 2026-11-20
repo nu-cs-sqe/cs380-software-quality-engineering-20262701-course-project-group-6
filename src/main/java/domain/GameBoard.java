@@ -61,6 +61,7 @@ public class GameBoard {
     private final Map<Integer, Edge> edges = new LinkedHashMap<>();
     private final Map<Integer, Tile> tiles = new LinkedHashMap<>();
     private int robberTileId;
+    private boolean generated;
 
     public void generateBoard(TileLayout layout, BeginnerPlacements placements) {
         validateGenerateInputs(layout, placements);
@@ -68,9 +69,11 @@ public class GameBoard {
         createEdges();
         createTiles(layout.getTiles());
         applyBeginnerPlacements(placements);
+        generated = true;
     }
 
     public List<ResourceCardType> getAdjacentResources(int nodeId) {
+        requireGenerated();
         List<ResourceCardType> adjacentResources = new ArrayList<>();
         for (int tileId = 0; tileId < NUM_TILES; tileId++) {
             addTileResourceIfAdjacent(tiles.get(tileId), nodes.get(nodeId), adjacentResources);
@@ -173,6 +176,12 @@ public class GameBoard {
     private void addTileResourceIfAdjacent(Tile tile, Node targetNode, List<ResourceCardType> resources) {
         if (tile.getCornerNodes().contains(targetNode)) {
             tile.getResourceProduced().ifPresent(resources::add);
+        }
+    }
+
+    private void requireGenerated() {
+        if (!generated) {
+            throw new IllegalStateException("Board has not been generated yet");
         }
     }
 }
