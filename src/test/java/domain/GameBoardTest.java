@@ -82,4 +82,15 @@ class GameBoardTest {
 
         assertEquals("placements cannot be null", exception.getMessage());
     }
+
+    @Test
+    void GenerateBoard_NullTileMapInLayout_ThrowsIllegalArgumentException() {
+        GameBoard gameBoard = new GameBoard();
+        TileLayout nullMapLayout = () -> null;
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> gameBoard.generateBoard(nullMapLayout, BeginnerPlacements.forFourPlayers()));
+
+        assertEquals("layout tiles cannot be null", exception.getMessage());
+    }
 }

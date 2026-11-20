@@ -32,7 +32,7 @@ All collection getters return unmodifiable copies.
 | TC1 | Valid `BeginnerLayout` and `BeginnerPlacements.forFourPlayers()` | Creates 54 nodes, 72 edges, 19 tiles, robber on desert tile 9, fixed harbor nodes set, settlements/roads/starred nodes applied | :white_check_mark: |
 | TC2 | `layout` = `null`, valid `placements` | `IllegalArgumentException` with message `"layout cannot be null"` | :white_check_mark: |
 | TC3 | Valid `layout`, `placements` = `null` | `IllegalArgumentException` with message `"placements cannot be null"` | :white_check_mark: |
-| TC4 | `layout.getTiles()` returns `null` | `IllegalArgumentException` with message `"layout tiles cannot be null"` | :x: |
+| TC4 | `layout.getTiles()` returns `null` | `IllegalArgumentException` with message `"layout tiles cannot be null"` | :white_check_mark: |
 | TC5 | `layout.getTiles()` contains 18 entries (below 19) | `IllegalArgumentException` with message `"Expected 19 tiles, got 18"` | :x: |
 | TC6 | `layout.getTiles()` contains 20 entries (above 19) | `IllegalArgumentException` with message `"Expected 19 tiles, got 20"` | :x: |
 | TC7 | `layout.getTiles()` has 19 entries but is missing a required tile ID (`0..18`) | `IllegalArgumentException` indicating missing tile setup | :x: |
