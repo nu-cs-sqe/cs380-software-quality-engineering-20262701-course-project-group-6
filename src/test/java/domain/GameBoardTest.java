@@ -40,6 +40,7 @@ class GameBoardTest {
     private static final int MISSING_TILE_GAP_ID = 99;
     private static final int SAMPLE_DICE = 6;
     private static final int INVALID_LOW_ID = -1;
+    private static final int INVALID_HIGH_NODE_ID = 54;
 
     @Test
     void GenerateBoard_ValidBeginnerLayoutAndPlacements_BuildsFullGraphAndHarbors() {
@@ -179,6 +180,13 @@ class GameBoardTest {
         GameBoard gameBoard = createGeneratedBeginnerBoard();
 
         assertThrows(IllegalArgumentException.class, () -> gameBoard.getAdjacentResources(INVALID_LOW_ID));
+    }
+
+    @Test
+    void GetAdjacentResources_NodeIdAboveMax_ThrowsIllegalArgumentException() {
+        GameBoard gameBoard = createGeneratedBeginnerBoard();
+
+        assertThrows(IllegalArgumentException.class, () -> gameBoard.getAdjacentResources(INVALID_HIGH_NODE_ID));
     }
 
     private TileLayout stubLayoutWithTileCount(int count) {
