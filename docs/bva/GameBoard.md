@@ -66,7 +66,7 @@ All collection getters return unmodifiable copies.
 | TC21 | Board has not been generated yet (`generated` = `false`), `getTiles()` is called | `IllegalStateException` with message `"Board has not been generated yet"` | :white_check_mark: |
 | TC22 | Board has not been generated yet (`generated` = `false`), `getNodes()` is called | `IllegalStateException` with message `"Board has not been generated yet"` | :white_check_mark: |
 | TC23 | Board has not been generated yet (`generated` = `false`), `getEdges()` is called | `IllegalStateException` with message `"Board has not been generated yet"` | :white_check_mark: |
-| TC24 | Board has not been generated yet (`generated` = `false`), `getRobberTileId()` is called | `IllegalStateException` with message `"Board has not been generated yet"` | :x: |
+| TC24 | Board has not been generated yet (`generated` = `false`), `getRobberTileId()` is called | `IllegalStateException` with message `"Board has not been generated yet"` | :white_check_mark: |
 | TC25 | Board has not been generated yet (`generated` = `false`), `getHarborNodes()` is called | `IllegalStateException` with message `"Board has not been generated yet"` | :x: |
 
 Read-only getters for `BoardView` and `GameSession`. Verified in TC1 and harbor assertions, plus `IllegalStateException` checks when called before `generateBoard(...)` on generated-state getters (TC22).

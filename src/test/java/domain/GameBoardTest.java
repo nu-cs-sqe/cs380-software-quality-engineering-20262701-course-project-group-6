@@ -276,6 +276,15 @@ class GameBoardTest {
         assertEquals("Board has not been generated yet", exception.getMessage());
     }
 
+    @Test
+    void getRobberTileId_BeforeGenerateBoard_ThrowIllegalStateException() {
+        GameBoard gameBoard = new GameBoard();
+
+        Exception exception = assertThrows(IllegalStateException.class, () -> gameBoard.getRobberTileId());
+
+        assertEquals("Board has not been generated yet", exception.getMessage());
+    }
+
     private TileLayout stubLayoutWithTileCount(int count) {
         Map<Integer, TileSetup> map = new LinkedHashMap<>();
         for (int i = 0; i < count; i++) {

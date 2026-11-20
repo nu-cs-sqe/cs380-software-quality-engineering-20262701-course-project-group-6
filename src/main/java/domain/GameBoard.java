@@ -117,6 +117,7 @@ public class GameBoard {
     }
 
     public int getRobberTileId() {
+        requireGenerated();
         return robberTileId;
     }
 
