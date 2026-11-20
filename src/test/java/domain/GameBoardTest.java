@@ -156,6 +156,13 @@ class GameBoardTest {
         assertEquals(List.of(GRAIN, BRICK, LUMBER), gameBoard.getAdjacentResources(WHITE_STAR_NODE));
     }
 
+    @Test
+    void GetAdjacentResources_NodeBorderingDesert_ExcludesDesert() {
+        GameBoard gameBoard = createGeneratedBeginnerBoard();
+
+        assertEquals(List.of(LUMBER, GRAIN), gameBoard.getAdjacentResources(DESERT_ADJACENT_NODE));
+    }
+
     private TileLayout stubLayoutWithTileCount(int count) {
         Map<Integer, TileSetup> map = new LinkedHashMap<>();
         for (int i = 0; i < count; i++) {
