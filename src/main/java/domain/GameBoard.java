@@ -112,6 +112,7 @@ public class GameBoard {
     }
 
     public List<Edge> getEdges() {
+        requireGenerated();
         return List.copyOf(edges.values());
     }
 
