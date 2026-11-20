@@ -4,6 +4,9 @@ import static domain.PlayerColor.ORANGE;
 import static domain.PlayerColor.RED;
 import static domain.ResourceCardType.ORE;
 import static domain.ResourceCardType.WOOL;
+import static domain.ResourceCardType.GRAIN;
+import static domain.ResourceCardType.BRICK;
+import static domain.ResourceCardType.LUMBER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -144,6 +147,13 @@ class GameBoardTest {
 
         assertEquals(List.of(ORE), gameBoard.getAdjacentResources(TOP_LEFT_NODE));
         assertEquals(List.of(WOOL), gameBoard.getAdjacentResources(BOTTOM_RIGHT_NODE));
+    }
+
+    @Test
+    void GetAdjacentResources_InteriorNode_ReturnsThreeResourcesInTileOrder() {
+        GameBoard gameBoard = createGeneratedBeginnerBoard();
+
+        assertEquals(List.of(GRAIN, BRICK, LUMBER), gameBoard.getAdjacentResources(WHITE_STAR_NODE));
     }
 
     private TileLayout stubLayoutWithTileCount(int count) {

@@ -42,24 +42,23 @@ All collection getters return unmodifiable copies.
 |  | State of the System | Expected output | Implemented? |
 | ----- | ----- | ----- | ----- |
 | TC8 | Board generated with `BeginnerLayout`, `nodeId` = 0 (top-left coastal boundary) | Returns `[ORE]` (1 adjacent tile) | :white_check_mark: |
-| TC9 | Board generated with `BeginnerLayout`, `nodeId` = 53 (bottom-right coastal boundary) | Returns `[WOOL]` (1 adjacent tile) | :x: |
-| TC10 | Board generated with `BeginnerLayout`, `nodeId` = 19 (interior node bordering 3 resource tiles) | Returns `[GRAIN, BRICK, LUMBER]` in tile ID order | :x: |
-| TC11 | Board generated with `BeginnerLayout`, `nodeId` = 18 (interior node bordering 2 resource tiles + desert) | Returns `[LUMBER, GRAIN]` (desert tile 9 excluded) | :x: |
-| TC12 | Board has not been generated yet (`generated` = `false`) | `IllegalStateException` with message `"Board has not been generated yet"` | :x: |
-| TC13 | Board generated with `BeginnerLayout`, `nodeId` = -1 | `IllegalArgumentException` indicating `nodeId` must be between 0 and 53 | :x: |
-| TC14 | Board generated with `BeginnerLayout`, `nodeId` = 54 | `IllegalArgumentException` indicating `nodeId` must be between 0 and 53 | :x: |
+| TC9 | Board generated with `BeginnerLayout`, `nodeId` = 19 (interior node bordering 3 resource tiles) | Returns `[GRAIN, BRICK, LUMBER]` in tile ID order | :white_check_mark: |
+| TC10 | Board generated with `BeginnerLayout`, `nodeId` = 18 (interior node bordering 2 resource tiles + desert) | Returns `[LUMBER, GRAIN]` (desert tile 9 excluded) | :x: |
+| TC11 | Board has not been generated yet (`generated` = `false`) | `IllegalStateException` with message `"Board has not been generated yet"` | :x: |
+| TC12 | Board generated with `BeginnerLayout`, `nodeId` = -1 | `IllegalArgumentException` indicating `nodeId` must be between 0 and 53 | :x: |
+| TC13 | Board generated with `BeginnerLayout`, `nodeId` = 54 | `IllegalArgumentException` indicating `nodeId` must be between 0 and 53 | :x: |
 
 ### Method under test: `getStartingResources(PlayerColor color)`
 
 |  | State of the System | Expected output | Implemented? |
 | ----- | ----- | ----- | ----- |
-| TC15 | Board has not been generated yet (`generated` = `false`) | `IllegalStateException` with message `"Board has not been generated yet"` | :x: |
-| TC16 | Board generated with `BeginnerLayout`, `color` = `null` | `IllegalArgumentException` with message `"Player color is required"` | :x: |
-| TC17 | Board generated with `BeginnerPlacements.forThreePlayers()`, `color` = `PlayerColor.RED` | `IllegalArgumentException` with message `"RED has no starting settlement on this board"` | :x: |
-| TC18 | Board generated with `BeginnerPlacements.forFourPlayers()`, `color` = `PlayerColor.WHITE` | Returns `[GRAIN, BRICK, LUMBER]` | :x: |
-| TC19 | Board generated with `BeginnerPlacements.forFourPlayers()`, `color` = `PlayerColor.RED` | Returns `[GRAIN, LUMBER, LUMBER]` | :x: |
-| TC20 | Board generated with `BeginnerPlacements.forFourPlayers()`, `color` = `PlayerColor.BLUE` | Returns `[LUMBER, ORE, BRICK]` | :x: |
-| TC21 | Board generated with `BeginnerPlacements.forFourPlayers()`, `color` = `PlayerColor.ORANGE` | Returns `[ORE, GRAIN, GRAIN]` | :x: |
+| TC14 | Board has not been generated yet (`generated` = `false`) | `IllegalStateException` with message `"Board has not been generated yet"` | :x: |
+| TC15 | Board generated with `BeginnerLayout`, `color` = `null` | `IllegalArgumentException` with message `"Player color is required"` | :x: |
+| TC16 | Board generated with `BeginnerPlacements.forThreePlayers()`, `color` = `PlayerColor.RED` | `IllegalArgumentException` with message `"RED has no starting settlement on this board"` | :x: |
+| TC17 | Board generated with `BeginnerPlacements.forFourPlayers()`, `color` = `PlayerColor.WHITE` | Returns `[GRAIN, BRICK, LUMBER]` | :x: |
+| TC18 | Board generated with `BeginnerPlacements.forFourPlayers()`, `color` = `PlayerColor.RED` | Returns `[GRAIN, LUMBER, LUMBER]` | :x: |
+| TC19 | Board generated with `BeginnerPlacements.forFourPlayers()`, `color` = `PlayerColor.BLUE` | Returns `[LUMBER, ORE, BRICK]` | :x: |
+| TC20 | Board generated with `BeginnerPlacements.forFourPlayers()`, `color` = `PlayerColor.ORANGE` | Returns `[ORE, GRAIN, GRAIN]` | :x: |
 
 ### Methods under test: `getTiles()`, `getNodes()`, `getEdges()`, `getRobberTileId()`, `getStartingResourceNodeIds()`, `getHarborNodes()`
 
