@@ -6,6 +6,7 @@ public class GameBoard {
     private static final int NUM_NODES = 54;
     private static final int NUM_EDGES = 72;
     private static final int NUM_TILES = 19;
+    private static final int MAX_NODE_ID = 53;
     private static final int UNSET_DESERT_ID = -1;
     private static final int CORNER_0 = 0;
     private static final int CORNER_1 = 1;
@@ -74,9 +75,10 @@ public class GameBoard {
 
     public List<ResourceCardType> getAdjacentResources(int nodeId) {
         requireGenerated();
+        Node targetNode = requireValidNode(nodeId);
         List<ResourceCardType> adjacentResources = new ArrayList<>();
         for (int tileId = 0; tileId < NUM_TILES; tileId++) {
-            addTileResourceIfAdjacent(tiles.get(tileId), nodes.get(nodeId), adjacentResources);
+            addTileResourceIfAdjacent(tiles.get(tileId), targetNode, adjacentResources);
         }
         return Collections.unmodifiableList(adjacentResources);
     }
@@ -183,5 +185,13 @@ public class GameBoard {
         if (!generated) {
             throw new IllegalStateException("Board has not been generated yet");
         }
+    }
+
+    private Node requireValidNode(int nodeId) {
+        Node node = nodes.get(nodeId);
+        if (node == null) {
+            throw new IllegalArgumentException("nodeId must be between 0 and " + MAX_NODE_ID + " (was " + nodeId + ")");
+        }
+        return node;
     }
 }

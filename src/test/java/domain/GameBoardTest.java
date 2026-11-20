@@ -39,6 +39,7 @@ class GameBoardTest {
     private static final int ORANGE_ROAD_EDGE = 15;
     private static final int MISSING_TILE_GAP_ID = 99;
     private static final int SAMPLE_DICE = 6;
+    private static final int INVALID_LOW_ID = -1;
 
     @Test
     void GenerateBoard_ValidBeginnerLayoutAndPlacements_BuildsFullGraphAndHarbors() {
@@ -171,6 +172,13 @@ class GameBoardTest {
                 () -> gameBoard.getAdjacentResources(TOP_LEFT_NODE));
 
         assertEquals("Board has not been generated yet", exception.getMessage());
+    }
+
+    @Test
+    void GetAdjacentResources_NegativeNodeId_ThrowsIllegalArgumentException() {
+        GameBoard gameBoard = createGeneratedBeginnerBoard();
+
+        assertThrows(IllegalArgumentException.class, () -> gameBoard.getAdjacentResources(INVALID_LOW_ID));
     }
 
     private TileLayout stubLayoutWithTileCount(int count) {
