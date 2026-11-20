@@ -68,19 +68,16 @@ public class GameBoard {
     private final Map<Integer, Tile> tiles = new LinkedHashMap<>();
     private final Map<PlayerColor, Integer> startingResourceNodes = new LinkedHashMap<>();
     private int robberTileId;
-    private boolean generated;
 
-    public void generateBoard(TileLayout layout, BeginnerPlacements placements) {
+    public GameBoard(TileLayout layout, BeginnerPlacements placements) {
         validateGenerateInputs(layout, placements);
         createNodes();
         createEdges();
         createTiles(layout.getTiles());
         applyBeginnerPlacements(placements);
-        generated = true;
     }
 
     public List<ResourceCardType> getAdjacentResources(int nodeId) {
-        requireGenerated();
         Node targetNode = requireValidNode(nodeId);
         List<ResourceCardType> adjacentResources = new ArrayList<>();
         for (int tileId = 0; tileId < NUM_TILES; tileId++) {
@@ -90,7 +87,6 @@ public class GameBoard {
     }
 
     public List<ResourceCardType> getStartingResources(PlayerColor color) {
-        requireGenerated();
         if (color == null) {
             throw new IllegalArgumentException("Player color is required");
         }
@@ -102,27 +98,22 @@ public class GameBoard {
     }
 
     public List<Tile> getTiles() {
-        requireGenerated();
         return List.copyOf(tiles.values());
     }
 
     public List<Node> getNodes() {
-        requireGenerated();
         return List.copyOf(nodes.values());
     }
 
     public List<Edge> getEdges() {
-        requireGenerated();
         return List.copyOf(edges.values());
     }
 
     public int getRobberTileId() {
-        requireGenerated();
         return robberTileId;
     }
 
     public Map<Integer, HarborType> getHarborNodes() {
-        requireGenerated();
         return Map.copyOf(HARBOR_NODES);
     }
 
@@ -205,12 +196,6 @@ public class GameBoard {
     private void addTileResourceIfAdjacent(Tile tile, Node targetNode, List<ResourceCardType> resources) {
         if (tile.getCornerNodes().contains(targetNode)) {
             tile.getResourceProduced().ifPresent(resources::add);
-        }
-    }
-
-    private void requireGenerated() {
-        if (!generated) {
-            throw new IllegalStateException("Board has not been generated yet");
         }
     }
 

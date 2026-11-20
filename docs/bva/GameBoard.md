@@ -44,30 +44,21 @@ All collection getters return unmodifiable copies.
 | TC8 | Board generated with `BeginnerLayout`, `nodeId` = 0 (top-left coastal boundary) | Returns `[ORE]` (1 adjacent tile) | :white_check_mark: |
 | TC9 | Board generated with `BeginnerLayout`, `nodeId` = 19 (interior node bordering 3 resource tiles) | Returns `[GRAIN, BRICK, LUMBER]` in tile ID order | :white_check_mark: |
 | TC10 | Board generated with `BeginnerLayout`, `nodeId` = 18 (interior node bordering 2 resource tiles + desert) | Returns `[LUMBER, GRAIN]` (desert tile 9 excluded) | :white_check_mark: |
-| TC11 | Board has not been generated yet (`generated` = `false`) | `IllegalStateException` with message `"Board has not been generated yet"` | :white_check_mark: |
-| TC12 | Board generated with `BeginnerLayout`, `nodeId` = -1 | `IllegalArgumentException` indicating `nodeId` must be between 0 and 53 | :white_check_mark: |
-| TC13 | Board generated with `BeginnerLayout`, `nodeId` = 54 | `IllegalArgumentException` indicating `nodeId` must be between 0 and 53 | :white_check_mark: |
+| TC11 | Board generated with `BeginnerLayout`, `nodeId` = -1 | `IllegalArgumentException` indicating `nodeId` must be between 0 and 53 | :white_check_mark: |
+| TC12 | Board generated with `BeginnerLayout`, `nodeId` = 54 | `IllegalArgumentException` indicating `nodeId` must be between 0 and 53 | :white_check_mark: |
 
 ### Method under test: `getStartingResources(PlayerColor color)`
 
 |  | State of the System | Expected output | Implemented? |
 | ----- | ----- | ----- | ----- |
-| TC14 | Board generated with `BeginnerPlacements.forFourPlayers()`, `color` = `PlayerColor.WHITE` | Returns `[GRAIN, BRICK, LUMBER]` | :white_check_mark: |
-| TC15 | Board generated with `BeginnerPlacements.forFourPlayers()`, `color` = `PlayerColor.RED` | Returns `[GRAIN, LUMBER, LUMBER]` | :white_check_mark: |
-| TC16 | Board generated with `BeginnerPlacements.forFourPlayers()`, `color` = `PlayerColor.BLUE` | Returns `[LUMBER, ORE, BRICK]` | :white_check_mark: |
-| TC17 | Board generated with `BeginnerPlacements.forFourPlayers()`, `color` = `PlayerColor.ORANGE` | Returns `[ORE, GRAIN, GRAIN]` | :white_check_mark: |
-| TC18 | Board has not been generated yet (`generated` = `false`) | `IllegalStateException` with message `"Board has not been generated yet"` | :white_check_mark: |
-| TC19 | Board generated with `BeginnerLayout`, `color` = `null` | `IllegalArgumentException` with message `"Player color is required"` | :white_check_mark: |
-| TC20 | Board generated with `BeginnerPlacements.forThreePlayers()`, `color` = `PlayerColor.RED` | `IllegalArgumentException` with message `"RED has no starting settlement on this board"` | :white_check_mark: |
+| TC13 | Board generated with `BeginnerPlacements.forFourPlayers()`, `color` = `PlayerColor.WHITE` | Returns `[GRAIN, BRICK, LUMBER]` | :white_check_mark: |
+| TC14 | Board generated with `BeginnerPlacements.forFourPlayers()`, `color` = `PlayerColor.RED` | Returns `[GRAIN, LUMBER, LUMBER]` | :white_check_mark: |
+| TC15 | Board generated with `BeginnerPlacements.forFourPlayers()`, `color` = `PlayerColor.BLUE` | Returns `[LUMBER, ORE, BRICK]` | :white_check_mark: |
+| TC16 | Board generated with `BeginnerPlacements.forFourPlayers()`, `color` = `PlayerColor.ORANGE` | Returns `[ORE, GRAIN, GRAIN]` | :white_check_mark: |
+| TC17 | Board generated with `BeginnerLayout`, `color` = `null` | `IllegalArgumentException` with message `"Player color is required"` | :white_check_mark: |
+| TC18 | Board generated with `BeginnerPlacements.forThreePlayers()`, `color` = `PlayerColor.RED` | `IllegalArgumentException` with message `"RED has no starting settlement on this board"` | :white_check_mark: |
 
 ### Methods under test: `getTiles()`, `getNodes()`, `getEdges()`, `getRobberTileId()`, `getHarborNodes()`
-|  | State of the System | Expected output | Implemented? |
-| ----- | ----- | ----- | ----- |
-| TC21 | Board has not been generated yet (`generated` = `false`), `getTiles()` is called | `IllegalStateException` with message `"Board has not been generated yet"` | :white_check_mark: |
-| TC22 | Board has not been generated yet (`generated` = `false`), `getNodes()` is called | `IllegalStateException` with message `"Board has not been generated yet"` | :white_check_mark: |
-| TC23 | Board has not been generated yet (`generated` = `false`), `getEdges()` is called | `IllegalStateException` with message `"Board has not been generated yet"` | :white_check_mark: |
-| TC24 | Board has not been generated yet (`generated` = `false`), `getRobberTileId()` is called | `IllegalStateException` with message `"Board has not been generated yet"` | :white_check_mark: |
-| TC25 | Board has not been generated yet (`generated` = `false`), `getHarborNodes()` is called | `IllegalStateException` with message `"Board has not been generated yet"` | :white_check_mark: |
 
 Read-only getters for `BoardView` and `GameSession`. Verified in TC1 and harbor assertions.
 

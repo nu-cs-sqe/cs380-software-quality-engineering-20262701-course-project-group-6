@@ -32,8 +32,7 @@ public class GameSession {
         BeginnerPlacements placements = playerCount == MIN_PLAYERS
                 ? BeginnerPlacements.forThreePlayers()
                 : BeginnerPlacements.forFourPlayers();
-        board = new GameBoard();
-        board.generateBoard(new BeginnerLayout(), placements);
+        board = new GameBoard(new BeginnerLayout(), placements);
     }
 
     public List<Integer> rollForStartingOrder() {

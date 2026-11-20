@@ -46,11 +46,10 @@ class GameBoardTest {
 
     @Test
     void GenerateBoard_ValidBeginnerLayoutAndPlacements_BuildsFullGraphAndHarbors() {
-        GameBoard gameBoard = new GameBoard();
         BeginnerLayout layout = new BeginnerLayout();
         BeginnerPlacements placements = BeginnerPlacements.forFourPlayers();
 
-        gameBoard.generateBoard(layout, placements);
+        GameBoard gameBoard = new GameBoard(layout, placements);
         List<Tile> tiles = gameBoard.getTiles();
         List<Node> nodes = gameBoard.getNodes();
         List<Edge> edges = gameBoard.getEdges();
@@ -78,60 +77,52 @@ class GameBoardTest {
 
     @Test
     void GenerateBoard_NullLayout_ThrowsIllegalArgumentException() {
-        GameBoard gameBoard = new GameBoard();
-
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> gameBoard.generateBoard(null, BeginnerPlacements.forFourPlayers()));
+                () -> new GameBoard(null, BeginnerPlacements.forFourPlayers()));
 
         assertEquals("layout cannot be null", exception.getMessage());
     }
 
     @Test
     void GenerateBoard_NullPlacements_ThrowsIllegalArgumentException() {
-        GameBoard gameBoard = new GameBoard();
-
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> gameBoard.generateBoard(new BeginnerLayout(), null));
+                () -> new GameBoard(new BeginnerLayout(), null));
 
         assertEquals("placements cannot be null", exception.getMessage());
     }
 
     @Test
     void GenerateBoard_NullTileMapInLayout_ThrowsIllegalArgumentException() {
-        GameBoard gameBoard = new GameBoard();
         TileLayout nullMapLayout = () -> null;
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> gameBoard.generateBoard(nullMapLayout, BeginnerPlacements.forFourPlayers()));
+                () -> new GameBoard(nullMapLayout, BeginnerPlacements.forFourPlayers()));
 
         assertEquals("layout tiles cannot be null", exception.getMessage());
     }
 
     @Test
     void GenerateBoard_TooFewTiles_ThrowsIllegalArgumentException() {
-        GameBoard gameBoard = new GameBoard();
         TileLayout eighteenTiles = stubLayoutWithTileCount(EXPECTED_TILES - 1);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> gameBoard.generateBoard(eighteenTiles, BeginnerPlacements.forFourPlayers()));
+                () -> new GameBoard(eighteenTiles, BeginnerPlacements.forFourPlayers()));
 
         assertEquals("Expected 19 tiles, got 18", exception.getMessage());
     }
 
     @Test
     void GenerateBoard_TooManyTiles_ThrowsIllegalArgumentException() {
-        GameBoard gameBoard = new GameBoard();
         TileLayout twentyTiles = stubLayoutWithTileCount(EXPECTED_TILES + 1);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> gameBoard.generateBoard(twentyTiles, BeginnerPlacements.forFourPlayers()));
+                () -> new GameBoard(twentyTiles, BeginnerPlacements.forFourPlayers()));
 
         assertEquals("Expected 19 tiles, got 20", exception.getMessage());
     }
 
     @Test
     void GenerateBoard_MissingTileIdKey_ThrowsIllegalArgumentException() {
-        GameBoard gameBoard = new GameBoard();
         Map<Integer, TileSetup> incompleteMap = new LinkedHashMap<>();
         for (int i = 0; i < EXPECTED_TILES - 1; i++) {
             incompleteMap.put(i, new TileSetup(ORE, SAMPLE_DICE));
@@ -140,14 +131,14 @@ class GameBoardTest {
         TileLayout gappedLayout = () -> incompleteMap;
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> gameBoard.generateBoard(gappedLayout, BeginnerPlacements.forFourPlayers()));
+                () -> new GameBoard(gappedLayout, BeginnerPlacements.forFourPlayers()));
 
         assertEquals("Missing tile setup for tileId " + (EXPECTED_TILES - 1), exception.getMessage());
     }
 
     @Test
     void GetAdjacentResources_CoastalBoundaryNodes_ReturnsSingleResource() {
-        GameBoard gameBoard = createGeneratedBeginnerBoard();
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());;
 
         assertEquals(List.of(ORE), gameBoard.getAdjacentResources(TOP_LEFT_NODE));
         assertEquals(List.of(WOOL), gameBoard.getAdjacentResources(BOTTOM_RIGHT_NODE));
@@ -155,82 +146,63 @@ class GameBoardTest {
 
     @Test
     void GetAdjacentResources_InteriorNode_ReturnsThreeResourcesInTileOrder() {
-        GameBoard gameBoard = createGeneratedBeginnerBoard();
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());;
 
         assertEquals(List.of(GRAIN, BRICK, LUMBER), gameBoard.getAdjacentResources(WHITE_STAR_NODE));
     }
 
     @Test
     void GetAdjacentResources_NodeBorderingDesert_ExcludesDesert() {
-        GameBoard gameBoard = createGeneratedBeginnerBoard();
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());;
 
         assertEquals(List.of(LUMBER, GRAIN), gameBoard.getAdjacentResources(DESERT_ADJACENT_NODE));
     }
 
     @Test
-    void GetAdjacentResources_BeforeGenerateBoard_ThrowsIllegalStateException() {
-        GameBoard gameBoard = new GameBoard();
-
-        IllegalStateException exception = assertThrows(IllegalStateException.class,
-                () -> gameBoard.getAdjacentResources(TOP_LEFT_NODE));
-
-        assertEquals("Board has not been generated yet", exception.getMessage());
-    }
-
-    @Test
     void GetAdjacentResources_NegativeNodeId_ThrowsIllegalArgumentException() {
-        GameBoard gameBoard = createGeneratedBeginnerBoard();
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());;
 
         assertThrows(IllegalArgumentException.class, () -> gameBoard.getAdjacentResources(INVALID_LOW_ID));
     }
 
     @Test
     void GetAdjacentResources_NodeIdAboveMax_ThrowsIllegalArgumentException() {
-        GameBoard gameBoard = createGeneratedBeginnerBoard();
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());;
 
         assertThrows(IllegalArgumentException.class, () -> gameBoard.getAdjacentResources(INVALID_HIGH_NODE_ID));
     }
 
     @Test
     void GetStartingResources_White_ReturnsMatchingIllustrationAResources() {
-        GameBoard gameBoard = createGeneratedBeginnerBoard();
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());;
 
         assertEquals(List.of(GRAIN, BRICK, LUMBER), gameBoard.getStartingResources(WHITE));
     }
 
     @Test
     void GetStartingResources_Red_ReturnsMatchingIllustrationAResources() {
-        GameBoard gameBoard = createGeneratedBeginnerBoard();
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());;
 
         assertEquals(List.of(GRAIN, LUMBER, LUMBER), gameBoard.getStartingResources(RED));
     }
 
     @Test
     void GetStartingResources_Blue_ReturnsMatchingIllustrationAResources() {
-        GameBoard gameBoard = createGeneratedBeginnerBoard();
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());;
 
         assertEquals(List.of(LUMBER, ORE, BRICK), gameBoard.getStartingResources(BLUE));
     }
 
     @Test
     void GetStartingResources_Orange_ReturnsMatchingIllustrationAResources() {
-        GameBoard gameBoard = createGeneratedBeginnerBoard();
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());;
 
         assertEquals(List.of(ORE, GRAIN, GRAIN), gameBoard.getStartingResources(ORANGE));
     }
 
     @Test
-    void GetStartingResources_BeforeGenerateBoard_ThrowsIllegalStateException() {
-        GameBoard gameBoard = new GameBoard();
-
-        Exception exception = assertThrows(IllegalStateException.class, () -> gameBoard.getStartingResources(WHITE));
-
-        assertEquals("Board has not been generated yet", exception.getMessage());
-    }
-
-    @Test
     void GetStartingResources_NullColor_ThrowsIllegalArgumentException() {
-        GameBoard gameBoard = createGeneratedBeginnerBoard();
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());;
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> gameBoard.getStartingResources(null));
@@ -240,58 +212,12 @@ class GameBoardTest {
 
     @Test
     void GetStartingResources_OmittedColorInThreePlayerGame_ThrowsIllegalArgumentException() {
-        GameBoard gameBoard = new GameBoard();
-        gameBoard.generateBoard(new BeginnerLayout(), BeginnerPlacements.forThreePlayers());
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forThreePlayers());
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> gameBoard.getStartingResources(RED));
 
         assertEquals("RED has no 2nd starting settlement on this board", exception.getMessage());
-    }
-
-    @Test
-    void getTiles_BeforeGenerateBoard_ThrowIllegalStateException() {
-        GameBoard gameBoard = new GameBoard();
-
-        Exception exception = assertThrows(IllegalStateException.class, () -> gameBoard.getTiles());
-
-        assertEquals("Board has not been generated yet", exception.getMessage());
-    }
-
-    @Test
-    void getNodes_BeforeGenerateBoard_ThrowIllegalStateException() {
-        GameBoard gameBoard = new GameBoard();
-
-        Exception exception = assertThrows(IllegalStateException.class, () -> gameBoard.getNodes());
-
-        assertEquals("Board has not been generated yet", exception.getMessage());
-    }
-
-    @Test
-    void getEdges_BeforeGenerateBoard_ThrowIllegalStateException() {
-        GameBoard gameBoard = new GameBoard();
-
-        Exception exception = assertThrows(IllegalStateException.class, () -> gameBoard.getEdges());
-
-        assertEquals("Board has not been generated yet", exception.getMessage());
-    }
-
-    @Test
-    void getRobberTileId_BeforeGenerateBoard_ThrowIllegalStateException() {
-        GameBoard gameBoard = new GameBoard();
-
-        Exception exception = assertThrows(IllegalStateException.class, () -> gameBoard.getRobberTileId());
-
-        assertEquals("Board has not been generated yet", exception.getMessage());
-    }
-
-    @Test
-    void getHarborNodes_BeforeGenerateBoard_ThrowIllegalStateException() {
-        GameBoard gameBoard = new GameBoard();
-
-        Exception exception = assertThrows(IllegalStateException.class, () -> gameBoard.getHarborNodes());
-
-        assertEquals("Board has not been generated yet", exception.getMessage());
     }
 
     private TileLayout stubLayoutWithTileCount(int count) {
@@ -300,11 +226,5 @@ class GameBoardTest {
             map.put(i, new TileSetup(ORE, SAMPLE_DICE));
         }
         return () -> map;
-    }
-
-    private GameBoard createGeneratedBeginnerBoard() {
-        GameBoard gameBoard = new GameBoard();
-        gameBoard.generateBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
-        return gameBoard;
     }
 }
