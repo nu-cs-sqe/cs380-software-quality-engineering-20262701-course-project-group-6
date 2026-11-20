@@ -219,6 +219,15 @@ class GameBoardTest {
         assertEquals(List.of(ORE, GRAIN, GRAIN), gameBoard.getStartingResources(ORANGE));
     }
 
+    @Test
+    void GetStartingResources_BeforeGenerateBoard_ThrowsIllegalStateException() {
+        GameBoard gameBoard = new GameBoard();
+
+        Exception exception = assertThrows(IllegalStateException.class, () -> gameBoard.getStartingResources(WHITE));
+
+        assertEquals("Board has not been generated yet", exception.getMessage());
+    }
+
     private TileLayout stubLayoutWithTileCount(int count) {
         Map<Integer, TileSetup> map = new LinkedHashMap<>();
         for (int i = 0; i < count; i++) {
