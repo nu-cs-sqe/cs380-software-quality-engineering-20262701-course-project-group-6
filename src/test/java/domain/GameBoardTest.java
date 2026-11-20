@@ -2,6 +2,8 @@ package domain;
 
 import static domain.PlayerColor.ORANGE;
 import static domain.PlayerColor.RED;
+import static domain.PlayerColor.WHITE;
+import static domain.PlayerColor.BLUE;
 import static domain.ResourceCardType.ORE;
 import static domain.ResourceCardType.WOOL;
 import static domain.ResourceCardType.GRAIN;
@@ -187,6 +189,13 @@ class GameBoardTest {
         GameBoard gameBoard = createGeneratedBeginnerBoard();
 
         assertThrows(IllegalArgumentException.class, () -> gameBoard.getAdjacentResources(INVALID_HIGH_NODE_ID));
+    }
+
+    @Test
+    void GetStartingResources_White_ReturnsMatchingIllustrationAResources() {
+        GameBoard gameBoard = createGeneratedBeginnerBoard();
+
+        assertEquals(List.of(GRAIN, BRICK, LUMBER), gameBoard.getStartingResources(WHITE));
     }
 
     private TileLayout stubLayoutWithTileCount(int count) {

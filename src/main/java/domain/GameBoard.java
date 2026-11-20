@@ -61,6 +61,7 @@ public class GameBoard {
     private final Map<Integer, Node> nodes = new LinkedHashMap<>();
     private final Map<Integer, Edge> edges = new LinkedHashMap<>();
     private final Map<Integer, Tile> tiles = new LinkedHashMap<>();
+    private final Map<PlayerColor, Integer> startingResourceNodes = new LinkedHashMap<>();
     private int robberTileId;
     private boolean generated;
 
@@ -81,6 +82,14 @@ public class GameBoard {
             addTileResourceIfAdjacent(tiles.get(tileId), targetNode, adjacentResources);
         }
         return Collections.unmodifiableList(adjacentResources);
+    }
+
+    public List<ResourceCardType> getStartingResources(PlayerColor color) {
+        Integer secondPlacedSettlement = startingResourceNodes.get(color);
+        if (secondPlacedSettlement == null) {
+            throw new IllegalArgumentException(color + " has no 2nd starting settlement on this board");
+        }
+        return getAdjacentResources(secondPlacedSettlement);
     }
 
     public List<Tile> getTiles() {
@@ -173,6 +182,10 @@ public class GameBoard {
                 nodes.get(nodeId).placeBuilding(BuildingType.SETTLEMENT, color));
         placements.getRoads().forEach((edgeId, color) ->
                 edges.get(edgeId).setRoadColor(color));
+        placements.getStartingResourceNodeIds().forEach((color, starredNodeId) -> {
+            requireValidNode(starredNodeId);
+            startingResourceNodes.put(color, starredNodeId);
+        });
     }
 
     private void addTileResourceIfAdjacent(Tile tile, Node targetNode, List<ResourceCardType> resources) {
