@@ -1,6 +1,8 @@
 package ui;
 
-import domain.BeginnerBoard;
+import domain.BeginnerLayout;
+import domain.BeginnerPlacements;
+import domain.GameBoard;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -29,14 +31,14 @@ final class GameSetupView extends StackPane {
     private final ResourceBundle messages;
     private final ToggleGroup playerCounts = new ToggleGroup();
 
-    GameSetupView(ResourceBundle messages, Consumer<BeginnerBoard> startGame, Runnable goBack) {
+    GameSetupView(ResourceBundle messages, Consumer<GameBoard> startGame, Runnable goBack) {
         this.messages = messages;
         setPadding(new Insets(SCREEN_PADDING));
         setStyle("-fx-background-color: #f5ecdc;");
         getChildren().add(createForm(startGame, goBack));
     }
 
-    private VBox createForm(Consumer<BeginnerBoard> startGame, Runnable goBack) {
+    private VBox createForm(Consumer<GameBoard> startGame, Runnable goBack) {
         RadioButton threePlayers = createOption("setup.threePlayers", playerCounts);
         RadioButton fourPlayers = createOption("setup.fourPlayers", playerCounts);
         HBox counts = new HBox(PLAYER_OPTION_SPACING, threePlayers, fourPlayers);
@@ -75,13 +77,13 @@ final class GameSetupView extends StackPane {
     }
 
     private Button createStartButton(RadioButton threePlayers, RadioButton beginner,
-            Consumer<BeginnerBoard> startGame) {
+            Consumer<GameBoard> startGame) {
         Button start = new Button(messages.getString("setup.start"));
         start.setDefaultButton(true);
         start.disableProperty().bind(playerCounts.selectedToggleProperty().isNull()
                 .or(beginner.selectedProperty().not()));
-        start.setOnAction(event -> startGame.accept(threePlayers.isSelected()
-                ? BeginnerBoard.createForThreePlayers() : new BeginnerBoard()));
+        start.setOnAction(event -> startGame.accept(new GameBoard(new BeginnerLayout(), threePlayers.isSelected()
+                ? BeginnerPlacements.forThreePlayers() : BeginnerPlacements.forFourPlayers())));
         start.setStyle("-fx-background-color: #a51f24; -fx-text-fill: white; -fx-font-weight: bold;");
         return start;
     }
