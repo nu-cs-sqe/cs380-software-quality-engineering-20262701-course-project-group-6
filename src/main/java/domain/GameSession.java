@@ -12,7 +12,7 @@ public class GameSession {
     private static final int MAX_PLAYERS = 4;
 
     private final Bank bank;
-    private final BeginnerBoard board;
+    private final GameBoard board;
     private final StartingRollOff rollOff;
     private final Dice dice;
     private final int playerCount;
@@ -33,7 +33,10 @@ public class GameSession {
         rollOff = new StartingRollOff(random);
         dice = new Dice(random);
         this.playerCount = playerCount;
-        board = playerCount == MIN_PLAYERS ? BeginnerBoard.createForThreePlayers() : new BeginnerBoard();
+        BeginnerPlacements placements = playerCount == MIN_PLAYERS
+                ? BeginnerPlacements.forThreePlayers()
+                : BeginnerPlacements.forFourPlayers();
+        board = new GameBoard(new BeginnerLayout(), placements);
     }
 
     public List<Integer> rollForStartingOrder() {
@@ -52,7 +55,7 @@ public class GameSession {
     public void pickColor(PlayerColor color) {
         requireColor(color);
         requirePicking();
-        if (!board.getSettlements().containsValue(color)) {
+        if (!isColorInPlay(color)) {
             throw new IllegalStateException(color + " is not in play");
         }
         if (players.containsKey(color)) {
@@ -91,7 +94,7 @@ public class GameSession {
 
     public List<PlayerColor> getAvailableColors() {
         return Arrays.stream(PlayerColor.values())
-                .filter(board.getSettlements()::containsValue)
+                .filter(this::isColorInPlay)
                 .filter(color -> !players.containsKey(color))
                 .collect(Collectors.toUnmodifiableList());
     }
@@ -106,6 +109,12 @@ public class GameSession {
 
     public int getBankResourceCount(ResourceCardType type) {
         return bank.getResourceCount(type);
+    }
+
+    private boolean isColorInPlay(PlayerColor color) {
+        return board.getNodes().stream()
+                .map(Node::getBuildingColor)
+                .anyMatch(optionalColor -> optionalColor.equals(java.util.Optional.of(color)));
     }
 
     private void payStartingResources(Player player, PlayerColor color) {

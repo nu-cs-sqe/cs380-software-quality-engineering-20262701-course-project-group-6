@@ -170,13 +170,15 @@ Encapsulates Catan's hexagonal board topology using an intersection/edge graph r
   * Enforce setup road attachment: roads must attach directly to an existing settlement or road, and cannot cross enemy roads in the way.
   * Keeps track of robber location with `robberTileId` field. 
   * Maintains dictionaries for tiles, nodes, and edges keyed by their ids.
+  * Keeps dictionary that maps `playerColor` to `int` node id of starred settlements (indicating the second settlement in the beginner set-up)
 * **`GameBoard` Key Methods:**
-  * `public void generateBoard(BoardLayoutStrategy strategy)`
+  * `public void generateBoard(TileLayout layout, BeginnerPlacements placements)`
   * `public boolean isValidSettlementLocation(int nodeId)`: Confirms node is unoccupied and all 2–3 neighboring nodes have no existing settlements/cities.
   * `public boolean isValidRoadLocation(int edgeId, int connectedNodeId, int playerId)`: Checks edge vacancy and validates direct attachment to `connectedNodeId`.
   * `public void buildSettlement(int nodeId, int playerId)`: Updates target `Node` occupancy.
   * `public void buildRoad(int edgeId, int playerId)`: Updates target `Edge` occupancy.
-  * `public List<Tile> getAdjacentTiles(int nodeId)`: Returns tiles bordering an intersection for resource distribution during setup phase.
+  * `public List<ResourceCardType> getAdjacentResources(int nodeId)`: Returns resources of the bordering tiles at an intersection for resource distribution.
+  * `public List<ResourceCardType> getStartingResources(PlayerColor color)`: Returns resources of the bordering tiles of the second placed settlement in the beginner set-up.
   * `public void moveRobber(int tileId)`: Moves robber to different tile.
 
 * **`Tile` Subcomponent (Terrain Hexes):**

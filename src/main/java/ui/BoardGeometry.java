@@ -1,6 +1,6 @@
 package ui;
 
-import domain.BeginnerBoard.TileSetup;
+import domain.TileSetup;
 import javafx.geometry.Point2D;
 
 import java.util.ArrayList;
