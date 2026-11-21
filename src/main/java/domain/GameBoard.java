@@ -120,6 +120,10 @@ public class GameBoard {
         return Map.copyOf(HARBOR_NODES);
     }
 
+    public Map<PlayerColor, Integer> getStartingResourceNodes() {
+        return Map.copyOf(startingResourceNodes);
+    }
+
     private void validateGenerateInputs(TileLayout layout, BeginnerPlacements placements) {
         if (layout == null) {
             throw new IllegalArgumentException("layout cannot be null");

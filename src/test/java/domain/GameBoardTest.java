@@ -254,6 +254,13 @@ class GameBoardTest {
         assertEquals("RED has no 2nd starting settlement on this board", exception.getMessage());
     }
 
+    @Test
+    void GetStartingResourceNodes_ThreePlayers_ReturnsEachColorsStarredNodeWithoutRed() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forThreePlayers());
+
+        assertEquals(Map.of(ORANGE, 42, BLUE, 40, WHITE, 19), gameBoard.getStartingResourceNodes());
+    }
+
     private TileLayout stubLayoutWithTileCount(int count) {
         Map<Integer, TileSetup> map = new LinkedHashMap<>();
         for (int i = 0; i < count; i++) {
