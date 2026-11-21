@@ -62,7 +62,7 @@ public class BeginnerBoardTest {
         assertEquals(fourPlayerBoard.getHarbors(), board.getHarbors());
     }
 
-    private static String describeTile(BeginnerBoard.TileSetup tile) {
+    private static String describeTile(TileSetup tile) {
         return tile.getResource().map(resource -> resource.name() + " " + tile.getDiceNumber().orElseThrow())
                 .orElse("DESERT");
     }
