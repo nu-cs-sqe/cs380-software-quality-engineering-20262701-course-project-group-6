@@ -52,7 +52,7 @@ colors (Story 2), and then controls the turn order. Turn play (rolling for resou
 development cards, the robber, winning) is added in a later PR once `GameBoard` exists.
 
 * **Responsibilities:**
-  * Accept only 3 or 4 players. Create the `Bank` and the `BeginnerBoard` (without red for 3 players).
+  * Accept only 3 or 4 players. Create the `Bank` and the `GameBoard` from `BeginnerLayout` and `BeginnerPlacements` (without red for 3 players).
   * Run the roll for starting order through `StartingRollOff`: each seat rolls 2 dice, highest picks first, ties
     re-roll among themselves (house rule, Story 2).
   * Let each seat, in roll order, pick one of the colors still available. Picking creates that color's `Player`
@@ -63,7 +63,7 @@ development cards, the robber, winning) is added in a later PR once `GameBoard` 
     need to know about them.
 * **Key Fields:**
   * `private final Bank bank`
-  * `private final BeginnerBoard board` (replaced by `GameBoard` built from `BeginnerBoard`, issue #25)
+  * `private final GameBoard board`
   * `private final StartingRollOff rollOff`
   * `private final int playerCount`
   * `private List<Integer> pickOrder` (seat numbers 1..playerCount, empty until rolled)
@@ -195,18 +195,16 @@ Encapsulates Catan's hexagonal board topology using an intersection/edge graph r
 
 #### Story 1: Game setup UI
 
-`BeginnerBoard` holds the starting layout from [Illustration A](https://cdn.1j1ju.com/medias/7a/18/fd-catan-rulebook.pdf#page=3).
-The five rows contain the terrain and dice numbers in tile ID order, with the robber on tile 9.
-The setup includes starting roads and settlements and the nine harbors. The white star marks the settlement used
-to determine each color's starting resources, corresponding to the second settlement in the regular setup.
-`BeginnerBoard()` includes all four colors. `createForThreePlayers()` omits red's pieces and starting resource marker.
-`getStartingResources(color)` lists the resources of the hexes next to that color's starred settlement, in tile ID order
-(white: grain, brick, lumber; red: grain, lumber, lumber; blue: lumber, ore, brick; orange: ore, grain, grain). It is fixed
-data from Illustration A until `GameBoard` can find the hexes next to a corner (issue #25).
-Settlements and resource markers use corner IDs, while roads and harbors use edge IDs.
+`BeginnerLayout` and `BeginnerPlacements` hold the starting setup from [Illustration A](https://cdn.1j1ju.com/medias/7a/18/fd-catan-rulebook.pdf#page=3):
+the terrain and dice numbers in tile ID order (robber on tile 9), the starting settlements and roads, and the starred
+settlement that decides each color's starting resources (the second settlement in the regular setup).
+`BeginnerPlacements.forThreePlayers()` omits red's pieces and star. `GameBoard` is built from both and owns the only
+corner, road and harbor numbering (see `docs/design/map_ids_reference.jpg`).
 
-`BoardGeometry` derives the 54 corners and 72 sides from the same tile rows. Shared corners and sides get one ID each.
-Corners are numbered from top to bottom and then left to right. Sides follow the same order by midpoint.
+`BoardView` draws the board from `GameBoard` alone: tiles, settlements (nodes), roads (edges), harbors (the two
+harbor nodes on one coast edge), starred settlements and the robber. `BoardGeometry` only knows screen positions: the
+tile centers row by row and each tile's 6 corners in `Tile.getCornerNodes()` order (clockwise from the upper-left).
+A corner's position comes from the tile it belongs to, so the UI and the domain cannot disagree on IDs (issue #25).
 The home screen's **New Game** button opens `GameSetupView` in the selected language. Players choose 3 or 4 and a
 board setup. **Start Game** becomes available after a count is selected with **Beginner board**. Selecting **Manual
 setup** disables **Start Game**. Starting a beginner game opens `BoardView`
