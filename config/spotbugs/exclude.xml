@@ -17,4 +17,11 @@
         <Class name="domain.Dice"/>
         <Bug pattern="EI_EXPOSE_REP2"/>
     </Match>
+    <!-- BoardView draws the board GameSession plays on, so it needs that same GameBoard. The UI only reads it; every
+         change to the board goes through GameSession. -->
+    <Match>
+        <Class name="domain.GameSession"/>
+        <Method name="getBoard"/>
+        <Bug pattern="EI_EXPOSE_REP"/>
+    </Match>
 </FindBugsFilter>

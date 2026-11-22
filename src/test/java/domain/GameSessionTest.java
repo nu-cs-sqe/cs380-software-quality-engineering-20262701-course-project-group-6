@@ -382,6 +382,16 @@ public class GameSessionTest {
         assertEquals("Dice are required to start a game", exception.getMessage());
     }
 
+    @Test
+    public void GetBoard_ThreePlayers_BoardWithoutRed() {
+        GameSession game = new GameSession(3, new Random());
+
+        GameBoard board = game.getBoard();
+
+        assertEquals(Set.of(PlayerColor.ORANGE, PlayerColor.BLUE, PlayerColor.WHITE),
+                board.getStartingResourceNodes().keySet());
+    }
+
     private static GameSession startedThreePlayerGame() {
         return startedThreePlayerGame(new Dice(new Random()));
     }

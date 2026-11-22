@@ -121,6 +121,10 @@ public class GameSession {
         return bank.getResourceCount(type);
     }
 
+    public GameBoard getBoard() {
+        return board;
+    }
+
     private static Dice diceFor(Random random) {
         return random == null ? null : new Dice(random);
     }
