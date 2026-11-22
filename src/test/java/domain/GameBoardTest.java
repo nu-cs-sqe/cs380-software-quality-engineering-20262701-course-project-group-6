@@ -327,6 +327,13 @@ class GameBoardTest {
         assertEquals(Map.of(), gameBoard.getProduction(2));
     }
 
+    @Test
+    void GetProduction_SevenRolled_DesertOwesNothing() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        assertEquals(Map.of(), gameBoard.getProduction(7));
+    }
+
     private TileLayout stubLayoutWithTileCount(int count) {
         Map<Integer, TileSetup> map = new LinkedHashMap<>();
         for (int i = 0; i < count; i++) {
