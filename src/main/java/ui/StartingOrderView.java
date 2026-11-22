@@ -1,5 +1,6 @@
 package ui;
 
+import domain.DiceRoll;
 import domain.GameSession;
 import domain.PlayerColor;
 import javafx.geometry.Insets;
@@ -14,7 +15,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -30,7 +33,13 @@ final class StartingOrderView extends StackPane {
     private final GameSession game;
     private final ResourceBundle messages;
     private final Runnable startPlaying;
+    private final Button roll = new Button();
+    private final VBox rollLog = new VBox(OPTION_SPACING);
     private final Label orderLabel = new Label();
+    private List<Map<Integer, DiceRoll>> rounds = List.of();
+    private List<Integer> pickOrder = List.of();
+    private int roundIndex;
+    private int seatIndex;
     private final Label prompt = new Label();
     private final FlowPane colorButtons = new FlowPane(OPTION_SPACING, OPTION_SPACING);
 
@@ -50,14 +59,10 @@ final class StartingOrderView extends StackPane {
         Label explanation = new Label(messages.getString("order.explanation"));
         explanation.setWrapText(true);
 
-        Button roll = new Button(messages.getString("order.roll"));
+        roll.setText(MessageFormat.format(messages.getString("order.roll"), 1));
         roll.setDefaultButton(true);
         roll.setStyle("-fx-background-color: #a51f24; -fx-text-fill: white; -fx-font-weight: bold;");
-        roll.setOnAction(event -> {
-            roll.setDisable(true);
-            showRollOrder(game.rollForStartingOrder());
-            showNextPick();
-        });
+        roll.setOnAction(event -> showNextRoll());
 
         orderLabel.setWrapText(true);
         prompt.setFont(PROMPT_FONT);
@@ -68,7 +73,8 @@ final class StartingOrderView extends StackPane {
         HBox actions = new HBox(OPTION_SPACING, back, roll);
         actions.setAlignment(Pos.CENTER_RIGHT);
 
-        VBox form = new VBox(SECTION_SPACING, title, explanation, actions, orderLabel, prompt, colorButtons);
+        VBox form = new VBox(SECTION_SPACING, title, explanation, actions, rollLog, orderLabel, prompt,
+                colorButtons);
         form.setPadding(new Insets(FORM_PADDING));
         form.setMaxSize(FORM_WIDTH, USE_PREF_SIZE);
         form.setStyle("-fx-background-color: #fff8e7; -fx-border-color: #c5a15b; "
@@ -76,11 +82,42 @@ final class StartingOrderView extends StackPane {
         return form;
     }
 
-    private void showRollOrder(List<Integer> seats) {
-        String order = seats.stream()
+    // Every seat's dice are rolled on the first click; each click then shows the next seat's roll.
+    private void showNextRoll() {
+        if (rounds.isEmpty()) {
+            pickOrder = game.rollForStartingOrder();
+            rounds = game.getStartingRolls();
+        }
+        Map<Integer, DiceRoll> round = rounds.get(roundIndex);
+        List<Integer> seats = new ArrayList<>(round.keySet());
+        int seat = seats.get(seatIndex);
+        DiceRoll dice = round.get(seat);
+        rollLog.getChildren().add(new Label(MessageFormat.format(messages.getString("order.rolled"), seat,
+                dice.getFirstDie(), dice.getSecondDie(), dice.getTotal())));
+        seatIndex++;
+        if (seatIndex == seats.size()) {
+            seatIndex = 0;
+            roundIndex++;
+            if (roundIndex == rounds.size()) {
+                roll.setDisable(true);
+                roll.setVisible(false);
+                roll.setManaged(false);
+                orderLabel.setText(MessageFormat.format(messages.getString("order.result"), seatNames(pickOrder)));
+                showNextPick();
+                return;
+            }
+            List<Integer> tied = new ArrayList<>(rounds.get(roundIndex).keySet());
+            rollLog.getChildren().add(new Label(MessageFormat.format(messages.getString("order.tie"),
+                    seatNames(tied))));
+        }
+        int nextSeat = new ArrayList<>(rounds.get(roundIndex).keySet()).get(seatIndex);
+        roll.setText(MessageFormat.format(messages.getString("order.roll"), nextSeat));
+    }
+
+    private String seatNames(List<Integer> seats) {
+        return seats.stream()
                 .map(seat -> MessageFormat.format(messages.getString("order.seat"), seat))
                 .collect(Collectors.joining(messages.getString("order.separator")));
-        orderLabel.setText(MessageFormat.format(messages.getString("order.result"), order));
     }
 
     private void showNextPick() {
