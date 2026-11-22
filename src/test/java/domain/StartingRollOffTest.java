@@ -105,6 +105,13 @@ public class StartingRollOffTest {
         EasyMock.verify(dice);
     }
 
+    @Test
+    public void GetRounds_NothingRolled_Empty() {
+        StartingRollOff rollOff = new StartingRollOff(new Random());
+
+        assertEquals(List.of(), rollOff.getRounds());
+    }
+
     private static Random diceRolling(int... totals) {
         Random dice = EasyMock.createStrictMock(Random.class);
         for (int total : totals) {

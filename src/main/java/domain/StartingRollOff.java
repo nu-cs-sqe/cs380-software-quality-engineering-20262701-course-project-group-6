@@ -31,6 +31,10 @@ public class StartingRollOff {
         return order(seats);
     }
 
+    public List<Map<Integer, DiceRoll>> getRounds() {
+        return List.of();
+    }
+
     // Seats that tie roll again among themselves; each tied group keeps its place in the overall order.
     private List<Integer> order(List<Integer> seats) {
         Map<Integer, List<Integer>> seatsByRoll = new TreeMap<>(Comparator.reverseOrder());
