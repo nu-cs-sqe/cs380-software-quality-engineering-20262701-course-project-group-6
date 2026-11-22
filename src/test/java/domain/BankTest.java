@@ -252,6 +252,16 @@ public class BankTest {
         assertEquals("Resource type is required", exception.getMessage());
     }
 
+    @Test
+    public void PayProduction_NullOwed_ThrowsIllegalArgumentException() {
+        Bank bank = newBank();
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> bank.payProduction(ResourceCardType.ORE, null));
+
+        assertEquals("Amounts owed are required", exception.getMessage());
+    }
+
     private static Bank newBank() {
         return new Bank(new Random());
     }

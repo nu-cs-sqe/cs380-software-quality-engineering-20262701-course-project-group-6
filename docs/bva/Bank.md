@@ -122,7 +122,7 @@ the players. `owed` comes from `GameBoard.getProduction` (`GameBoard.md`).
 | TC21 | 1 `ORE`, owed `{RED=2}` | returns `{RED=1}`; 0 `ORE` left | :white_check_mark: |
 | TC22 | 0 `ORE`, owed `{RED=1}` | returns `{}`; still 0 `ORE` | :white_check_mark: |
 | TC23 | `type` = `null` | `IllegalArgumentException` with a message saying the resource type is required | :white_check_mark: |
-| TC24 | `owed` = `null` | `IllegalArgumentException` with a message saying the amounts owed are required | :x: |
+| TC24 | `owed` = `null` | `IllegalArgumentException` with a message saying the amounts owed are required | :white_check_mark: |
 
 ### Method under test: `getDevelopmentCardsRemaining()`
 

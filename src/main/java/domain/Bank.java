@@ -39,6 +39,9 @@ public class Bank {
     }
 
     public Map<PlayerColor, Integer> payProduction(ResourceCardType type, Map<PlayerColor, Integer> owed) {
+        if (owed == null) {
+            throw new IllegalArgumentException("Amounts owed are required");
+        }
         if (owed.isEmpty()) {
             return Map.of();
         }
