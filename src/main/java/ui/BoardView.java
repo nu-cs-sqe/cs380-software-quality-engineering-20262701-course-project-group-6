@@ -54,7 +54,9 @@ final class BoardView extends BorderPane {
         if (boardMap.showSpots(mode, game.getCurrentColor(), spot -> build(mode, spot))) {
             turnPanel.showMessage(MessageFormat.format(messages.getString("build.pick"), piece));
         } else {
-            turnPanel.showMessage(MessageFormat.format(messages.getString("build.noSpots"), piece));
+            String noSpots = MessageFormat.format(messages.getString("build.noSpots"), piece);
+            turnPanel.showMessage(MessageFormat.format(messages.getString("build.withTip"), noSpots,
+                    messages.getString("build.tip." + mode.name())));
         }
     }
 
