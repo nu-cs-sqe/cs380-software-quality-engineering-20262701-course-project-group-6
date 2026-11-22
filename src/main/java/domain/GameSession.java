@@ -88,7 +88,9 @@ public class GameSession {
             throw new IllegalStateException(getCurrentColor() + " already rolled this turn");
         }
         rolledThisTurn = true;
-        return dice.roll();
+        DiceRoll roll = dice.roll();
+        payProduction(roll.getTotal());
+        return roll;
     }
 
     public void endTurn() {
@@ -133,6 +135,11 @@ public class GameSession {
             bank.withdrawResource(type, 1);
             player.collectResource(type, 1);
         }
+    }
+
+    private void payProduction(int diceTotal) {
+        board.getProduction(diceTotal).forEach((type, owed) -> bank.payProduction(type, owed)
+                .forEach((color, amount) -> players.get(color).collectResource(type, amount)));
     }
 
     private Player playerFor(PlayerColor color) {

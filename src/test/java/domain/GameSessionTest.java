@@ -295,6 +295,21 @@ public class GameSessionTest {
     }
 
     @Test
+    public void RollDice_EightRolled_SettlementsOnEightHexesCollect() {
+        GameSession game = startedThreePlayerGame(diceRolling(2, 6));
+
+        game.rollDice();
+
+        assertEquals(1, game.getResourceCount(PlayerColor.WHITE, ResourceCardType.ORE));
+        assertEquals(2, game.getResourceCount(PlayerColor.BLUE, ResourceCardType.LUMBER));
+        assertEquals(4, totalResources(game, PlayerColor.WHITE));
+        assertEquals(4, totalResources(game, PlayerColor.BLUE));
+        assertEquals(3, totalResources(game, PlayerColor.ORANGE));
+        assertEquals(16, game.getBankResourceCount(ResourceCardType.ORE));
+        assertEquals(16, game.getBankResourceCount(ResourceCardType.LUMBER));
+    }
+
+    @Test
     public void RollDice_AlreadyRolledThisTurn_ThrowsIllegalStateException() {
         GameSession game = startedThreePlayerGame();
         game.rollDice();
