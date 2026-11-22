@@ -7,6 +7,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class GameBoard {
     private static final int NUM_NODES = 54;
@@ -143,6 +145,16 @@ public class GameBoard {
         return owed;
     }
 
+    public Set<Integer> getRoadSpots(PlayerColor color) {
+        Set<Integer> spots = new TreeSet<>();
+        for (Edge edge : edges.values()) {
+            if (!edge.isOccupied() && (reaches(edge.getNode1(), color) || reaches(edge.getNode2(), color))) {
+                spots.add(edge.getId());
+            }
+        }
+        return spots;
+    }
+
     private void validateGenerateInputs(TileLayout layout, BeginnerPlacements placements) {
         if (layout == null) {
             throw new IllegalArgumentException("layout cannot be null");
@@ -232,6 +244,14 @@ public class GameBoard {
                     owed.computeIfAbsent(resource, type -> new EnumMap<>(PlayerColor.class))
                             .merge(color, amount, Integer::sum));
         }
+    }
+
+    private boolean reaches(Node corner, PlayerColor color) {
+        Optional<PlayerColor> owner = corner.getBuildingColor();
+        if (owner.isPresent() && owner.get() == color) {
+            return true;
+        }
+        return corner.getIncidentEdges().stream().anyMatch(edge -> edge.getRoadColor().equals(Optional.of(color)));
     }
 
     private Node requireValidNode(int nodeId) {

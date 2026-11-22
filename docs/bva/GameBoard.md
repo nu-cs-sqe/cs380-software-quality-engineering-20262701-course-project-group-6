@@ -122,3 +122,72 @@ orange on 13 and 42, blue on 40 and 44, white on 19 and 35. Cities and extra set
 | TC27 | 4 players, extra red settlement on 4 (also on wool hex 1), `diceTotal` = 2 | `{WOOL={RED=2}}` (1 + 1) | :white_check_mark: |
 | TC28 | 3 players (no red), `diceTotal` = 2 | empty map (nobody is on wool hex 1) | :white_check_mark: |
 | TC29 | 4 players, `diceTotal` = 7 | empty map | :white_check_mark: |
+
+## Story 5: Placement rules (#33)
+
+The board decides where a color may build (Story 5 criteria 4–6). `GameSession` checks turns, costs and pieces; the board
+only knows the spots.
+
+- **Road:** an empty edge with one end on the color's own settlement or city, or on a corner that touches one of the
+  color's roads. A road cannot connect through a corner where an opponent has a building.
+- **Settlement:** an empty corner that touches one of the color's roads, with no building on any neighboring corner
+  (the distance rule).
+- **City:** a corner with the color's own settlement.
+
+`getRoadSpots`, `getSettlementSpots` and `getCitySpots` list the legal spots (the UI highlights them).
+`buildRoad`, `buildSettlement` and `buildCity` place a piece and throw if the spot is not in that list, so the rules
+live in one place.
+
+Expected values come from the 4-player beginner board (`docs/design/map_ids_reference.jpg`). Red has settlements on
+10 and 29 and roads on edges 13 (10–11) and 41 (29–30). Extra roads and cities are set up in the test with the
+package-private `Edge.setRoadColor` and `Node.placeBuilding`.
+
+### Steps 2–3: Catalog types and boundary values
+
+| Input / state | Catalog type | Values tested |
+|---|---|---|
+| legal spots | Collection | none (red's settlements at the start) → TC33; one → TC34, TC38; many → TC30, TC37 |
+| how a road connects | Cases | through own settlement → TC30 (edge 12); through own road → TC30 (edge 42); only through an opponent's building → TC31 (excluded) |
+| road ends on an opponent's settlement but connects at the other end | Cases | allowed → TC30 (edge 50, blue on 40) |
+| corner for a settlement | Cases | free and 2 away from buildings → TC34; next to a building → TC33, TC45; occupied → TC35 |
+| corner for a city | Cases | own settlement → TC37, TC46; own city → TC38 (excluded); opponent's settlement → TC47 |
+| `edgeId` in `buildRoad` | Interval [0, 71] | -1 → TC43; 72 → TC42 (both rejected like any illegal spot) |
+| `color` | Pointer | `null` → TC32, TC36, TC39 |
+
+### Method under test: `getRoadSpots(PlayerColor color)`
+
+|      | State of the System | Expected output | Implemented? |
+|------|---------------------|-----------------|--------------|
+| TC30 | 4 players, `RED` | `{7, 12, 14, 20, 34, 40, 42, 50}` | :white_check_mark: |
+| TC31 | 4 players, extra blue road on edge 46 (34–35, white settlement on 35), `BLUE` | `{45, 50, 55, 57, 59, 60, 63}` (not 47: its only link is through white's settlement) | :x: |
+| TC32 | `color` = `null` | `IllegalArgumentException` with a message saying a color is required | :x: |
+
+### Method under test: `getSettlementSpots(PlayerColor color)`
+
+|      | State of the System | Expected output | Implemented? |
+|------|---------------------|-----------------|--------------|
+| TC33 | 4 players, `RED` | empty (every corner red's roads reach is next to a building) | :x: |
+| TC34 | 4 players, extra red road on edge 42 (30–31), `RED` | `{31}` | :x: |
+| TC35 | 4 players, extra red road on edge 16 (13–14, orange settlement on 13), `RED` | empty (13 is occupied, 14 is next to it) | :x: |
+| TC36 | `color` = `null` | `IllegalArgumentException` with a message saying a color is required | :x: |
+
+### Method under test: `getCitySpots(PlayerColor color)`
+
+|      | State of the System | Expected output | Implemented? |
+|------|---------------------|-----------------|--------------|
+| TC37 | 4 players, `RED` | `{10, 29}` | :x: |
+| TC38 | 4 players, red city on 10, `RED` | `{29}` | :x: |
+| TC39 | `color` = `null` | `IllegalArgumentException` with a message saying a color is required | :x: |
+
+### Methods under test: `buildRoad`, `buildSettlement`, `buildCity`
+
+|      | State of the System | Expected output | Implemented? |
+|------|---------------------|-----------------|--------------|
+| TC40 | 4 players, `buildRoad(42, RED)` | edge 42 has a red road; red's settlement spots are now `{31}` | :x: |
+| TC41 | 4 players, `buildRoad(0, RED)` | `IllegalStateException` with a message saying edge 0 is not a legal spot for a red road; edge 0 still empty | :x: |
+| TC42 | `buildRoad(72, RED)` | `IllegalStateException` with a message saying edge 72 is not a legal spot for a red road | :x: |
+| TC43 | `buildRoad(-1, RED)` | `IllegalStateException` with a message saying edge -1 is not a legal spot for a red road | :x: |
+| TC44 | extra red road on edge 42, `buildSettlement(31, RED)` | corner 31 has a red settlement | :x: |
+| TC45 | 4 players, `buildSettlement(11, RED)` | `IllegalStateException` with a message saying node 11 is not a legal spot for a red settlement; still empty | :x: |
+| TC46 | 4 players, `buildCity(10, RED)` | corner 10 has a red city | :x: |
+| TC47 | 4 players, `buildCity(13, RED)` | `IllegalStateException` with a message saying node 13 is not a legal spot for a red city; still orange's settlement | :x: |

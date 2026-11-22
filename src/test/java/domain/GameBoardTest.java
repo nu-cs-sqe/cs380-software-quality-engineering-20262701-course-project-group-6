@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.List;
 import java.util.Optional;
 import java.util.Map;
+import java.util.Set;
 import java.util.LinkedHashMap;
 import org.junit.jupiter.api.Test;
 
@@ -332,6 +333,13 @@ class GameBoardTest {
         GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
 
         assertEquals(Map.of(), gameBoard.getProduction(7));
+    }
+
+    @Test
+    void GetRoadSpots_Red_EdgesConnectedToRedsPieces() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        assertEquals(Set.of(7, 12, 14, 20, 34, 40, 42, 50), gameBoard.getRoadSpots(RED));
     }
 
     private TileLayout stubLayoutWithTileCount(int count) {
