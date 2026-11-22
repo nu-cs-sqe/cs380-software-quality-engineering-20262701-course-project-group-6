@@ -201,4 +201,4 @@ Passes on `StartingRollOff.getRounds()` (tested in `StartingRollOff.md`) so the 
 
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
-| TC35 | 4 players, rolled for starting order | the first round has a roll for each of seats 1–4 | :x: |
+| TC35 | 4 players, rolled for starting order | the first round has a roll for each of seats 1–4 | :white_check_mark: |

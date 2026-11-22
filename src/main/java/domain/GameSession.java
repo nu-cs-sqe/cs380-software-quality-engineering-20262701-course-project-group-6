@@ -55,6 +55,10 @@ public class GameSession {
         return List.copyOf(pickOrder);
     }
 
+    public List<Map<Integer, DiceRoll>> getStartingRolls() {
+        return rollOff.getRounds();
+    }
+
     public int getSeatToPick() {
         requirePicking();
         return pickOrder.get(players.size());
