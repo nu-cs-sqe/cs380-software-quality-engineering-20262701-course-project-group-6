@@ -400,6 +400,14 @@ class GameBoardTest {
         assertEquals(Set.of(10, 29), gameBoard.getCitySpots(RED));
     }
 
+    @Test
+    void GetCitySpots_RedCityOnTen_OnlyTheOtherSettlement() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+        gameBoard.getNodes().get(10).placeBuilding(BuildingType.CITY, RED);
+
+        assertEquals(Set.of(29), gameBoard.getCitySpots(RED));
+    }
+
     private TileLayout stubLayoutWithTileCount(int count) {
         Map<Integer, TileSetup> map = new LinkedHashMap<>();
         for (int i = 0; i < count; i++) {

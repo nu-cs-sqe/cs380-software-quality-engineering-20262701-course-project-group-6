@@ -168,7 +168,8 @@ public class GameBoard {
     public Set<Integer> getCitySpots(PlayerColor color) {
         Set<Integer> spots = new TreeSet<>();
         for (Node corner : nodes.values()) {
-            if (corner.getBuildingColor().equals(Optional.of(color))) {
+            if (corner.getBuildingType() == BuildingType.SETTLEMENT
+                    && corner.getBuildingColor().equals(Optional.of(color))) {
                 spots.add(corner.getId());
             }
         }
