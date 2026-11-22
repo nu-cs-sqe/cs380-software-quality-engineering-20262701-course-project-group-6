@@ -137,13 +137,21 @@ public class StartingRollOffTest {
         assertEquals(List.of(Map.of(1, 8, 2, 5, 3, 8), Map.of(1, 4, 3, 10)), totals(rollOff.getRounds()));
     }
 
+    @Test
+    public void GetRounds_TieTwiceInARow_ThreeRounds() {
+        StartingRollOff rollOff = new StartingRollOff(diceRolling(5, 5, 8, 8, 3, 11));
+        rollOff.rollOrder(2);
+
+        assertEquals(List.of(Map.of(1, 5, 2, 5), Map.of(1, 8, 2, 8), Map.of(1, 3, 2, 11)),
+                totals(rollOff.getRounds()));
+    }
+
     private static List<Map<Integer, Integer>> totals(List<Map<Integer, DiceRoll>> rounds) {
         return rounds.stream()
                 .map(round -> round.entrySet().stream()
                         .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getTotal())))
                 .collect(Collectors.toList());
     }
-
 
     private static Random diceRolling(int... totals) {
         Random dice = EasyMock.createStrictMock(Random.class);
