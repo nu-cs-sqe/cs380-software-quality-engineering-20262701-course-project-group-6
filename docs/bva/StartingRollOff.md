@@ -91,6 +91,6 @@ the tied seats. Rounds are listed in the order they were rolled, and seats withi
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
 | TC10 | nothing rolled yet | empty list | :white_check_mark: |
-| TC11 | 2 seats roll 3 (1 + 2) and 8 (4 + 4) | one round: seat 1 rolled 1 and 2, seat 2 rolled 4 and 4 | :x: |
+| TC11 | 2 seats roll 3 (1 + 2) and 8 (4 + 4) | one round: seat 1 rolled 1 and 2, seat 2 rolled 4 and 4 | :white_check_mark: |
 | TC12 | 3 seats roll 8, 5, 8; re-roll: seat 1 → 4, seat 3 → 10 (same as TC6) | two rounds: `{1=8, 2=5, 3=8}`, then `{1=4, 3=10}` | :x: |
 | TC13 | 2 seats roll 5, 5; re-roll 8, 8; re-roll 3, 11 (same as TC9) | three rounds: `{1=5, 2=5}`, `{1=8, 2=8}`, `{1=3, 2=11}` | :x: |
