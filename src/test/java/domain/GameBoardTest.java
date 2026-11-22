@@ -285,6 +285,16 @@ class GameBoardTest {
         assertEquals("Dice total must be between 2 and 12 (was 1)", exception.getMessage());
     }
 
+    @Test
+    void GetProduction_TotalAboveTwelve_ThrowsIllegalArgumentException() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> gameBoard.getProduction(13));
+
+        assertEquals("Dice total must be between 2 and 12 (was 13)", exception.getMessage());
+    }
+
     private TileLayout stubLayoutWithTileCount(int count) {
         Map<Integer, TileSetup> map = new LinkedHashMap<>();
         for (int i = 0; i < count; i++) {
