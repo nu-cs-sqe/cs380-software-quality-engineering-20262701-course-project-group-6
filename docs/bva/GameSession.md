@@ -184,4 +184,4 @@ Tests set up a 3-player game where the seats pick `WHITE`, `BLUE`, `ORANGE`, so 
 
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
-| TC32 | `dice` = `null` | `IllegalArgumentException` with a message saying dice are required | :x: |
+| TC32 | `dice` = `null` | `IllegalArgumentException` with a message saying dice are required | :white_check_mark: |

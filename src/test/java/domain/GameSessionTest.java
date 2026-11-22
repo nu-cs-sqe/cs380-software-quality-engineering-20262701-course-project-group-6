@@ -356,6 +356,14 @@ public class GameSessionTest {
         assertEquals("Players are still picking colors", exception.getMessage());
     }
 
+    @Test
+    public void Constructor_NullDice_ThrowsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> new GameSession(3, new Random(), null));
+
+        assertEquals("Dice are required to start a game", exception.getMessage());
+    }
+
     private static GameSession startedThreePlayerGame() {
         GameSession game = new GameSession(3, new Random());
         game.rollForStartingOrder();

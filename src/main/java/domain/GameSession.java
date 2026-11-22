@@ -22,6 +22,10 @@ public class GameSession {
     private boolean rolledThisTurn;
 
     public GameSession(int playerCount, Random random) {
+        this(playerCount, random, diceFor(random));
+    }
+
+    public GameSession(int playerCount, Random random, Dice dice) {
         if (playerCount < MIN_PLAYERS || playerCount > MAX_PLAYERS) {
             throw new IllegalArgumentException(
                     "A game needs " + MIN_PLAYERS + " or " + MAX_PLAYERS + " players (was " + playerCount + ")");
@@ -29,9 +33,12 @@ public class GameSession {
         if (random == null) {
             throw new IllegalArgumentException("Random is required to start a game");
         }
+        if (dice == null) {
+            throw new IllegalArgumentException("Dice are required to start a game");
+        }
         bank = new Bank(random);
         rollOff = new StartingRollOff(random);
-        dice = new Dice(random);
+        this.dice = dice;
         this.playerCount = playerCount;
         BeginnerPlacements placements = playerCount == MIN_PLAYERS
                 ? BeginnerPlacements.forThreePlayers()
@@ -109,6 +116,10 @@ public class GameSession {
 
     public int getBankResourceCount(ResourceCardType type) {
         return bank.getResourceCount(type);
+    }
+
+    private static Dice diceFor(Random random) {
+        return random == null ? null : new Dice(random);
     }
 
     private boolean isColorInPlay(PlayerColor color) {
