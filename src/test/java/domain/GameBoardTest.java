@@ -393,6 +393,13 @@ class GameBoardTest {
         assertEquals("Player color is required", exception.getMessage());
     }
 
+    @Test
+    void GetCitySpots_Red_RedsSettlements() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        assertEquals(Set.of(10, 29), gameBoard.getCitySpots(RED));
+    }
+
     private TileLayout stubLayoutWithTileCount(int count) {
         Map<Integer, TileSetup> map = new LinkedHashMap<>();
         for (int i = 0; i < count; i++) {

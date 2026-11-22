@@ -165,6 +165,16 @@ public class GameBoard {
         return spots;
     }
 
+    public Set<Integer> getCitySpots(PlayerColor color) {
+        Set<Integer> spots = new TreeSet<>();
+        for (Node corner : nodes.values()) {
+            if (corner.getBuildingColor().equals(Optional.of(color))) {
+                spots.add(corner.getId());
+            }
+        }
+        return spots;
+    }
+
     private void validateGenerateInputs(TileLayout layout, BeginnerPlacements placements) {
         if (layout == null) {
             throw new IllegalArgumentException("layout cannot be null");
