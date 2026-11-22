@@ -428,6 +428,17 @@ class GameBoardTest {
         assertEquals(Set.of(31), gameBoard.getSettlementSpots(RED));
     }
 
+    @Test
+    void BuildRoad_UnconnectedEdge_ThrowsIllegalStateException() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> gameBoard.buildRoad(0, RED));
+
+        assertEquals("Edge 0 is not a legal spot for a RED road", exception.getMessage());
+        assertEquals(Optional.empty(), gameBoard.getEdges().get(0).getRoadColor());
+    }
+
     private TileLayout stubLayoutWithTileCount(int count) {
         Map<Integer, TileSetup> map = new LinkedHashMap<>();
         for (int i = 0; i < count; i++) {

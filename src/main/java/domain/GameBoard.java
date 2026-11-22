@@ -178,6 +178,9 @@ public class GameBoard {
     }
 
     public void buildRoad(int edgeId, PlayerColor color) {
+        if (!getRoadSpots(color).contains(edgeId)) {
+            throw new IllegalStateException("Edge " + edgeId + " is not a legal spot for a " + color + " road");
+        }
         edges.get(edgeId).setRoadColor(color);
     }
 
