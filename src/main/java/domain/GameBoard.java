@@ -229,7 +229,8 @@ public class GameBoard {
         for (Node corner : tile.getCornerNodes()) {
             int amount = corner.getBuildingType() == BuildingType.CITY ? CITY_YIELD : SETTLEMENT_YIELD;
             corner.getBuildingColor().ifPresent(color ->
-                    owed.computeIfAbsent(resource, type -> new EnumMap<>(PlayerColor.class)).put(color, amount));
+                    owed.computeIfAbsent(resource, type -> new EnumMap<>(PlayerColor.class))
+                            .merge(color, amount, Integer::sum));
         }
     }
 
