@@ -295,6 +295,15 @@ class GameBoardTest {
         assertEquals("Dice total must be between 2 and 12 (was 13)", exception.getMessage());
     }
 
+    @Test
+    void GetProduction_EightRolled_TwoHexesPayThreeSettlements() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        Map<ResourceCardType, Map<PlayerColor, Integer>> production = gameBoard.getProduction(8);
+
+        assertEquals(Map.of(ORE, Map.of(WHITE, 1), LUMBER, Map.of(RED, 1, BLUE, 1)), production);
+    }
+
     private TileLayout stubLayoutWithTileCount(int count) {
         Map<Integer, TileSetup> map = new LinkedHashMap<>();
         for (int i = 0; i < count; i++) {
