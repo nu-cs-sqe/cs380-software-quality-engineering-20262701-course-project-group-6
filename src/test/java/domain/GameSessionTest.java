@@ -510,6 +510,16 @@ public class GameSessionTest {
         assertEquals(17, game.getBankResourceCount(ResourceCardType.GRAIN));
     }
 
+    @Test
+    public void BuildCity_OpponentsSettlement_ThrowsIllegalStateException() {
+        GameSession game = startedThreePlayerGame(diceRolling(3, 4));
+        game.rollDice();
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> game.buildCity(13));
+
+        assertEquals("Node 13 is not a legal spot for a WHITE city", exception.getMessage());
+    }
+
     private static GameSession startedThreePlayerGame() {
         return startedThreePlayerGame(new Dice(new Random()));
     }

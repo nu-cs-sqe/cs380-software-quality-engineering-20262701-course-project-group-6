@@ -134,6 +134,10 @@ public class GameSession {
 
     public void buildCity(int nodeId) {
         Player player = playerWhoRolled();
+        if (!board.getCitySpots(player.getColor()).contains(nodeId)) {
+            throw new IllegalStateException(
+                    "Node " + nodeId + " is not a legal spot for a " + player.getColor() + " city");
+        }
         takePieceAndPay(player, CITY_COST, "city", player::placeCityPiece);
         board.buildCity(nodeId, player.getColor());
     }
