@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import org.easymock.EasyMock;
@@ -403,6 +404,16 @@ public class GameSessionTest {
         assertEquals(Set.of(1, 2, 3, 4), rolls.get(0).keySet());
     }
 
+    @Test
+    public void BuildRoad_NotRolledYet_ThrowsIllegalStateException() {
+        GameSession game = startedThreePlayerGame();
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> game.buildRoad(24));
+
+        assertEquals("WHITE must roll before building", exception.getMessage());
+        assertEquals(Optional.empty(), game.getBoard().getEdges().get(24).getRoadColor());
+    }
+
     private static GameSession startedThreePlayerGame() {
         return startedThreePlayerGame(new Dice(new Random()));
     }
@@ -416,10 +427,11 @@ public class GameSessionTest {
         return game;
     }
 
-    private static Dice diceRolling(int firstDie, int secondDie) {
+    private static Dice diceRolling(int... dice) {
         Random random = EasyMock.createStrictMock(Random.class);
-        EasyMock.expect(random.nextInt(6)).andReturn(firstDie - 1);
-        EasyMock.expect(random.nextInt(6)).andReturn(secondDie - 1);
+        for (int die : dice) {
+            EasyMock.expect(random.nextInt(6)).andReturn(die - 1);
+        }
         EasyMock.replay(random);
         return new Dice(random);
     }

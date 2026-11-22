@@ -106,6 +106,12 @@ public class GameSession {
         currentTurnIndex = (currentTurnIndex + 1) % playerCount;
     }
 
+    public void buildRoad(int edgeId) {
+        if (!rolledThisTurn) {
+            throw new IllegalStateException(getCurrentColor() + " must roll before building");
+        }
+    }
+
     public List<PlayerColor> getAvailableColors() {
         return Arrays.stream(PlayerColor.values())
                 .filter(this::isColorInPlay)
