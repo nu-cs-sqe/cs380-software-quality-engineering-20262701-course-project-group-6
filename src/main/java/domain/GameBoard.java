@@ -177,6 +177,10 @@ public class GameBoard {
         return spots;
     }
 
+    public void buildRoad(int edgeId, PlayerColor color) {
+        edges.get(edgeId).setRoadColor(color);
+    }
+
     private void validateGenerateInputs(TileLayout layout, BeginnerPlacements placements) {
         if (layout == null) {
             throw new IllegalArgumentException("layout cannot be null");

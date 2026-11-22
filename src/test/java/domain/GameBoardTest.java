@@ -418,6 +418,16 @@ class GameBoardTest {
         assertEquals("Player color is required", exception.getMessage());
     }
 
+    @Test
+    void BuildRoad_LegalEdge_PlacesRoadAndOpensSettlementSpot() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        gameBoard.buildRoad(42, RED);
+
+        assertEquals(Optional.of(RED), gameBoard.getEdges().get(42).getRoadColor());
+        assertEquals(Set.of(31), gameBoard.getSettlementSpots(RED));
+    }
+
     private TileLayout stubLayoutWithTileCount(int count) {
         Map<Integer, TileSetup> map = new LinkedHashMap<>();
         for (int i = 0; i < count; i++) {
