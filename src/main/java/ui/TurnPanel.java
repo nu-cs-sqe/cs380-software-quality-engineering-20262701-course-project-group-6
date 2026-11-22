@@ -70,13 +70,19 @@ final class TurnPanel extends VBox {
         HBox dice = new HBox(SPACING, firstDie, secondDie);
         dice.setAlignment(Pos.CENTER_LEFT);
         HBox actions = new HBox(SPACING, roll, endTurn);
+        getChildren().addAll(turnLabel, dice, rollLabel, actions, createCardsSection());
+        startTurn();
+    }
 
+    private VBox createCardsSection() {
         cards.setHgap(GRID_GAP);
         cards.setVgap(GRID_GAP);
         Label cardsTitle = new Label(messages.getString("turn.cards"));
         cardsTitle.setFont(HEADER_FONT);
-        getChildren().addAll(turnLabel, dice, rollLabel, actions, cardsTitle, cards);
-        startTurn();
+        Label peekHint = new Label(messages.getString("turn.peek"));
+        peekHint.setWrapText(true);
+        peekHint.setTextFill(INK);
+        return new VBox(SPACING, cardsTitle, cards, peekHint);
     }
 
     private void rollDice() {
