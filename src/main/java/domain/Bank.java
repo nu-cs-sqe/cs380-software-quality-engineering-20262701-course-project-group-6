@@ -39,6 +39,9 @@ public class Bank {
     }
 
     public Map<PlayerColor, Integer> payProduction(ResourceCardType type, Map<PlayerColor, Integer> owed) {
+        if (owed.isEmpty()) {
+            return Map.of();
+        }
         int totalOwed = owed.values().stream().mapToInt(Integer::intValue).sum();
         withdrawResource(type, totalOwed);
         return Map.copyOf(owed);
