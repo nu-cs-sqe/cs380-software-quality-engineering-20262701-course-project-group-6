@@ -487,6 +487,29 @@ public class GameSessionTest {
         assertEquals("Node 0 is not a legal spot for a WHITE settlement", exception.getMessage());
     }
 
+    @Test
+    public void BuildCity_CollectedTheCost_UpgradesSettlementAndScoresPoint() {
+        GameSession game = startedThreePlayerGame(diceRolling(2, 6, 2, 6, 2, 6, 6, 6));
+        for (int turn = 0; turn < 3; turn++) {
+            game.rollDice();
+            game.endTurn();
+        }
+        game.rollDice();
+
+        game.buildCity(19);
+
+        Node corner = game.getBoard().getNodes().get(19);
+        assertEquals(BuildingType.CITY, corner.getBuildingType());
+        assertEquals(Optional.of(PlayerColor.WHITE), corner.getBuildingColor());
+        assertEquals(0, game.getResourceCount(PlayerColor.WHITE, ResourceCardType.ORE));
+        assertEquals(0, game.getResourceCount(PlayerColor.WHITE, ResourceCardType.GRAIN));
+        assertEquals(3, game.getVictoryPointCount(PlayerColor.WHITE));
+        assertEquals(3, game.getCitiesRemaining(PlayerColor.WHITE));
+        assertEquals(4, game.getSettlementsRemaining(PlayerColor.WHITE));
+        assertEquals(17, game.getBankResourceCount(ResourceCardType.ORE));
+        assertEquals(17, game.getBankResourceCount(ResourceCardType.GRAIN));
+    }
+
     private static GameSession startedThreePlayerGame() {
         return startedThreePlayerGame(new Dice(new Random()));
     }

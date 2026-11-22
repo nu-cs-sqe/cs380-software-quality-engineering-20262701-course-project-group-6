@@ -15,6 +15,8 @@ public class GameSession {
             Map.of(ResourceCardType.BRICK, 1, ResourceCardType.LUMBER, 1);
     private static final Map<ResourceCardType, Integer> SETTLEMENT_COST = Map.of(ResourceCardType.BRICK, 1,
             ResourceCardType.LUMBER, 1, ResourceCardType.WOOL, 1, ResourceCardType.GRAIN, 1);
+    private static final Map<ResourceCardType, Integer> CITY_COST =
+            Map.of(ResourceCardType.ORE, 3, ResourceCardType.GRAIN, 2);
 
     private final Bank bank;
     private final GameBoard board;
@@ -130,6 +132,12 @@ public class GameSession {
         board.buildSettlement(nodeId, player.getColor());
     }
 
+    public void buildCity(int nodeId) {
+        Player player = playerWhoRolled();
+        takePieceAndPay(player, CITY_COST, "city", player::placeCityPiece);
+        board.buildCity(nodeId, player.getColor());
+    }
+
     public List<PlayerColor> getAvailableColors() {
         return Arrays.stream(PlayerColor.values())
                 .filter(this::isColorInPlay)
@@ -147,6 +155,10 @@ public class GameSession {
 
     public int getSettlementsRemaining(PlayerColor color) {
         return playerFor(color).getSettlementsRemaining();
+    }
+
+    public int getCitiesRemaining(PlayerColor color) {
+        return playerFor(color).getCitiesRemaining();
     }
 
     public int getVictoryPointCount(PlayerColor color) {
