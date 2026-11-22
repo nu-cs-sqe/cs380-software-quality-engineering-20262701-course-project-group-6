@@ -13,6 +13,8 @@ public class GameSession {
     private static final int MAX_PLAYERS = 4;
     private static final Map<ResourceCardType, Integer> ROAD_COST =
             Map.of(ResourceCardType.BRICK, 1, ResourceCardType.LUMBER, 1);
+    private static final Map<ResourceCardType, Integer> SETTLEMENT_COST = Map.of(ResourceCardType.BRICK, 1,
+            ResourceCardType.LUMBER, 1, ResourceCardType.WOOL, 1, ResourceCardType.GRAIN, 1);
 
     private final Bank bank;
     private final GameBoard board;
@@ -120,6 +122,14 @@ public class GameSession {
         board.buildRoad(edgeId, player.getColor());
     }
 
+    public void buildSettlement(int nodeId) {
+        Player player = playerWhoRolled();
+        requireAffordable(player, SETTLEMENT_COST, "settlement");
+        player.placeSettlementPiece();
+        pay(player, SETTLEMENT_COST);
+        board.buildSettlement(nodeId, player.getColor());
+    }
+
     public List<PlayerColor> getAvailableColors() {
         return Arrays.stream(PlayerColor.values())
                 .filter(this::isColorInPlay)
@@ -133,6 +143,10 @@ public class GameSession {
 
     public int getRoadsRemaining(PlayerColor color) {
         return playerFor(color).getRoadsRemaining();
+    }
+
+    public int getSettlementsRemaining(PlayerColor color) {
+        return playerFor(color).getSettlementsRemaining();
     }
 
     public int getVictoryPointCount(PlayerColor color) {

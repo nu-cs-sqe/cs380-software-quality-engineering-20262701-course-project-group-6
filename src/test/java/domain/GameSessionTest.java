@@ -455,6 +455,28 @@ public class GameSessionTest {
         assertEquals(12, game.getRoadsRemaining(PlayerColor.WHITE));
     }
 
+    @Test
+    public void BuildSettlement_CollectedTheCost_PlacesSettlementAndScoresPoint() {
+        GameSession game = startedThreePlayerGame(diceRolling(2, 3, 3, 3, 5, 6, 3, 4));
+        game.rollDice();
+        game.buildRoad(24);
+        game.endTurn();
+        game.rollDice();
+        game.endTurn();
+        game.rollDice();
+        game.endTurn();
+        game.rollDice();
+
+        game.buildSettlement(17);
+
+        Node corner = game.getBoard().getNodes().get(17);
+        assertEquals(BuildingType.SETTLEMENT, corner.getBuildingType());
+        assertEquals(Optional.of(PlayerColor.WHITE), corner.getBuildingColor());
+        assertEquals(0, totalResources(game, PlayerColor.WHITE));
+        assertEquals(3, game.getVictoryPointCount(PlayerColor.WHITE));
+        assertEquals(2, game.getSettlementsRemaining(PlayerColor.WHITE));
+    }
+
     private static GameSession startedThreePlayerGame() {
         return startedThreePlayerGame(new Dice(new Random()));
     }
