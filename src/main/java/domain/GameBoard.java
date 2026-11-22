@@ -97,9 +97,7 @@ public class GameBoard {
     }
 
     public List<ResourceCardType> getStartingResources(PlayerColor color) {
-        if (color == null) {
-            throw new IllegalArgumentException("Player color is required");
-        }
+        requireColor(color);
         Integer secondPlacedSettlement = startingResourceNodes.get(color);
         if (secondPlacedSettlement == null) {
             throw new IllegalArgumentException(color + " has no 2nd starting settlement on this board");
@@ -146,6 +144,7 @@ public class GameBoard {
     }
 
     public Set<Integer> getRoadSpots(PlayerColor color) {
+        requireColor(color);
         Set<Integer> spots = new TreeSet<>();
         for (Edge edge : edges.values()) {
             if (!edge.isOccupied() && (reaches(edge.getNode1(), color) || reaches(edge.getNode2(), color))) {
@@ -252,6 +251,12 @@ public class GameBoard {
             return owner.get() == color;
         }
         return corner.getIncidentEdges().stream().anyMatch(edge -> edge.getRoadColor().equals(Optional.of(color)));
+    }
+
+    private static void requireColor(PlayerColor color) {
+        if (color == null) {
+            throw new IllegalArgumentException("Player color is required");
+        }
     }
 
     private Node requireValidNode(int nodeId) {
