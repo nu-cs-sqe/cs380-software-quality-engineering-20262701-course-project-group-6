@@ -154,6 +154,10 @@ public class GameBoard {
         return spots;
     }
 
+    public Set<Integer> getSettlementSpots(PlayerColor color) {
+        return new TreeSet<>();
+    }
+
     private void validateGenerateInputs(TileLayout layout, BeginnerPlacements placements) {
         if (layout == null) {
             throw new IllegalArgumentException("layout cannot be null");

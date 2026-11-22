@@ -360,6 +360,13 @@ class GameBoardTest {
         assertEquals("Player color is required", exception.getMessage());
     }
 
+    @Test
+    void GetSettlementSpots_RedAtStart_NoneBecauseEveryReachableCornerIsNextToABuilding() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        assertEquals(Set.of(), gameBoard.getSettlementSpots(RED));
+    }
+
     private TileLayout stubLayoutWithTileCount(int count) {
         Map<Integer, TileSetup> map = new LinkedHashMap<>();
         for (int i = 0; i < count; i++) {
