@@ -520,6 +520,17 @@ public class GameSessionTest {
         assertEquals("Node 13 is not a legal spot for a WHITE city", exception.getMessage());
     }
 
+    @Test
+    public void BuildRoad_StillPicking_ThrowsIllegalStateException() {
+        GameSession game = new GameSession(3, new Random());
+        game.rollForStartingOrder();
+        game.pickColor(PlayerColor.WHITE);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> game.buildRoad(24));
+
+        assertEquals("Players are still picking colors", exception.getMessage());
+    }
+
     private static GameSession startedThreePlayerGame() {
         return startedThreePlayerGame(new Dice(new Random()));
     }

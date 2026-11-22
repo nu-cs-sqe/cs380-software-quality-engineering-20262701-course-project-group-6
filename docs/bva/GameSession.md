@@ -246,7 +246,7 @@ Tests use the 3-player game with turn order `WHITE, BLUE, ORANGE` and stubbed di
 | TC41 | white rolls 7, `buildSettlement(0)` | `IllegalStateException` with a message saying node 0 is not a legal spot for a white settlement | :white_check_mark: |
 | TC42 | white, blue and orange each roll 8 (white +1 ore each time); white rolls 12 (+1 grain), `buildCity(19)` | corner 19 has a white city; white has 0 ore and 0 grain; white has 3 points (city 2 + settlement 1), 3 cities and 4 settlements left; the bank has 17 ore and 17 grain | :white_check_mark: |
 | TC43 | white rolls 7, `buildCity(13)` (orange's settlement) | `IllegalStateException` with a message saying node 13 is not a legal spot for a white city | :white_check_mark: |
-| TC44 | still picking colors, `buildRoad(24)` | `IllegalStateException` with a message saying players are still picking colors | :x: |
+| TC44 | still picking colors, `buildRoad(24)` | `IllegalStateException` with a message saying players are still picking colors | :white_check_mark: |
 
 `getRoadsRemaining`, `getSettlementsRemaining` and `getCitiesRemaining` pass the counts on from `Player` (tested in
 `Player.md`); they are checked in TC37, TC40 and TC42.
