@@ -43,8 +43,14 @@ public class Bank {
             return Map.of();
         }
         int totalOwed = owed.values().stream().mapToInt(Integer::intValue).sum();
-        if (totalOwed > getResourceCount(type)) {
-            return Map.of();
+        int available = getResourceCount(type);
+        if (totalOwed > available) {
+            if (owed.size() > 1) {
+                return Map.of();
+            }
+            PlayerColor onlyColor = owed.keySet().iterator().next();
+            withdrawResource(type, available);
+            return Map.of(onlyColor, available);
         }
         withdrawResource(type, totalOwed);
         return Map.copyOf(owed);
