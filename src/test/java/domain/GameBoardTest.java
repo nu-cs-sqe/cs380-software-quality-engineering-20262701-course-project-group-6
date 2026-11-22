@@ -482,6 +482,17 @@ class GameBoardTest {
         assertEquals(BuildingType.NONE, gameBoard.getNodes().get(11).getBuildingType());
     }
 
+    @Test
+    void BuildCity_OwnSettlement_PlacesCity() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        gameBoard.buildCity(10, RED);
+
+        Node corner = gameBoard.getNodes().get(10);
+        assertEquals(BuildingType.CITY, corner.getBuildingType());
+        assertEquals(Optional.of(RED), corner.getBuildingColor());
+    }
+
     private TileLayout stubLayoutWithTileCount(int count) {
         Map<Integer, TileSetup> map = new LinkedHashMap<>();
         for (int i = 0; i < count; i++) {

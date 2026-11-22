@@ -191,6 +191,10 @@ public class GameBoard {
         nodes.get(nodeId).placeBuilding(BuildingType.SETTLEMENT, color);
     }
 
+    public void buildCity(int nodeId, PlayerColor color) {
+        nodes.get(nodeId).placeBuilding(BuildingType.CITY, color);
+    }
+
     private void validateGenerateInputs(TileLayout layout, BeginnerPlacements placements) {
         if (layout == null) {
             throw new IllegalArgumentException("layout cannot be null");
