@@ -155,6 +155,7 @@ public class GameBoard {
     }
 
     public Set<Integer> getSettlementSpots(PlayerColor color) {
+        requireColor(color);
         Set<Integer> spots = new TreeSet<>();
         for (Node corner : nodes.values()) {
             if (!corner.isOccupied() && !isNextToBuilding(corner) && touchesRoad(corner, color)) {

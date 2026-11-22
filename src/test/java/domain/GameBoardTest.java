@@ -383,6 +383,16 @@ class GameBoardTest {
         assertEquals(Set.of(), gameBoard.getSettlementSpots(RED));
     }
 
+    @Test
+    void GetSettlementSpots_NullColor_ThrowsIllegalArgumentException() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> gameBoard.getSettlementSpots(null));
+
+        assertEquals("Player color is required", exception.getMessage());
+    }
+
     private TileLayout stubLayoutWithTileCount(int count) {
         Map<Integer, TileSetup> map = new LinkedHashMap<>();
         for (int i = 0; i < count; i++) {
