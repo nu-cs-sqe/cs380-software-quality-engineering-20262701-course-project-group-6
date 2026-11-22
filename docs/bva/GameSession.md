@@ -9,7 +9,7 @@ order), and **playing** (everyone has picked; the pick order is the turn order).
 The roll itself is tested in `StartingRollOff.md` with a stubbed `Random`. These tests use a real `Random` and read the
 order that `rollForStartingOrder()` returns, so they check that `GameSession` follows that order whatever the dice say.
 
-Starting resources come from `BeginnerBoard.getStartingResources(color)`. Blue's are lumber, ore, and brick (the Story 2
+Starting resources come from `GameBoard.getStartingResources(color)`. Blue's are lumber, ore, and brick (the Story 2
 example); red's are grain and 2 lumber.
 
 ## Step 1: Inputs and outputs

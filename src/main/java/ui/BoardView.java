@@ -1,10 +1,12 @@
 package ui;
 
-import domain.BeginnerBoard;
-import domain.TileSetup;
+import domain.Edge;
+import domain.GameBoard;
 import domain.HarborType;
+import domain.Node;
 import domain.PlayerColor;
 import domain.ResourceCardType;
+import domain.Tile;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
 import javafx.geometry.Bounds;
@@ -28,9 +30,9 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import ui.BoardGeometry.Side;
 
 import java.text.NumberFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -83,7 +85,7 @@ final class BoardView extends BorderPane {
 
     private final ResourceBundle messages;
 
-    BoardView(BeginnerBoard board, ResourceBundle messages, Runnable goBack) {
+    BoardView(GameBoard board, ResourceBundle messages, Runnable goBack) {
         this.messages = messages;
         setPadding(new Insets(SCREEN_PADDING));
         setStyle("-fx-background-color: #f5ecdc;");
@@ -130,50 +132,57 @@ final class BoardView extends BorderPane {
         return viewport;
     }
 
-    private Group createMap(BeginnerBoard board) {
-        List<List<TileSetup>> rows = board.getTileRows();
-        BoardGeometry geometry = new BoardGeometry(rows);
+    private Group createMap(GameBoard board) {
+        BoardGeometry geometry = new BoardGeometry();
         Point2D boardCenter = geometry.getCenter();
-        Group map = new Group(createTerrain(rows, geometry));
-        board.getHarbors().forEach((id, type) -> map.getChildren().add(
-                createHarbor(geometry.getEdge(id), type, boardCenter)));
-        board.getRoads().forEach((id, owner) -> map.getChildren().add(createRoad(geometry.getEdge(id), owner)));
-        board.getSettlements().forEach((id, owner) -> map.getChildren().add(
-                createSettlement(geometry.getNode(id), owner)));
-        board.getStartingResourceNodes().forEach(id -> map.getChildren().add(createResourceStar(geometry.getNode(id))));
+        Map<Integer, Point2D> nodePositions = new HashMap<>();
+        Group map = new Group();
+        for (Tile tile : board.getTiles()) {
+            List<Point2D> corners = geometry.getTileCorners(tile.getId());
+            List<Node> cornerNodes = tile.getCornerNodes();
+            for (int corner = 0; corner < corners.size(); corner++) {
+                nodePositions.put(cornerNodes.get(corner).getId(), corners.get(corner));
+            }
+            map.getChildren().add(createTile(tile, corners, geometry.getTileCenter(tile.getId())));
+        }
+        board.getEdges().forEach(edge -> addEdge(map, edge, nodePositions, boardCenter));
+        for (Node node : board.getNodes()) {
+            node.getBuildingColor().ifPresent(owner -> map.getChildren().add(
+                    createSettlement(nodePositions.get(node.getId()), owner)));
+        }
+        board.getStartingResourceNodes().values().forEach(id -> map.getChildren().add(
+                createResourceStar(nodePositions.get(id))));
         map.getChildren().add(createRobber(geometry.getTileCenter(board.getRobberTileId())));
         return map;
     }
 
-    private Group createTerrain(List<List<TileSetup>> rows, BoardGeometry geometry) {
-        Group terrain = new Group();
-        int tileId = 0;
-        for (List<TileSetup> row : rows) {
-            for (TileSetup tile : row) {
-                terrain.getChildren().add(createTile(tile, geometry.getTileCorners(tileId),
-                        geometry.getTileCenter(tileId)));
-                tileId++;
-            }
+    private void addEdge(Group map, Edge edge, Map<Integer, Point2D> nodePositions, Point2D boardCenter) {
+        Point2D start = nodePositions.get(edge.getNode1().getId());
+        Point2D end = nodePositions.get(edge.getNode2().getId());
+        HarborType harbor = edge.getNode1().getHarborType();
+        if (harbor != HarborType.NONE && harbor == edge.getNode2().getHarborType()) {
+            map.getChildren().add(createHarbor(start, end, harbor, boardCenter));
         }
-        return terrain;
+        edge.getRoadColor().ifPresent(owner -> map.getChildren().add(createRoad(start, end, owner)));
     }
 
-    private Group createTile(TileSetup tile, List<Point2D> corners, Point2D center) {
+    private Group createTile(Tile tile, List<Point2D> corners, Point2D center) {
         Polygon hex = new Polygon();
         for (Point2D corner : corners) {
             hex.getPoints().addAll(corner.getX(), corner.getY());
         }
-        hex.setFill(tile.getResource().map(TERRAIN_COLORS::get).orElse(DESERT));
+        hex.setFill(tile.getResourceProduced().map(TERRAIN_COLORS::get).orElse(DESERT));
         hex.setStroke(SAND);
         hex.setStrokeWidth(TILE_OUTLINE_WIDTH);
 
-        String key = tile.getResource().map(resource -> "board.terrain." + resource.name())
+        String key = tile.getResourceProduced().map(resource -> "board.terrain." + resource.name())
                 .orElse("board.terrain.desert");
         Point2D labelCenter = center.add(0, TERRAIN_LABEL_OFFSET);
         Text label = createText(messages.getString(key), labelCenter, TERRAIN_FONT, Color.WHITE);
         Group group = new Group(hex, label);
-        tile.getDiceNumber().ifPresent(number -> group.getChildren().add(
-                createToken(center.add(0, TILE_SYMBOL_OFFSET), number)));
+        if (tile.getResourceProduced().isPresent()) {
+            group.getChildren().add(createToken(center.add(0, TILE_SYMBOL_OFFSET), tile.getDiceNumber()));
+        }
         return group;
     }
 
@@ -188,9 +197,7 @@ final class BoardView extends BorderPane {
         return new Group(token, roll, dots);
     }
 
-    private Group createHarbor(Side edge, HarborType type, Point2D boardCenter) {
-        Point2D start = edge.getStart();
-        Point2D end = edge.getEnd();
+    private Group createHarbor(Point2D start, Point2D end, HarborType type, Point2D boardCenter) {
         Point2D midpoint = start.midpoint(end);
         Point2D outward = outwardNormal(start, end, boardCenter);
         Point2D harborCenter = midpoint.add(outward.multiply(HARBOR_DISTANCE));
@@ -218,9 +225,9 @@ final class BoardView extends BorderPane {
         return badge;
     }
 
-    private Group createRoad(Side edge, PlayerColor owner) {
-        return new Group(createLine(edge.getStart(), edge.getEnd(), INK, ROAD_OUTLINE_WIDTH),
-                createLine(edge.getStart(), edge.getEnd(), PLAYER_COLORS.get(owner), ROAD_WIDTH));
+    private Group createRoad(Point2D start, Point2D end, PlayerColor owner) {
+        return new Group(createLine(start, end, INK, ROAD_OUTLINE_WIDTH),
+                createLine(start, end, PLAYER_COLORS.get(owner), ROAD_WIDTH));
     }
 
     private Line createLine(Point2D start, Point2D end, Color color, double width) {

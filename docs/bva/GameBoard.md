@@ -59,6 +59,12 @@ All collection getters return unmodifiable copies.
 | TC18 | Board generated with `BeginnerLayout`, `color` = `null` | `IllegalArgumentException` with message `"Player color is required"` | :white_check_mark: |
 | TC19 | Board generated with `BeginnerPlacements.forThreePlayers()`, `color` = `PlayerColor.RED` | `IllegalArgumentException` with message `"RED has no starting settlement on this board"` | :white_check_mark: |
 
+### Method under test: `getStartingResourceNodes()`
+
+|  | State of the System | Expected output | Implemented? |
+| ----- | ----- | ----- | ----- |
+| TC20 | Board generated with `BeginnerPlacements.forThreePlayers()` | Returns `{ORANGE=42, BLUE=40, WHITE=19}` (each color's starred settlement; no red) | :white_check_mark: |
+
 ### Methods under test: `getTiles()`, `getNodes()`, `getEdges()`, `getRobberTileId()`, `getHarborNodes()`
 
 Read-only getters for `BoardView` and `GameSession`. Verified in TC1 and harbor assertions.

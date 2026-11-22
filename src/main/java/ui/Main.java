@@ -1,6 +1,6 @@
 package ui;
 
-import domain.BeginnerBoard;
+import domain.GameBoard;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -88,7 +88,7 @@ public class Main extends Application {
         stage.getScene().setRoot(setup);
     }
 
-    private void showBoard(Stage stage, BeginnerBoard board, ResourceBundle messages, Runnable goHome) {
+    private void showBoard(Stage stage, GameBoard board, ResourceBundle messages, Runnable goHome) {
         stage.getScene().setRoot(new BoardView(board, messages, goHome));
         stage.setWidth(Math.max(stage.getWidth(), BOARD_WINDOW_WIDTH));
         stage.setHeight(Math.max(stage.getHeight(), BOARD_WINDOW_HEIGHT));
