@@ -110,6 +110,10 @@ public class GameSession {
 
     public void buildRoad(int edgeId) {
         Player player = playerWhoRolled();
+        if (!board.getRoadSpots(player.getColor()).contains(edgeId)) {
+            throw new IllegalStateException(
+                    "Edge " + edgeId + " is not a legal spot for a " + player.getColor() + " road");
+        }
         player.placeRoadPiece();
         pay(player, ROAD_COST);
         board.buildRoad(edgeId, player.getColor());

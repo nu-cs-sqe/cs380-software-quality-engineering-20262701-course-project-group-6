@@ -240,7 +240,7 @@ Tests use the 3-player game with turn order `WHITE, BLUE, ORANGE` and stubbed di
 |------|---------------------|-----------------|--------------|
 | TC36 | white's turn, not rolled, `buildRoad(24)` | `IllegalStateException` with a message saying white must roll before building; edge 24 still empty | :white_check_mark: |
 | TC37 | white rolls 7, `buildRoad(24)` (17–18) | edge 24 has a white road; white has 0 brick and 0 lumber; the bank has 18 brick and 18 lumber; white has 12 roads left | :white_check_mark: |
-| TC38 | white rolls 7, `buildRoad(0)` | `IllegalStateException` with a message saying edge 0 is not a legal spot for a white road; white still has 1 brick and 1 lumber | :x: |
+| TC38 | white rolls 7, `buildRoad(0)` | `IllegalStateException` with a message saying edge 0 is not a legal spot for a white road; white still has 1 brick and 1 lumber | :white_check_mark: |
 | TC39 | white rolls 7, builds a road on 24, then `buildRoad(23)` | `IllegalStateException` with a message saying white cannot afford a road; edge 23 still empty; white still has 12 roads left | :x: |
 | TC40 | white rolls 5 (+1 wool) and builds a road on 24; blue rolls 6 (white +1 brick); orange rolls 11 (white +1 lumber); white rolls 7, `buildSettlement(17)` | corner 17 has a white settlement; white has 0 brick, lumber, wool and grain; white has 3 points and 2 settlements left | :x: |
 | TC41 | white rolls 7, `buildSettlement(0)` | `IllegalStateException` with a message saying node 0 is not a legal spot for a white settlement | :x: |

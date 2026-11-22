@@ -429,6 +429,19 @@ public class GameSessionTest {
         assertEquals(12, game.getRoadsRemaining(PlayerColor.WHITE));
     }
 
+    @Test
+    public void BuildRoad_IllegalEdge_ThrowsAndKeepsCards() {
+        GameSession game = startedThreePlayerGame(diceRolling(3, 4));
+        game.rollDice();
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> game.buildRoad(0));
+
+        assertEquals("Edge 0 is not a legal spot for a WHITE road", exception.getMessage());
+        assertEquals(1, game.getResourceCount(PlayerColor.WHITE, ResourceCardType.BRICK));
+        assertEquals(1, game.getResourceCount(PlayerColor.WHITE, ResourceCardType.LUMBER));
+        assertEquals(13, game.getRoadsRemaining(PlayerColor.WHITE));
+    }
+
     private static GameSession startedThreePlayerGame() {
         return startedThreePlayerGame(new Dice(new Random()));
     }
