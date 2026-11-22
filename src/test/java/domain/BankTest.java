@@ -231,6 +231,17 @@ public class BankTest {
         assertEquals(0, bank.getResourceCount(ResourceCardType.ORE));
     }
 
+    @Test
+    public void PayProduction_OnePlayerOwedAndBankEmpty_PaysNothing() {
+        Bank bank = newBank();
+        bank.withdrawResource(ResourceCardType.ORE, 19);
+
+        Map<PlayerColor, Integer> paid = bank.payProduction(ResourceCardType.ORE, Map.of(PlayerColor.RED, 1));
+
+        assertEquals(Map.of(), paid);
+        assertEquals(0, bank.getResourceCount(ResourceCardType.ORE));
+    }
+
     private static Bank newBank() {
         return new Bank(new Random());
     }

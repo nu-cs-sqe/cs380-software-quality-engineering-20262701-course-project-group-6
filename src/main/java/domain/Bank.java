@@ -45,7 +45,7 @@ public class Bank {
         int totalOwed = owed.values().stream().mapToInt(Integer::intValue).sum();
         int available = getResourceCount(type);
         if (totalOwed > available) {
-            if (owed.size() > 1) {
+            if (owed.size() > 1 || available == 0) {
                 return Map.of();
             }
             PlayerColor onlyColor = owed.keySet().iterator().next();
