@@ -1,7 +1,7 @@
 package ui;
 
 import domain.BeginnerBoard;
-import domain.BeginnerBoard.TileSetup;
+import domain.TileSetup;
 import domain.HarborType;
 import domain.PlayerColor;
 import domain.ResourceCardType;

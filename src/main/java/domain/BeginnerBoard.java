@@ -18,8 +18,6 @@ import static domain.ResourceCardType.WOOL;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.OptionalInt;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -106,28 +104,5 @@ public final class BeginnerBoard {
     private static Map<Integer, PlayerColor> omitRed(Map<Integer, PlayerColor> placements) {
         return placements.entrySet().stream().filter(placement -> placement.getValue() != RED)
                 .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
-    }
-
-    public static final class TileSetup {
-        private final Optional<ResourceCardType> resource;
-        private final OptionalInt diceNumber;
-
-        private TileSetup(ResourceCardType resource, int diceNumber) {
-            this.resource = Optional.of(resource);
-            this.diceNumber = OptionalInt.of(diceNumber);
-        }
-
-        private TileSetup() {
-            resource = Optional.empty();
-            diceNumber = OptionalInt.empty();
-        }
-
-        public Optional<ResourceCardType> getResource() {
-            return resource;
-        }
-
-        public OptionalInt getDiceNumber() {
-            return diceNumber;
-        }
     }
 }

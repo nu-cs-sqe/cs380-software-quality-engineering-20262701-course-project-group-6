@@ -48,8 +48,8 @@ v               v              v                            v
 
 ### 3.1 GameSession (Orchestrator & Turn Controller)
 Runs one game: sets up the bank and the beginner board (Story 1), lets the players roll for starting order and pick
-colors (Story 2), and then controls the turn order. Turn play (rolling for resources, building, buying and playing
-development cards, the robber, winning) is added in a later PR once `GameBoard` exists.
+colors (Story 2), and then runs the turns: rolling the dice and ending the turn (Story 3, #31). Paying out resources,
+building, buying and playing development cards, the robber, and winning (Stories 3–7) are added once `GameBoard` exists.
 
 * **Responsibilities:**
   * Accept only 3 or 4 players. Create the `Bank` and the `BeginnerBoard` (without red for 3 players).
@@ -68,7 +68,9 @@ development cards, the robber, winning) is added in a later PR once `GameBoard` 
   * `private final int playerCount`
   * `private List<Integer> pickOrder` (seat numbers 1..playerCount, empty until rolled)
   * `private final Map<PlayerColor, Player> players` (insertion order = pick order = turn order)
-  * `private int currentTurnIndex`
+  * `private int currentTurnIndex` (place of the current player in the turn order)
+  * `private final Dice dice` (same `Random`)
+  * `private boolean rolledThisTurn`
 * **Key Methods:**
   * `public GameSession(int playerCount, Random random)`: `IllegalArgumentException` unless `playerCount` is 3 or 4,
     or if `random` is `null`. The same `Random` shuffles the deck and rolls the dice, so tests can stub it.
@@ -85,6 +87,11 @@ development cards, the robber, winning) is added in a later PR once `GameBoard` 
     `public int getVictoryPointCount(PlayerColor color)`: for the UI; `IllegalArgumentException` if no player has
     that color.
   * `public int getBankResourceCount(ResourceCardType type)`: for the UI and for Story 2 criterion 6.
+  * `public DiceRoll rollDice()` (Story 3): the current player rolls 2 dice, once per turn; returns both faces and the
+    total for the UI. `IllegalStateException` while players are still picking or if this player already rolled.
+    Paying out resources on the roll is added once `GameBoard` exists; a 7 never pays out (robber, Story 4).
+  * `public void endTurn()` (Story 3): only after rolling; passes the turn to the next color in turn order, wrapping
+    after the last one. `IllegalStateException` while players are still picking or if this player has not rolled.
 
 * **`StartingRollOff`:** rolls for starting order with an injected `Random`, through `Dice`.
   * `public StartingRollOff(Random random)`: `IllegalArgumentException` if `random` is `null`.
@@ -163,13 +170,15 @@ Encapsulates Catan's hexagonal board topology using an intersection/edge graph r
   * Enforce setup road attachment: roads must attach directly to an existing settlement or road, and cannot cross enemy roads in the way.
   * Keeps track of robber location with `robberTileId` field. 
   * Maintains dictionaries for tiles, nodes, and edges keyed by their ids.
+  * Keeps dictionary that maps `playerColor` to `int` node id of starred settlements (indicating the second settlement in the beginner set-up)
 * **`GameBoard` Key Methods:**
-  * `public void generateBoard(BoardLayoutStrategy strategy)`
+  * `public void generateBoard(TileLayout layout, BeginnerPlacements placements)`
   * `public boolean isValidSettlementLocation(int nodeId)`: Confirms node is unoccupied and all 2–3 neighboring nodes have no existing settlements/cities.
   * `public boolean isValidRoadLocation(int edgeId, int connectedNodeId, int playerId)`: Checks edge vacancy and validates direct attachment to `connectedNodeId`.
   * `public void buildSettlement(int nodeId, int playerId)`: Updates target `Node` occupancy.
   * `public void buildRoad(int edgeId, int playerId)`: Updates target `Edge` occupancy.
-  * `public List<Tile> getAdjacentTiles(int nodeId)`: Returns tiles bordering an intersection for resource distribution during setup phase.
+  * `public List<ResourceCardType> getAdjacentResources(int nodeId)`: Returns resources of the bordering tiles at an intersection for resource distribution.
+  * `public List<ResourceCardType> getStartingResources(PlayerColor color)`: Returns resources of the bordering tiles of the second placed settlement in the beginner set-up.
   * `public void moveRobber(int tileId)`: Moves robber to different tile.
 
 * **`Tile` Subcomponent (Terrain Hexes):**
