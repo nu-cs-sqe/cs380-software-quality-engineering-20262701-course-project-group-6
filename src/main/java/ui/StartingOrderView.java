@@ -9,8 +9,11 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
@@ -28,6 +31,11 @@ final class StartingOrderView extends BorderPane {
     private static final double SECTION_SPACING = 14;
     private static final double OPTION_SPACING = 8;
     private static final Font TITLE_FONT = Font.font("System", FontWeight.BOLD, 22);
+    private static final double LOG_DIE_SIZE = 26;
+    private static final double TOTAL_RADIUS = 14;
+    private static final Color TOKEN_FILL = Color.web("#ffedbe");
+    private static final Color INK = Color.web("#352820");
+    private static final Font TOTAL_FONT = Font.font("System", FontWeight.BOLD, 14);
     private static final Font PROMPT_FONT = Font.font("System", FontWeight.BOLD, 16);
 
     private final GameSession game;
@@ -96,8 +104,7 @@ final class StartingOrderView extends BorderPane {
         List<Integer> players = new ArrayList<>(round.keySet());
         int player = players.get(playerIndex);
         DiceRoll dice = round.get(player);
-        rollLog.getChildren().add(new Label(MessageFormat.format(messages.getString("order.rolled"), player,
-                dice.getFirstDie(), dice.getSecondDie(), dice.getTotal())));
+        rollLog.getChildren().add(rollLine(player, dice));
         playerIndex++;
         if (playerIndex == players.size()) {
             playerIndex = 0;
@@ -116,6 +123,23 @@ final class StartingOrderView extends BorderPane {
         }
         int nextPlayer = new ArrayList<>(rounds.get(roundIndex).keySet()).get(playerIndex);
         roll.setText(MessageFormat.format(messages.getString("order.roll"), nextPlayer));
+    }
+
+    private HBox rollLine(int player, DiceRoll dice) {
+        DieFace first = new DieFace(LOG_DIE_SIZE);
+        first.show(dice.getFirstDie());
+        DieFace second = new DieFace(LOG_DIE_SIZE);
+        second.show(dice.getSecondDie());
+        Circle token = new Circle(TOTAL_RADIUS, TOKEN_FILL);
+        token.setStroke(INK);
+        Label total = new Label(String.valueOf(dice.getTotal()));
+        total.setFont(TOTAL_FONT);
+        HBox line = new HBox(OPTION_SPACING, new Label(MessageFormat.format(messages.getString("order.rolledBy"),
+                player)), first, new Label("+"), second, new Label("="), new StackPane(token, total));
+        line.setAlignment(Pos.CENTER_LEFT);
+        line.setAccessibleText(MessageFormat.format(messages.getString("order.rolled"), player,
+                dice.getFirstDie(), dice.getSecondDie(), dice.getTotal()));
+        return line;
     }
 
     private String playerNames(List<Integer> players) {
