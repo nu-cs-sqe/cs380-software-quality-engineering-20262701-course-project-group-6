@@ -155,7 +155,13 @@ public class GameBoard {
     }
 
     public Set<Integer> getSettlementSpots(PlayerColor color) {
-        return new TreeSet<>();
+        Set<Integer> spots = new TreeSet<>();
+        for (Node corner : nodes.values()) {
+            if (!corner.isOccupied() && !isNextToBuilding(corner) && touchesRoad(corner, color)) {
+                spots.add(corner.getId());
+            }
+        }
+        return spots;
     }
 
     private void validateGenerateInputs(TileLayout layout, BeginnerPlacements placements) {
@@ -254,7 +260,21 @@ public class GameBoard {
         if (owner.isPresent()) {
             return owner.get() == color;
         }
+        return touchesRoad(corner, color);
+    }
+
+    private boolean touchesRoad(Node corner, PlayerColor color) {
         return corner.getIncidentEdges().stream().anyMatch(edge -> edge.getRoadColor().equals(Optional.of(color)));
+    }
+
+    private boolean isNextToBuilding(Node corner) {
+        for (Edge edge : corner.getIncidentEdges()) {
+            Node neighbor = edge.getNode1() == corner ? edge.getNode2() : edge.getNode1();
+            if (neighbor.isOccupied()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static void requireColor(PlayerColor color) {
