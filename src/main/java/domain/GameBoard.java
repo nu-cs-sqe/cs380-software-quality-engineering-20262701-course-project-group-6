@@ -131,8 +131,8 @@ public class GameBoard {
 
     public Map<ResourceCardType, Map<PlayerColor, Integer>> getProduction(int diceTotal) {
         if (diceTotal < MIN_DICE_TOTAL || diceTotal > MAX_DICE_TOTAL) {
-            throw new IllegalArgumentException(
-                    "Dice total must be between " + MIN_DICE_TOTAL + " and " + MAX_DICE_TOTAL + " (was " + diceTotal + ")");
+            throw new IllegalArgumentException("Dice total must be between " + MIN_DICE_TOTAL + " and "
+                    + MAX_DICE_TOTAL + " (was " + diceTotal + ")");
         }
         Map<ResourceCardType, Map<PlayerColor, Integer>> owed = new EnumMap<>(ResourceCardType.class);
         for (Tile tile : tiles.values()) {
