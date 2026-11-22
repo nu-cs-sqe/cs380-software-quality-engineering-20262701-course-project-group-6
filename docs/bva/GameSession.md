@@ -166,7 +166,7 @@ Tests set up a 3-player game where the seats pick `WHITE`, `BLUE`, `ORANGE`, so 
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
 | TC24 | rolled for order, still picking | `IllegalStateException` with a message saying players are still picking colors | :white_check_mark: |
-| TC25 | `WHITE`'s turn, dice stubbed to roll 3 and 4 | a `DiceRoll` of 3 and 4 (total 7); nobody's resources and the bank change | :x: |
+| TC25 | `WHITE`'s turn, dice stubbed to roll 3 and 4 | a `DiceRoll` of 3 and 4 (total 7); nobody's resources and the bank change | :white_check_mark: |
 | TC26 | `WHITE` already rolled this turn | `IllegalStateException` with a message saying white already rolled this turn | :white_check_mark: |
 | TC27 | `WHITE` rolled and ended the turn; `BLUE` rolls | returns a `DiceRoll` (the flag reset for the new turn) | :white_check_mark: |
 | TC33 | `WHITE`'s turn, dice stubbed to roll 2 and 6 (total 8) | white gets 1 ore (hex 11) and blue 1 lumber (hex 12); bank has 16 ore and 16 lumber | :x: |
