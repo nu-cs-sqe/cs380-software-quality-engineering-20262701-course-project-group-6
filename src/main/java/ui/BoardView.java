@@ -2,6 +2,7 @@ package ui;
 
 import domain.Edge;
 import domain.GameBoard;
+import domain.GameSession;
 import domain.HarborType;
 import domain.Node;
 import domain.PlayerColor;
@@ -79,13 +80,10 @@ final class BoardView extends BorderPane {
             ResourceCardType.LUMBER, Color.web("#315b43"), ResourceCardType.WOOL, Color.web("#617539"),
             ResourceCardType.GRAIN, Color.web("#936421"), ResourceCardType.BRICK, Color.web("#8c4232"),
             ResourceCardType.ORE, Color.web("#515b70"));
-    private static final Map<PlayerColor, Color> PLAYER_COLORS = Map.of(
-            PlayerColor.RED, Color.web("#e74142"), PlayerColor.ORANGE, Color.web("#fb9c34"),
-            PlayerColor.BLUE, Color.web("#43a2eb"), PlayerColor.WHITE, Color.web("#fff8e8"));
 
     private final ResourceBundle messages;
 
-    BoardView(GameBoard board, ResourceBundle messages, Runnable goBack) {
+    BoardView(GameSession game, ResourceBundle messages, Runnable goBack) {
         this.messages = messages;
         setPadding(new Insets(SCREEN_PADDING));
         setStyle("-fx-background-color: #f5ecdc;");
@@ -93,7 +91,10 @@ final class BoardView extends BorderPane {
         HBox header = createHeader(goBack);
         setTop(header);
         setMargin(header, new Insets(0, 0, SECTION_SPACING, 0));
-        setCenter(createMapViewport(createMap(board)));
+        setCenter(createMapViewport(createMap(game.getBoard())));
+        TurnPanel turnPanel = new TurnPanel(game, messages);
+        setRight(turnPanel);
+        setMargin(turnPanel, new Insets(0, 0, 0, SECTION_SPACING));
 
         Label legend = new Label(messages.getString("board.startingResources"));
         legend.setTextFill(INK);
@@ -227,7 +228,7 @@ final class BoardView extends BorderPane {
 
     private Group createRoad(Point2D start, Point2D end, PlayerColor owner) {
         return new Group(createLine(start, end, INK, ROAD_OUTLINE_WIDTH),
-                createLine(start, end, PLAYER_COLORS.get(owner), ROAD_WIDTH));
+                createLine(start, end, PlayerColors.of(owner), ROAD_WIDTH));
     }
 
     private Line createLine(Point2D start, Point2D end, Color color, double width) {
@@ -240,7 +241,7 @@ final class BoardView extends BorderPane {
 
     private Polygon createSettlement(Point2D position, PlayerColor owner) {
         Polygon house = new Polygon(SETTLEMENT_POINTS);
-        house.setFill(PLAYER_COLORS.get(owner));
+        house.setFill(PlayerColors.of(owner));
         house.setStroke(INK);
         house.setStrokeWidth(PIECE_OUTLINE_WIDTH);
         house.setTranslateX(position.getX());

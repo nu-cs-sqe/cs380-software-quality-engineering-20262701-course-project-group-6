@@ -1,6 +1,6 @@
 package ui;
 
-import domain.GameBoard;
+import domain.GameSession;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -38,7 +38,7 @@ public class Main extends Application {
     private static final double WINDOW_PADDING = 32;
     private static final double WINDOW_WIDTH = 480;
     private static final double WINDOW_HEIGHT = 640;
-    private static final double BOARD_WINDOW_WIDTH = 820;
+    private static final double BOARD_WINDOW_WIDTH = 1180;
     private static final double BOARD_WINDOW_HEIGHT = 740;
     private static final double MIN_WINDOW_WIDTH = 400;
     private static final String LANGUAGE_FILE = "/languages.properties";
@@ -84,12 +84,18 @@ public class Main extends Application {
 
     private void showSetup(Stage stage, ResourceBundle messages, Locale locale) {
         Runnable goHome = () -> showHome(stage, locale);
-        GameSetupView setup = new GameSetupView(messages, board -> showBoard(stage, board, messages, goHome), goHome);
+        GameSetupView setup = new GameSetupView(messages,
+                game -> showStartingOrder(stage, game, messages, goHome), goHome);
         stage.getScene().setRoot(setup);
     }
 
-    private void showBoard(Stage stage, GameBoard board, ResourceBundle messages, Runnable goHome) {
-        stage.getScene().setRoot(new BoardView(board, messages, goHome));
+    private void showStartingOrder(Stage stage, GameSession game, ResourceBundle messages, Runnable goHome) {
+        stage.getScene().setRoot(new StartingOrderView(game, messages,
+                () -> showBoard(stage, game, messages, goHome), goHome));
+    }
+
+    private void showBoard(Stage stage, GameSession game, ResourceBundle messages, Runnable goHome) {
+        stage.getScene().setRoot(new BoardView(game, messages, goHome));
         stage.setWidth(Math.max(stage.getWidth(), BOARD_WINDOW_WIDTH));
         stage.setHeight(Math.max(stage.getHeight(), BOARD_WINDOW_HEIGHT));
         stage.centerOnScreen();
