@@ -3,7 +3,6 @@ package integration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import domain.Dice;
 import domain.DiceRoll;
 import domain.GameSession;
 import domain.PlayerColor;
@@ -16,16 +15,13 @@ import java.util.Map;
 import java.util.Random;
 
 public class F3Tests {
-    private static final int SIDES = 6;
-    private static final Random SEED_PROBE = new Random();
-
     private GameSession game;
     private DiceRoll roll;
     private IllegalStateException actionError;
 
     @Given("^a 3-player game with turn order (.+) where the dice will roll ([1-6]) and ([1-6])$")
     public void aThreePlayerGameWhereTheDiceWillRoll(String colors, int firstDie, int secondDie) {
-        game = new GameSession(3, new Random(), new Dice(randomRolling(firstDie, secondDie)));
+        game = new GameSession(3, new Random(), SeededDice.rolling(firstDie, secondDie));
         game.rollForStartingOrder();
         for (PlayerColor color : ColorList.parse(colors)) {
             game.pickColor(color);
@@ -95,15 +91,5 @@ public class F3Tests {
     public void theActionIsRejectedWithTheMessage(String message) {
         assertNotNull(actionError);
         assertEquals(message, actionError.getMessage());
-    }
-
-    // A real Random with a seed whose first two dice are the ones asked for, so no class is mocked.
-    private static Random randomRolling(int firstDie, int secondDie) {
-        for (long seed = 0; ; seed++) {
-            SEED_PROBE.setSeed(seed);
-            if (SEED_PROBE.nextInt(SIDES) + 1 == firstDie && SEED_PROBE.nextInt(SIDES) + 1 == secondDie) {
-                return new Random(seed);
-            }
-        }
     }
 }
