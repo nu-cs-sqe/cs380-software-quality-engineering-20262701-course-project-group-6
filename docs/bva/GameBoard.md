@@ -168,7 +168,7 @@ package-private `Edge.setRoadColor` and `Node.placeBuilding`.
 |------|---------------------|-----------------|--------------|
 | TC33 | 4 players, `RED` | empty (every corner red's roads reach is next to a building) | :white_check_mark: |
 | TC34 | 4 players, extra red road on edge 42 (30–31), `RED` | `{31}` | :white_check_mark: |
-| TC35 | 4 players, extra red road on edge 16 (13–14, orange settlement on 13), `RED` | empty (13 is occupied, 14 is next to it) | :x: |
+| TC35 | 4 players, extra red road on edge 16 (13–14, orange settlement on 13), `RED` | empty (13 is occupied, 14 is next to it) | :white_check_mark: |
 | TC36 | `color` = `null` | `IllegalArgumentException` with a message saying a color is required | :x: |
 
 ### Method under test: `getCitySpots(PlayerColor color)`

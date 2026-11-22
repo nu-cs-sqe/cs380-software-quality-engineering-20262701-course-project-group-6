@@ -375,6 +375,14 @@ class GameBoardTest {
         assertEquals(Set.of(31), gameBoard.getSettlementSpots(RED));
     }
 
+    @Test
+    void GetSettlementSpots_RedRoadReachesOrangesSettlement_OccupiedCornerNotLegal() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+        gameBoard.getEdges().get(16).setRoadColor(RED);
+
+        assertEquals(Set.of(), gameBoard.getSettlementSpots(RED));
+    }
+
     private TileLayout stubLayoutWithTileCount(int count) {
         Map<Integer, TileSetup> map = new LinkedHashMap<>();
         for (int i = 0; i < count; i++) {
