@@ -177,7 +177,7 @@ package-private `Edge.setRoadColor` and `Node.placeBuilding`.
 |------|---------------------|-----------------|--------------|
 | TC37 | 4 players, `RED` | `{10, 29}` | :white_check_mark: |
 | TC38 | 4 players, red city on 10, `RED` | `{29}` | :white_check_mark: |
-| TC39 | `color` = `null` | `IllegalArgumentException` with a message saying a color is required | :x: |
+| TC39 | `color` = `null` | `IllegalArgumentException` with a message saying a color is required | :white_check_mark: |
 
 ### Methods under test: `buildRoad`, `buildSettlement`, `buildCity`
 

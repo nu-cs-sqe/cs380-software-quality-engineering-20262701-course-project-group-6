@@ -166,6 +166,7 @@ public class GameBoard {
     }
 
     public Set<Integer> getCitySpots(PlayerColor color) {
+        requireColor(color);
         Set<Integer> spots = new TreeSet<>();
         for (Node corner : nodes.values()) {
             if (corner.getBuildingType() == BuildingType.SETTLEMENT
