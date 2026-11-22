@@ -114,6 +114,7 @@ public class GameSession {
             throw new IllegalStateException(
                     "Edge " + edgeId + " is not a legal spot for a " + player.getColor() + " road");
         }
+        requireAffordable(player, ROAD_COST, "road");
         player.placeRoadPiece();
         pay(player, ROAD_COST);
         board.buildRoad(edgeId, player.getColor());
@@ -173,6 +174,14 @@ public class GameSession {
             throw new IllegalStateException(getCurrentColor() + " must roll before building");
         }
         return players.get(getCurrentColor());
+    }
+
+    private static void requireAffordable(Player player, Map<ResourceCardType, Integer> cost, String piece) {
+        boolean affordable = cost.entrySet().stream()
+                .allMatch(entry -> player.getResourceCount(entry.getKey()) >= entry.getValue());
+        if (!affordable) {
+            throw new IllegalStateException(player.getColor() + " cannot afford a " + piece);
+        }
     }
 
     private void pay(Player player, Map<ResourceCardType, Integer> cost) {

@@ -442,6 +442,19 @@ public class GameSessionTest {
         assertEquals(13, game.getRoadsRemaining(PlayerColor.WHITE));
     }
 
+    @Test
+    public void BuildRoad_OneCardShort_ThrowsAndChangesNothing() {
+        GameSession game = startedThreePlayerGame(diceRolling(3, 4));
+        game.rollDice();
+        game.buildRoad(24);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> game.buildRoad(23));
+
+        assertEquals("WHITE cannot afford a road", exception.getMessage());
+        assertEquals(Optional.empty(), game.getBoard().getEdges().get(23).getRoadColor());
+        assertEquals(12, game.getRoadsRemaining(PlayerColor.WHITE));
+    }
+
     private static GameSession startedThreePlayerGame() {
         return startedThreePlayerGame(new Dice(new Random()));
     }
