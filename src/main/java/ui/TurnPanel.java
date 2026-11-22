@@ -116,7 +116,10 @@ final class TurnPanel extends VBox {
         cards.setVgap(GRID_GAP);
         Label cardsTitle = new Label(messages.getString("turn.cards"));
         cardsTitle.setFont(HEADER_FONT);
-        return new VBox(SPACING, cardsTitle, cards);
+        Label peekHint = new Label(messages.getString("turn.peek"));
+        peekHint.setWrapText(true);
+        peekHint.setTextFill(INK);
+        return new VBox(SPACING, cardsTitle, cards, peekHint);
     }
 
     private void rollDice() {
