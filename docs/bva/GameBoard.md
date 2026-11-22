@@ -185,7 +185,7 @@ package-private `Edge.setRoadColor` and `Node.placeBuilding`.
 |------|---------------------|-----------------|--------------|
 | TC40 | 4 players, `buildRoad(42, RED)` | edge 42 has a red road; red's settlement spots are now `{31}` | :white_check_mark: |
 | TC41 | 4 players, `buildRoad(0, RED)` | `IllegalStateException` with a message saying edge 0 is not a legal spot for a red road; edge 0 still empty | :white_check_mark: |
-| TC42 | `buildRoad(72, RED)` | `IllegalStateException` with a message saying edge 72 is not a legal spot for a red road | :x: |
+| TC42 | `buildRoad(72, RED)` | `IllegalStateException` with a message saying edge 72 is not a legal spot for a red road | :white_check_mark: |
 | TC43 | `buildRoad(-1, RED)` | `IllegalStateException` with a message saying edge -1 is not a legal spot for a red road | :x: |
 | TC44 | extra red road on edge 42, `buildSettlement(31, RED)` | corner 31 has a red settlement | :x: |
 | TC45 | 4 players, `buildSettlement(11, RED)` | `IllegalStateException` with a message saying node 11 is not a legal spot for a red settlement; still empty | :x: |
