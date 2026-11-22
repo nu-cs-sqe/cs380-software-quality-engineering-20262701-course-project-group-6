@@ -51,7 +51,11 @@ final class BoardView extends BorderPane {
 
     private void chooseBuild(BuildMode mode) {
         String piece = messages.getString("piece." + mode.name());
-        if (boardMap.showSpots(mode, game.getCurrentColor(), spot -> build(mode, spot))) {
+        if (piecesLeft(mode) == 0) {
+            boardMap.clearSpots();
+            turnPanel.showMessage(MessageFormat.format(messages.getString("build.noPieces"),
+                    messages.getString("pieces." + mode.name())));
+        } else if (boardMap.showSpots(mode, game.getCurrentColor(), spot -> build(mode, spot))) {
             turnPanel.showMessage(MessageFormat.format(messages.getString("build.pick"), piece));
         } else {
             String noSpots = MessageFormat.format(messages.getString("build.noSpots"), piece);
@@ -60,7 +64,8 @@ final class BoardView extends BorderPane {
         }
     }
 
-    // The board only offers legal spots, so a failed build means the player is short of cards or pieces.
+    // The board offers only legal spots, and chooseBuild already checked for a piece, so a failed build means the
+    // player is short of cards.
     private void build(BuildMode mode, int spot) {
         PlayerColor builder = game.getCurrentColor();
         String piece = messages.getString("piece." + mode.name());
@@ -75,10 +80,19 @@ final class BoardView extends BorderPane {
             turnPanel.showMessage(MessageFormat.format(messages.getString("build.built"),
                     messages.getString("color." + builder.name()), piece));
         } catch (IllegalStateException error) {
-            turnPanel.showMessage(MessageFormat.format(messages.getString("build.cannot"), piece));
+            turnPanel.showMessage(MessageFormat.format(messages.getString("build.noCards"), piece,
+                    messages.getString("build.cost." + mode.name())));
         }
         boardMap.clearSpots();
         turnPanel.refresh();
+    }
+
+    private int piecesLeft(BuildMode mode) {
+        PlayerColor color = game.getCurrentColor();
+        if (mode == BuildMode.ROAD) {
+            return game.getRoadsRemaining(color);
+        }
+        return mode == BuildMode.SETTLEMENT ? game.getSettlementsRemaining(color) : game.getCitiesRemaining(color);
     }
 
     private HBox createHeader(Runnable goBack) {
