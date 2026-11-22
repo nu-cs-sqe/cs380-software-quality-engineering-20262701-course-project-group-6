@@ -471,6 +471,17 @@ class GameBoardTest {
         assertEquals(Optional.of(RED), corner.getBuildingColor());
     }
 
+    @Test
+    void BuildSettlement_CornerNextToABuilding_ThrowsIllegalStateException() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> gameBoard.buildSettlement(11, RED));
+
+        assertEquals("Node 11 is not a legal spot for a RED settlement", exception.getMessage());
+        assertEquals(BuildingType.NONE, gameBoard.getNodes().get(11).getBuildingType());
+    }
+
     private TileLayout stubLayoutWithTileCount(int count) {
         Map<Integer, TileSetup> map = new LinkedHashMap<>();
         for (int i = 0; i < count; i++) {

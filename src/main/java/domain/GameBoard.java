@@ -185,6 +185,9 @@ public class GameBoard {
     }
 
     public void buildSettlement(int nodeId, PlayerColor color) {
+        if (!getSettlementSpots(color).contains(nodeId)) {
+            throw new IllegalStateException("Node " + nodeId + " is not a legal spot for a " + color + " settlement");
+        }
         nodes.get(nodeId).placeBuilding(BuildingType.SETTLEMENT, color);
     }
 
