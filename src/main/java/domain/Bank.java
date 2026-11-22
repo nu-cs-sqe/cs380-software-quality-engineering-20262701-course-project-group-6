@@ -38,6 +38,12 @@ public class Bank {
         resources.put(type, count + amount);
     }
 
+    public Map<PlayerColor, Integer> payProduction(ResourceCardType type, Map<PlayerColor, Integer> owed) {
+        int totalOwed = owed.values().stream().mapToInt(Integer::intValue).sum();
+        withdrawResource(type, totalOwed);
+        return Map.copyOf(owed);
+    }
+
     public int getResourceCount(ResourceCardType type) {
         ResourceArguments.requireType(type);
         return resources.get(type);

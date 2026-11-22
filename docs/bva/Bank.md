@@ -115,7 +115,7 @@ the players. `owed` comes from `GameBoard.getProduction` (`GameBoard.md`).
 
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
-| TC17 | 19 `ORE`, owed `{RED=1, BLUE=2}` | returns `{RED=1, BLUE=2}`; 16 `ORE` left | :x: |
+| TC17 | 19 `ORE`, owed `{RED=1, BLUE=2}` | returns `{RED=1, BLUE=2}`; 16 `ORE` left | :white_check_mark: |
 | TC18 | 19 `ORE`, owed `{}` | returns `{}`; still 19 `ORE` | :x: |
 | TC19 | 3 `ORE`, owed `{RED=1, BLUE=2}` | returns `{RED=1, BLUE=2}`; 0 `ORE` left | :x: |
 | TC20 | 2 `ORE`, owed `{RED=1, BLUE=2}` | returns `{}`; still 2 `ORE` | :x: |

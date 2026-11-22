@@ -3,6 +3,7 @@ package domain;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.Map;
 import java.util.Random;
 import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
@@ -172,6 +173,17 @@ public class BankTest {
 
         assertEquals(DevCardType.KNIGHT, card);
         assertEquals(24, bank.getDevelopmentCardsRemaining());
+    }
+
+    @Test
+    public void PayProduction_BankCoversEveryone_PaysWhatIsOwed() {
+        Bank bank = newBank();
+
+        Map<PlayerColor, Integer> paid = bank.payProduction(ResourceCardType.ORE,
+                Map.of(PlayerColor.RED, 1, PlayerColor.BLUE, 2));
+
+        assertEquals(Map.of(PlayerColor.RED, 1, PlayerColor.BLUE, 2), paid);
+        assertEquals(16, bank.getResourceCount(ResourceCardType.ORE));
     }
 
     private static Bank newBank() {
