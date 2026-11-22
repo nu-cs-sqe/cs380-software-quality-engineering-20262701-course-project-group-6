@@ -114,7 +114,7 @@ orange on 13 and 42, blue on 40 and 44, white on 19 and 35. Cities and extra set
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
 | TC21 | 4 players, `diceTotal` = 2 (wool hex 1, red settlement on 10) | `{WOOL={RED=1}}` | :white_check_mark: |
-| TC22 | 4 players, `diceTotal` = 12 (grain hex 3, white settlement on 19) | `{GRAIN={WHITE=1}}` | :x: |
+| TC22 | 4 players, `diceTotal` = 12 (grain hex 3, white settlement on 19) | `{GRAIN={WHITE=1}}` | :white_check_mark: |
 | TC23 | `diceTotal` = 1 | `IllegalArgumentException` with a message saying the total must be between 2 and 12 (was 1) | :x: |
 | TC24 | `diceTotal` = 13 | `IllegalArgumentException` with a message saying the total must be between 2 and 12 (was 13) | :x: |
 | TC25 | 4 players, `diceTotal` = 8 (ore hex 11: white on 35; lumber hex 12: red on 29, blue on 40) | `{ORE={WHITE=1}, LUMBER={RED=1, BLUE=1}}` | :x: |

@@ -268,6 +268,13 @@ class GameBoardTest {
         assertEquals(Map.of(WOOL, Map.of(RED, 1)), gameBoard.getProduction(2));
     }
 
+    @Test
+    void GetProduction_TwelveRolled_WhiteOwedOneGrain() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        assertEquals(Map.of(GRAIN, Map.of(WHITE, 1)), gameBoard.getProduction(12));
+    }
+
     private TileLayout stubLayoutWithTileCount(int count) {
         Map<Integer, TileSetup> map = new LinkedHashMap<>();
         for (int i = 0; i < count; i++) {
