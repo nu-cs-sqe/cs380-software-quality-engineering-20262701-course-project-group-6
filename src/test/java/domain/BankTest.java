@@ -242,6 +242,16 @@ public class BankTest {
         assertEquals(0, bank.getResourceCount(ResourceCardType.ORE));
     }
 
+    @Test
+    public void PayProduction_NullType_ThrowsIllegalArgumentException() {
+        Bank bank = newBank();
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> bank.payProduction(null, Map.of(PlayerColor.RED, 1)));
+
+        assertEquals("Resource type is required", exception.getMessage());
+    }
+
     private static Bank newBank() {
         return new Bank(new Random());
     }
