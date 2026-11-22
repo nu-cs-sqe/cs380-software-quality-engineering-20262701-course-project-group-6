@@ -16,6 +16,8 @@ public class GameBoard {
     private static final int UNSET_DESERT_ID = -1;
     private static final int MIN_DICE_TOTAL = 2;
     private static final int MAX_DICE_TOTAL = 12;
+    private static final int SETTLEMENT_YIELD = 1;
+    private static final int CITY_YIELD = 2;
     private static final int CORNER_0 = 0;
     private static final int CORNER_1 = 1;
     private static final int CORNER_2 = 2;
@@ -225,8 +227,9 @@ public class GameBoard {
 
     private void addOwed(Map<ResourceCardType, Map<PlayerColor, Integer>> owed, ResourceCardType resource, Tile tile) {
         for (Node corner : tile.getCornerNodes()) {
+            int amount = corner.getBuildingType() == BuildingType.CITY ? CITY_YIELD : SETTLEMENT_YIELD;
             corner.getBuildingColor().ifPresent(color ->
-                    owed.computeIfAbsent(resource, type -> new EnumMap<>(PlayerColor.class)).put(color, 1));
+                    owed.computeIfAbsent(resource, type -> new EnumMap<>(PlayerColor.class)).put(color, amount));
         }
     }
 

@@ -304,6 +304,14 @@ class GameBoardTest {
         assertEquals(Map.of(ORE, Map.of(WHITE, 1), LUMBER, Map.of(RED, 1, BLUE, 1)), production);
     }
 
+    @Test
+    void GetProduction_RedCityOnWoolHex_RedOwedTwoWool() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+        gameBoard.getNodes().get(10).placeBuilding(BuildingType.CITY, RED);
+
+        assertEquals(Map.of(WOOL, Map.of(RED, 2)), gameBoard.getProduction(2));
+    }
+
     private TileLayout stubLayoutWithTileCount(int count) {
         Map<Integer, TileSetup> map = new LinkedHashMap<>();
         for (int i = 0; i < count; i++) {
