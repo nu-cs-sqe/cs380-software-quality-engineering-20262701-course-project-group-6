@@ -116,17 +116,13 @@ public class GameSession {
             throw new IllegalStateException(
                     "Edge " + edgeId + " is not a legal spot for a " + player.getColor() + " road");
         }
-        requireAffordable(player, ROAD_COST, "road");
-        player.placeRoadPiece();
-        pay(player, ROAD_COST);
+        takePieceAndPay(player, ROAD_COST, "road", player::placeRoadPiece);
         board.buildRoad(edgeId, player.getColor());
     }
 
     public void buildSettlement(int nodeId) {
         Player player = playerWhoRolled();
-        requireAffordable(player, SETTLEMENT_COST, "settlement");
-        player.placeSettlementPiece();
-        pay(player, SETTLEMENT_COST);
+        takePieceAndPay(player, SETTLEMENT_COST, "settlement", player::placeSettlementPiece);
         board.buildSettlement(nodeId, player.getColor());
     }
 
@@ -190,15 +186,15 @@ public class GameSession {
         return players.get(getCurrentColor());
     }
 
-    private static void requireAffordable(Player player, Map<ResourceCardType, Integer> cost, String piece) {
+    // Checks the cost, then takes the piece (Player throws if none are left), and only then moves the cards, so a
+    // failed build changes nothing.
+    private void takePieceAndPay(Player player, Map<ResourceCardType, Integer> cost, String piece, Runnable takePiece) {
         boolean affordable = cost.entrySet().stream()
                 .allMatch(entry -> player.getResourceCount(entry.getKey()) >= entry.getValue());
         if (!affordable) {
             throw new IllegalStateException(player.getColor() + " cannot afford a " + piece);
         }
-    }
-
-    private void pay(Player player, Map<ResourceCardType, Integer> cost) {
+        takePiece.run();
         cost.forEach((type, amount) -> {
             player.useResource(type, amount);
             bank.depositResource(type, amount);
