@@ -72,3 +72,53 @@ Read-only getters for `BoardView` and `GameSession`. Verified in TC1 and harbor 
 ## Next section (to be added before that code is written)
 
 Placement validation and gameplay mutations (`isValidSettlementLocation`, `isValidRoadLocation`, `buildSettlement`, `buildRoad`, `moveRobber`). Deferred for later development. Once added, BVA will cover distance rules, road attachment, vacancy checks, and boundary IDs.
+## Story 3: Production (#31)
+
+`getProduction(diceTotal)` works out who is owed what when a number is rolled (Story 3 criteria 3 and 4). For every hex
+with that number, each settlement on its corners is owed 1 of the hex's resource and each city 2. The result is grouped
+by resource, then by color, because the bank decides each resource on its own (Story 3 criterion 5, `Bank.md`). The
+board only works out what is owed; `GameSession` and `Bank` hand out the cards.
+
+The desert's number is 7 inside `Tile`, and it has no resource, so it never produces. Skipping the hex the robber is on
+needs a way to move the robber, which comes with Story 4; until then the robber stays on the desert, which produces
+nothing anyway.
+
+Expected values come from the beginner board (`docs/design/map_ids_reference.jpg`) with all 4 colors: red on 10 and 29,
+orange on 13 and 42, blue on 40 and 44, white on 19 and 35. Cities and extra settlements are placed in the test with
+`Node.placeBuilding` (package-private), since building comes with Story 5.
+
+### Steps 2–3: Catalog types and boundary values
+
+#### Intervals
+
+| Input | Interval | LOW − 1 | LOW | HIGH | HIGH + 1 |
+|---|---|---|---|---|---|
+| `diceTotal` | [2, 12] | 1 → TC23 (throws) | 2 → TC21 | 12 → TC22 | 13 → TC24 (throws) |
+
+#### Collections
+
+| State | Empty | One | Many |
+|---|---|---|---|
+| hexes with the rolled number | — (every number 2–12 is on the board) | 1 hex → TC21 | 2 hexes → TC25 |
+| buildings on a producing hex | none → TC28 (3 players, no red) | 1 → TC21 | 2 colors → TC25; 2 of one color → TC27 |
+
+#### Cases
+
+| Case | Values tested | Why |
+|---|---|---|
+| building type | settlement → TC21; city → TC26 | a city collects 2 |
+| roll of 7 | 7 → TC29 (nothing owed) | the desert's number is 7 inside `Tile`, but it has no resource |
+
+### Method under test: `getProduction(int diceTotal)`
+
+|      | State of the System | Expected output | Implemented? |
+|------|---------------------|-----------------|--------------|
+| TC21 | 4 players, `diceTotal` = 2 (wool hex 1, red settlement on 10) | `{WOOL={RED=1}}` | :white_check_mark: |
+| TC22 | 4 players, `diceTotal` = 12 (grain hex 3, white settlement on 19) | `{GRAIN={WHITE=1}}` | :x: |
+| TC23 | `diceTotal` = 1 | `IllegalArgumentException` with a message saying the total must be between 2 and 12 (was 1) | :x: |
+| TC24 | `diceTotal` = 13 | `IllegalArgumentException` with a message saying the total must be between 2 and 12 (was 13) | :x: |
+| TC25 | 4 players, `diceTotal` = 8 (ore hex 11: white on 35; lumber hex 12: red on 29, blue on 40) | `{ORE={WHITE=1}, LUMBER={RED=1, BLUE=1}}` | :x: |
+| TC26 | 4 players, red's settlement on 10 upgraded to a city, `diceTotal` = 2 | `{WOOL={RED=2}}` | :x: |
+| TC27 | 4 players, extra red settlement on 4 (also on wool hex 1), `diceTotal` = 2 | `{WOOL={RED=2}}` (1 + 1) | :x: |
+| TC28 | 3 players (no red), `diceTotal` = 2 | empty map (nobody is on wool hex 1) | :x: |
+| TC29 | 4 players, `diceTotal` = 7 | empty map | :x: |

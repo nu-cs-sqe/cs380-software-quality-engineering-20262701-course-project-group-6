@@ -99,6 +99,31 @@ Hands the call to the deck. The deck's own boundaries (empty deck, contents) are
 |------|---------------------|-----------------|--------------|
 | TC15 | new bank built with a `Random` stub whose `nextInt` always returns 0 | returns the top card of the deck (`KNIGHT`, see `DevelopmentDeck.md` TC4); 24 development cards left | :white_check_mark: |
 
+### Method under test: `payProduction(ResourceCardType type, Map<PlayerColor, Integer> owed)`
+
+Pays out one resource after a roll (Story 3 criterion 5): if the bank has enough for everyone owed, everyone gets
+what they are owed. If not, nobody gets that resource, unless only one player is owed it, who gets whatever is left.
+Returns what each color actually got (colors that get nothing are left out), and `GameSession` gives those cards to
+the players. `owed` comes from `GameBoard.getProduction` (`GameBoard.md`).
+
+| Input / state | Catalog type | Values tested |
+|---|---|---|
+| total owed vs. bank count (2+ players) | Interval [0, count] | count → TC19 (all paid); count + 1 → TC20 (nobody paid) |
+| amount owed vs. bank count (1 player) | Interval [0, count] | count + 1 → TC21 (gets what is left); bank empty → TC22 (gets nothing) |
+| `owed` | Collection | empty → TC18; one color → TC21; many colors → TC17 |
+| `type`, `owed` | Pointer | `null` → TC23, TC24 (throw) |
+
+|      | State of the System | Expected output | Implemented? |
+|------|---------------------|-----------------|--------------|
+| TC17 | 19 `ORE`, owed `{RED=1, BLUE=2}` | returns `{RED=1, BLUE=2}`; 16 `ORE` left | :x: |
+| TC18 | 19 `ORE`, owed `{}` | returns `{}`; still 19 `ORE` | :x: |
+| TC19 | 3 `ORE`, owed `{RED=1, BLUE=2}` | returns `{RED=1, BLUE=2}`; 0 `ORE` left | :x: |
+| TC20 | 2 `ORE`, owed `{RED=1, BLUE=2}` | returns `{}`; still 2 `ORE` | :x: |
+| TC21 | 1 `ORE`, owed `{RED=2}` | returns `{RED=1}`; 0 `ORE` left | :x: |
+| TC22 | 0 `ORE`, owed `{RED=1}` | returns `{}`; still 0 `ORE` | :x: |
+| TC23 | `type` = `null` | `IllegalArgumentException` with a message saying the resource type is required | :x: |
+| TC24 | `owed` = `null` | `IllegalArgumentException` with a message saying the amounts owed are required | :x: |
+
 ### Method under test: `getDevelopmentCardsRemaining()`
 
 Simple getter. Checked in TC1 and TC15.

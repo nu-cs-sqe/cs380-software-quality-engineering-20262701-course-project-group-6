@@ -2,6 +2,7 @@ package domain;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -124,6 +125,16 @@ public class GameBoard {
         return Map.copyOf(startingResourceNodes);
     }
 
+    public Map<ResourceCardType, Map<PlayerColor, Integer>> getProduction(int diceTotal) {
+        Map<ResourceCardType, Map<PlayerColor, Integer>> owed = new EnumMap<>(ResourceCardType.class);
+        for (Tile tile : tiles.values()) {
+            if (tile.getDiceNumber() == diceTotal) {
+                tile.getResourceProduced().ifPresent(resource -> addOwed(owed, resource, tile));
+            }
+        }
+        return owed;
+    }
+
     private void validateGenerateInputs(TileLayout layout, BeginnerPlacements placements) {
         if (layout == null) {
             throw new IllegalArgumentException("layout cannot be null");
@@ -203,6 +214,13 @@ public class GameBoard {
     private void addTileResourceIfAdjacent(Tile tile, Node targetNode, List<ResourceCardType> resources) {
         if (tile.getCornerNodes().contains(targetNode)) {
             tile.getResourceProduced().ifPresent(resources::add);
+        }
+    }
+
+    private void addOwed(Map<ResourceCardType, Map<PlayerColor, Integer>> owed, ResourceCardType resource, Tile tile) {
+        for (Node corner : tile.getCornerNodes()) {
+            corner.getBuildingColor().ifPresent(color ->
+                    owed.computeIfAbsent(resource, type -> new EnumMap<>(PlayerColor.class)).put(color, 1));
         }
     }
 
