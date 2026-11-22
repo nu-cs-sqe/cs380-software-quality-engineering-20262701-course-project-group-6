@@ -1,5 +1,6 @@
 package ui;
 
+import domain.BuildingType;
 import domain.Edge;
 import domain.GameBoard;
 import domain.HarborType;
@@ -13,6 +14,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.VPos;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.StackPane;
@@ -31,6 +33,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.function.IntConsumer;
 
 final class BoardMap extends StackPane {
     private static final double MAP_PADDING = 22;
@@ -55,6 +59,10 @@ final class BoardMap extends StackPane {
     private static final double ROBBER_HEAD_RADIUS = 8;
     private static final double ROBBER_HEAD_OFFSET = -12;
     private static final double[] SETTLEMENT_POINTS = {-10, 8, -10, -2, 0, -11, 10, -2, 10, 8};
+    private static final double[] CITY_POINTS = {-14, 10, -14, -4, -6, -12, 2, -4, 2, -6, 14, -6, 14, 10};
+    private static final double SPOT_RADIUS = 11;
+    private static final double SPOT_ROAD_WIDTH = 12;
+    private static final Color SPOT = Color.web("#ffe066", 0.85);
     private static final double[] ROBBER_POINTS = {-11, 12, -8, -5, -4, -10, 4, -10, 8, -5, 11, 12};
     private static final Color SAND = Color.web("#ecd7a6");
     private static final Color TOKEN_FILL = Color.web("#ffedbe");
@@ -74,6 +82,9 @@ final class BoardMap extends StackPane {
 
     private final GameBoard board;
     private final ResourceBundle messages;
+    private BuildMode spotMode;
+    private PlayerColor spotColor;
+    private IntConsumer pickSpot;
 
     BoardMap(GameBoard board, ResourceBundle messages) {
         this.board = board;
@@ -82,6 +93,23 @@ final class BoardMap extends StackPane {
         setPadding(new Insets(MAP_PADDING));
         setStyle("-fx-background-color: linear-gradient(to bottom right, #39788e, #183f58); "
                 + "-fx-background-radius: 16;");
+        redraw();
+    }
+
+    boolean showSpots(BuildMode mode, PlayerColor color, IntConsumer onPick) {
+        if (spotsFor(mode, color).isEmpty()) {
+            clearSpots();
+            return false;
+        }
+        spotMode = mode;
+        spotColor = color;
+        pickSpot = onPick;
+        redraw();
+        return true;
+    }
+
+    void clearSpots() {
+        spotMode = null;
         redraw();
     }
 
@@ -112,11 +140,14 @@ final class BoardMap extends StackPane {
         board.getEdges().forEach(edge -> addEdge(map, edge, nodePositions, boardCenter));
         for (Node node : board.getNodes()) {
             node.getBuildingColor().ifPresent(owner -> map.getChildren().add(
-                    createSettlement(nodePositions.get(node.getId()), owner)));
+                    createBuilding(nodePositions.get(node.getId()), owner, node.getBuildingType())));
         }
         board.getStartingResourceNodes().values().forEach(id -> map.getChildren().add(
                 createResourceStar(nodePositions.get(id))));
         map.getChildren().add(createRobber(geometry.getTileCenter(board.getRobberTileId())));
+        if (spotMode != null) {
+            addSpots(map, nodePositions);
+        }
         return map;
     }
 
@@ -202,8 +233,40 @@ final class BoardMap extends StackPane {
         return line;
     }
 
-    private Polygon createSettlement(Point2D position, PlayerColor owner) {
-        Polygon house = new Polygon(SETTLEMENT_POINTS);
+    private void addSpots(Group map, Map<Integer, Point2D> nodePositions) {
+        Set<Integer> spots = spotsFor(spotMode, spotColor);
+        if (spotMode == BuildMode.ROAD) {
+            for (int edgeId : spots) {
+                Edge edge = board.getEdges().get(edgeId);
+                Line spot = createLine(nodePositions.get(edge.getNode1().getId()),
+                        nodePositions.get(edge.getNode2().getId()), SPOT, SPOT_ROAD_WIDTH);
+                map.getChildren().add(clickable(spot, edgeId));
+            }
+            return;
+        }
+        for (int nodeId : spots) {
+            Point2D position = nodePositions.get(nodeId);
+            Circle spot = new Circle(position.getX(), position.getY(), SPOT_RADIUS, SPOT);
+            spot.setStroke(INK);
+            map.getChildren().add(clickable(spot, nodeId));
+        }
+    }
+
+    private Set<Integer> spotsFor(BuildMode mode, PlayerColor color) {
+        if (mode == BuildMode.ROAD) {
+            return board.getRoadSpots(color);
+        }
+        return mode == BuildMode.SETTLEMENT ? board.getSettlementSpots(color) : board.getCitySpots(color);
+    }
+
+    private javafx.scene.Node clickable(javafx.scene.Node spot, int id) {
+        spot.setCursor(Cursor.HAND);
+        spot.setOnMouseClicked(event -> pickSpot.accept(id));
+        return spot;
+    }
+
+    private Polygon createBuilding(Point2D position, PlayerColor owner, BuildingType type) {
+        Polygon house = new Polygon(type == BuildingType.CITY ? CITY_POINTS : SETTLEMENT_POINTS);
         house.setFill(PlayerColors.of(owner));
         house.setStroke(INK);
         house.setStrokeWidth(PIECE_OUTLINE_WIDTH);

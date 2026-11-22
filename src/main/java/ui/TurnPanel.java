@@ -21,7 +21,10 @@ import javafx.scene.text.Text;
 
 import java.text.MessageFormat;
 import java.text.NumberFormat;
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 final class TurnPanel extends VBox {
     private static final double PANEL_WIDTH = 380;
@@ -42,14 +45,19 @@ final class TurnPanel extends VBox {
     private final Text firstDie = new Text();
     private final Text secondDie = new Text();
     private final Label rollLabel = new Label();
-    private final Button roll;
-    private final Button endTurn;
+    private final Button roll = new Button();
+    private final Button endTurn = new Button();
     private final GridPane cards = new GridPane();
+    private final Map<BuildMode, Button> buildButtons = new EnumMap<>(BuildMode.class);
+    private final Label piecesLabel = new Label();
+    private final Label buildMessage = new Label();
+    private final Runnable turnEnded;
 
-    TurnPanel(GameSession game, ResourceBundle messages) {
+    TurnPanel(GameSession game, ResourceBundle messages, Consumer<BuildMode> chooseBuild, Runnable turnEnded) {
         super(SPACING);
         this.game = game;
         this.messages = messages;
+        this.turnEnded = turnEnded;
         setPadding(new Insets(PANEL_PADDING));
         setPrefWidth(PANEL_WIDTH);
         setMinWidth(PANEL_WIDTH);
@@ -61,22 +69,54 @@ final class TurnPanel extends VBox {
         turnLabel.setWrapText(true);
         rollLabel.setWrapText(true);
         rollLabel.setTextFill(INK);
-        roll = new Button(messages.getString("turn.roll"));
+        getChildren().addAll(turnLabel, createDice(), rollLabel, createTurnActions(), createBuildSection(chooseBuild),
+                createCardsSection());
+        startTurn();
+    }
+
+    private HBox createDice() {
+        HBox dice = new HBox(SPACING, createDie(firstDie), createDie(secondDie));
+        dice.setAlignment(Pos.CENTER_LEFT);
+        return dice;
+    }
+
+    private HBox createTurnActions() {
+        roll.setText(messages.getString("turn.roll"));
         roll.setDefaultButton(true);
         roll.setStyle("-fx-background-color: #a51f24; -fx-text-fill: white; -fx-font-weight: bold;");
         roll.setOnAction(event -> rollDice());
-        endTurn = new Button(messages.getString("turn.end"));
+        endTurn.setText(messages.getString("turn.end"));
         endTurn.setOnAction(event -> endTurn());
-        HBox dice = new HBox(SPACING, createDie(firstDie), createDie(secondDie));
-        dice.setAlignment(Pos.CENTER_LEFT);
-        HBox actions = new HBox(SPACING, roll, endTurn);
+        return new HBox(SPACING, roll, endTurn);
+    }
 
+    private VBox createBuildSection(Consumer<BuildMode> chooseBuild) {
+        HBox buildRow = new HBox(SPACING);
+        for (BuildMode mode : BuildMode.values()) {
+            Button build = new Button(messages.getString("build." + mode.name()));
+            build.setOnAction(event -> chooseBuild.accept(mode));
+            buildButtons.put(mode, build);
+            buildRow.getChildren().add(build);
+        }
+        Label buildTitle = new Label(messages.getString("build.title"));
+        buildTitle.setFont(HEADER_FONT);
+        Label costs = new Label(messages.getString("build.costs"));
+        costs.setWrapText(true);
+        costs.setTextFill(INK);
+        piecesLabel.setTextFill(INK);
+        piecesLabel.setWrapText(true);
+        buildMessage.setTextFill(INK);
+        buildMessage.setWrapText(true);
+        buildMessage.setFont(HEADER_FONT);
+        return new VBox(SPACING, buildTitle, buildRow, costs, piecesLabel, buildMessage);
+    }
+
+    private VBox createCardsSection() {
         cards.setHgap(GRID_GAP);
         cards.setVgap(GRID_GAP);
         Label cardsTitle = new Label(messages.getString("turn.cards"));
         cardsTitle.setFont(HEADER_FONT);
-        getChildren().addAll(turnLabel, dice, rollLabel, actions, cardsTitle, cards);
-        startTurn();
+        return new VBox(SPACING, cardsTitle, cards);
     }
 
     private StackPane createDie(Text face) {
@@ -98,11 +138,25 @@ final class TurnPanel extends VBox {
         roll.setDisable(true);
         endTurn.setDisable(false);
         endTurn.setDefaultButton(true);
+        buildButtons.values().forEach(button -> button.setDisable(false));
+        refresh();
+    }
+
+    void showMessage(String text) {
+        buildMessage.setText(text);
+    }
+
+    void refresh() {
+        PlayerColor current = game.getCurrentColor();
+        piecesLabel.setText(MessageFormat.format(messages.getString("build.piecesLeft"),
+                game.getRoadsRemaining(current), game.getSettlementsRemaining(current),
+                game.getCitiesRemaining(current)));
         showCards();
     }
 
     private void endTurn() {
         game.endTurn();
+        turnEnded.run();
         startTurn();
     }
 
@@ -115,7 +169,9 @@ final class TurnPanel extends VBox {
         roll.setDisable(false);
         endTurn.setDisable(true);
         endTurn.setDefaultButton(false);
-        showCards();
+        buildButtons.values().forEach(button -> button.setDisable(true));
+        buildMessage.setText("");
+        refresh();
     }
 
     private void showCards() {
