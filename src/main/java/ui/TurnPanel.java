@@ -11,13 +11,11 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 
 import java.text.MessageFormat;
 import java.text.NumberFormat;
@@ -31,19 +29,17 @@ final class TurnPanel extends VBox {
     private static final double PANEL_PADDING = 16;
     private static final double SPACING = 12;
     private static final double DIE_SIZE = 48;
-    private static final double DIE_RADIUS = 10;
     private static final double SWATCH_SIZE = 12;
     private static final double GRID_GAP = 6;
     private static final Color INK = Color.web("#352820");
     private static final Font TURN_FONT = Font.font("System", FontWeight.BOLD, 20);
-    private static final Font DIE_FONT = Font.font("System", FontWeight.BOLD, 24);
     private static final Font HEADER_FONT = Font.font("System", FontWeight.BOLD, 12);
 
     private final GameSession game;
     private final ResourceBundle messages;
     private final Label turnLabel = new Label();
-    private final Text firstDie = new Text();
-    private final Text secondDie = new Text();
+    private final DieFace firstDie = new DieFace(DIE_SIZE);
+    private final DieFace secondDie = new DieFace(DIE_SIZE);
     private final Label rollLabel = new Label();
     private final Button roll = new Button();
     private final Button endTurn = new Button();
@@ -75,7 +71,7 @@ final class TurnPanel extends VBox {
     }
 
     private HBox createDice() {
-        HBox dice = new HBox(SPACING, createDie(firstDie), createDie(secondDie));
+        HBox dice = new HBox(SPACING, firstDie, secondDie);
         dice.setAlignment(Pos.CENTER_LEFT);
         return dice;
     }
@@ -119,20 +115,10 @@ final class TurnPanel extends VBox {
         return new VBox(SPACING, cardsTitle, cards);
     }
 
-    private StackPane createDie(Text face) {
-        Rectangle square = new Rectangle(DIE_SIZE, DIE_SIZE, Color.WHITE);
-        square.setArcWidth(DIE_RADIUS);
-        square.setArcHeight(DIE_RADIUS);
-        square.setStroke(INK);
-        face.setFont(DIE_FONT);
-        face.setFill(INK);
-        return new StackPane(square, face);
-    }
-
     private void rollDice() {
         DiceRoll result = game.rollDice();
-        firstDie.setText(number(result.getFirstDie()));
-        secondDie.setText(number(result.getSecondDie()));
+        firstDie.show(result.getFirstDie());
+        secondDie.show(result.getSecondDie());
         rollLabel.setText(MessageFormat.format(messages.getString("turn.rolled"),
                 colorName(game.getCurrentColor()), result.getTotal()));
         roll.setDisable(true);
@@ -163,8 +149,8 @@ final class TurnPanel extends VBox {
     private void startTurn() {
         PlayerColor current = game.getCurrentColor();
         turnLabel.setText(MessageFormat.format(messages.getString("turn.current"), colorName(current)));
-        firstDie.setText("");
-        secondDie.setText("");
+        firstDie.clear();
+        secondDie.clear();
         rollLabel.setText(messages.getString("turn.rollPrompt"));
         roll.setDisable(false);
         endTurn.setDisable(true);
