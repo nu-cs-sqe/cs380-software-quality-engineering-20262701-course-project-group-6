@@ -91,11 +91,7 @@ public class Main extends Application {
 
     private void showStartingOrder(Stage stage, GameSession game, ResourceBundle messages, Runnable goHome) {
         stage.getScene().setRoot(new StartingOrderView(game, messages,
-                () -> showBoard(stage, game, messages, goHome), goHome));
-    }
-
-    private void showBoard(Stage stage, GameSession game, ResourceBundle messages, Runnable goHome) {
-        stage.getScene().setRoot(new BoardView(game, messages, goHome));
+                () -> stage.getScene().setRoot(new BoardView(game, messages, goHome)), goHome));
         stage.setWidth(Math.max(stage.getWidth(), BOARD_WINDOW_WIDTH));
         stage.setHeight(Math.max(stage.getHeight(), BOARD_WINDOW_HEIGHT));
         stage.centerOnScreen();
