@@ -19,7 +19,9 @@ import javafx.scene.text.FontWeight;
 
 import java.text.MessageFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
@@ -33,6 +35,8 @@ final class TurnPanel extends VBox {
     private static final double GRID_GAP = 6;
     private static final Color INK = Color.web("#352820");
     private static final Font TURN_FONT = Font.font("System", FontWeight.BOLD, 20);
+    private static final String PEEK_STYLE = "-fx-background-color: rgba(197, 161, 91, 0.25); "
+            + "-fx-background-radius: 6;";
     private static final Font HEADER_FONT = Font.font("System", FontWeight.BOLD, 12);
 
     private final GameSession game;
@@ -166,20 +170,50 @@ final class TurnPanel extends VBox {
         for (int column = 0; column < types.length; column++) {
             cards.add(header(messages.getString("resource." + types[column].name())), column + 1, 0);
         }
-        cards.add(header(messages.getString("turn.points")), types.length + 1, 0);
+        cards.add(header(messages.getString("turn.total")), types.length + 1, 0);
+        cards.add(header(messages.getString("turn.points")), types.length + 2, 0);
         int row = 1;
         for (PlayerColor color : game.getTurnOrder()) {
-            cards.add(playerName(color), 0, row);
-            for (int column = 0; column < types.length; column++) {
-                cards.add(count(game.getResourceCount(color, types[column])), column + 1, row);
-            }
-            cards.add(count(game.getVictoryPointCount(color)), types.length + 1, row);
+            addPlayerRow(color, row);
             row++;
         }
         cards.add(header(messages.getString("turn.bank")), 0, row);
         for (int column = 0; column < types.length; column++) {
             cards.add(count(game.getBankResourceCount(types[column])), column + 1, row);
         }
+    }
+
+    private void addPlayerRow(PlayerColor color, int row) {
+        ResourceCardType[] types = ResourceCardType.values();
+        List<Label> hidden = new ArrayList<>();
+        int total = 0;
+        cards.add(playerName(color), 0, row);
+        for (int column = 0; column < types.length; column++) {
+            Label card = new Label(messages.getString("turn.hidden"));
+            card.setTextFill(INK);
+            hidden.add(card);
+            cards.add(card, column + 1, row);
+            total += game.getResourceCount(color, types[column]);
+        }
+        cards.add(count(total), types.length + 1, row);
+        cards.add(count(game.getVictoryPointCount(color)), types.length + 2, row);
+        if (color == game.getCurrentColor()) {
+            cards.add(peekArea(color, hidden), 0, row, GridPane.REMAINING, 1);
+        }
+    }
+
+    private Region peekArea(PlayerColor color, List<Label> hidden) {
+        ResourceCardType[] types = ResourceCardType.values();
+        Region area = new Region();
+        area.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        area.setStyle(PEEK_STYLE);
+        area.setOnMouseEntered(event -> {
+            for (int column = 0; column < types.length; column++) {
+                hidden.get(column).setText(number(game.getResourceCount(color, types[column])));
+            }
+        });
+        area.setOnMouseExited(event -> hidden.forEach(card -> card.setText(messages.getString("turn.hidden"))));
+        return area;
     }
 
     private HBox playerName(PlayerColor color) {
