@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.stream.Collectors;
 import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
 
@@ -127,6 +128,22 @@ public class StartingRollOffTest {
         assertEquals(4, rounds.get(0).get(2).getFirstDie());
         assertEquals(4, rounds.get(0).get(2).getSecondDie());
     }
+
+    @Test
+    public void GetRounds_OneTie_OnlyTiedSeatsInSecondRound() {
+        StartingRollOff rollOff = new StartingRollOff(diceRolling(8, 5, 8, 4, 10));
+        rollOff.rollOrder(3);
+
+        assertEquals(List.of(Map.of(1, 8, 2, 5, 3, 8), Map.of(1, 4, 3, 10)), totals(rollOff.getRounds()));
+    }
+
+    private static List<Map<Integer, Integer>> totals(List<Map<Integer, DiceRoll>> rounds) {
+        return rounds.stream()
+                .map(round -> round.entrySet().stream()
+                        .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getTotal())))
+                .collect(Collectors.toList());
+    }
+
 
     private static Random diceRolling(int... totals) {
         Random dice = EasyMock.createStrictMock(Random.class);
