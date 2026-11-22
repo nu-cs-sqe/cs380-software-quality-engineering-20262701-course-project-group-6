@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -127,7 +128,7 @@ public class GameSession {
     private boolean isColorInPlay(PlayerColor color) {
         return board.getNodes().stream()
                 .map(Node::getBuildingColor)
-                .anyMatch(optionalColor -> optionalColor.equals(java.util.Optional.of(color)));
+                .anyMatch(optionalColor -> optionalColor.equals(Optional.of(color)));
     }
 
     private void payStartingResources(Player player, PlayerColor color) {
