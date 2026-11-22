@@ -159,7 +159,7 @@ package-private `Edge.setRoadColor` and `Node.placeBuilding`.
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
 | TC30 | 4 players, `RED` | `{7, 12, 14, 20, 34, 40, 42, 50}` | :white_check_mark: |
-| TC31 | 4 players, extra blue road on edge 46 (34–35, white settlement on 35), `BLUE` | `{45, 50, 55, 57, 59, 60, 63}` (not 47: its only link is through white's settlement) | :x: |
+| TC31 | 4 players, extra blue road on edge 46 (34–35, white settlement on 35), `BLUE` | `{45, 50, 55, 57, 59, 60, 63}` (not 47: its only link is through white's settlement) | :white_check_mark: |
 | TC32 | `color` = `null` | `IllegalArgumentException` with a message saying a color is required | :x: |
 
 ### Method under test: `getSettlementSpots(PlayerColor color)`

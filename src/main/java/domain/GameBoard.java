@@ -248,8 +248,8 @@ public class GameBoard {
 
     private boolean reaches(Node corner, PlayerColor color) {
         Optional<PlayerColor> owner = corner.getBuildingColor();
-        if (owner.isPresent() && owner.get() == color) {
-            return true;
+        if (owner.isPresent()) {
+            return owner.get() == color;
         }
         return corner.getIncidentEdges().stream().anyMatch(edge -> edge.getRoadColor().equals(Optional.of(color)));
     }

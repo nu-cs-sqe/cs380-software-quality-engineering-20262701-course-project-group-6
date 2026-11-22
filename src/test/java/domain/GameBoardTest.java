@@ -342,6 +342,14 @@ class GameBoardTest {
         assertEquals(Set.of(7, 12, 14, 20, 34, 40, 42, 50), gameBoard.getRoadSpots(RED));
     }
 
+    @Test
+    void GetRoadSpots_BlueRoadEndsAtWhitesSettlement_CannotContinueThroughIt() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+        gameBoard.getEdges().get(46).setRoadColor(BLUE);
+
+        assertEquals(Set.of(45, 50, 55, 57, 59, 60, 63), gameBoard.getRoadSpots(BLUE));
+    }
+
     private TileLayout stubLayoutWithTileCount(int count) {
         Map<Integer, TileSetup> map = new LinkedHashMap<>();
         for (int i = 0; i < count; i++) {
