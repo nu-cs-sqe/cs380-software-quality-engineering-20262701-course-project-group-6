@@ -14,6 +14,8 @@ public class GameBoard {
     private static final int NUM_TILES = 19;
     private static final int MAX_NODE_ID = 53;
     private static final int UNSET_DESERT_ID = -1;
+    private static final int MIN_DICE_TOTAL = 2;
+    private static final int MAX_DICE_TOTAL = 12;
     private static final int CORNER_0 = 0;
     private static final int CORNER_1 = 1;
     private static final int CORNER_2 = 2;
@@ -126,6 +128,10 @@ public class GameBoard {
     }
 
     public Map<ResourceCardType, Map<PlayerColor, Integer>> getProduction(int diceTotal) {
+        if (diceTotal < MIN_DICE_TOTAL) {
+            throw new IllegalArgumentException(
+                    "Dice total must be between " + MIN_DICE_TOTAL + " and " + MAX_DICE_TOTAL + " (was " + diceTotal + ")");
+        }
         Map<ResourceCardType, Map<PlayerColor, Integer>> owed = new EnumMap<>(ResourceCardType.class);
         for (Tile tile : tiles.values()) {
             if (tile.getDiceNumber() == diceTotal) {
