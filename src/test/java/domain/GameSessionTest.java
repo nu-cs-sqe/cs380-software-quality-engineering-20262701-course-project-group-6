@@ -2,6 +2,7 @@ package domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.Random;
@@ -263,5 +264,104 @@ public class GameSessionTest {
         assertEquals("Players are not picking colors", exception.getMessage());
         assertEquals(List.of(PlayerColor.BLUE, PlayerColor.ORANGE, PlayerColor.WHITE, PlayerColor.RED),
                 game.getAvailableColors());
+    }
+
+    @Test
+    public void RollDice_StillPicking_ThrowsIllegalStateException() {
+        GameSession game = new GameSession(3, new Random());
+        game.rollForStartingOrder();
+        game.pickColor(PlayerColor.WHITE);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, game::rollDice);
+
+        assertEquals("Players are still picking colors", exception.getMessage());
+    }
+
+    @Test
+    public void RollDice_WhitesTurn_ReturnsTwoDiceAndPaysNothingYet() {
+        GameSession game = startedThreePlayerGame();
+
+        DiceRoll roll = game.rollDice();
+
+        assertTrue(roll.getFirstDie() >= 1 && roll.getFirstDie() <= 6);
+        assertTrue(roll.getSecondDie() >= 1 && roll.getSecondDie() <= 6);
+        assertEquals(roll.getFirstDie() + roll.getSecondDie(), roll.getTotal());
+        assertEquals(1, game.getResourceCount(PlayerColor.WHITE, ResourceCardType.GRAIN));
+        assertEquals(1, game.getResourceCount(PlayerColor.WHITE, ResourceCardType.BRICK));
+        assertEquals(1, game.getResourceCount(PlayerColor.WHITE, ResourceCardType.LUMBER));
+    }
+
+    @Test
+    public void RollDice_AlreadyRolledThisTurn_ThrowsIllegalStateException() {
+        GameSession game = startedThreePlayerGame();
+        game.rollDice();
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, game::rollDice);
+
+        assertEquals("WHITE already rolled this turn", exception.getMessage());
+    }
+
+    @Test
+    public void RollDice_NextPlayersTurn_CanRollAgain() {
+        GameSession game = startedThreePlayerGame();
+        game.rollDice();
+        game.endTurn();
+
+        DiceRoll roll = game.rollDice();
+
+        assertTrue(roll.getTotal() >= 2 && roll.getTotal() <= 12);
+    }
+
+    @Test
+    public void EndTurn_NotRolledYet_ThrowsIllegalStateException() {
+        GameSession game = startedThreePlayerGame();
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, game::endTurn);
+
+        assertEquals("WHITE must roll before ending the turn", exception.getMessage());
+        assertEquals(PlayerColor.WHITE, game.getCurrentColor());
+    }
+
+    @Test
+    public void EndTurn_WhiteRolled_BluesTurn() {
+        GameSession game = startedThreePlayerGame();
+        game.rollDice();
+
+        game.endTurn();
+
+        assertEquals(PlayerColor.BLUE, game.getCurrentColor());
+    }
+
+    @Test
+    public void EndTurn_LastPlayerEndsTurn_WrapsToFirstPlayer() {
+        GameSession game = startedThreePlayerGame();
+        for (int turn = 0; turn < 3; turn++) {
+            game.rollDice();
+            game.endTurn();
+        }
+
+        PlayerColor current = game.getCurrentColor();
+
+        assertEquals(PlayerColor.WHITE, current);
+    }
+
+    @Test
+    public void EndTurn_StillPicking_ThrowsIllegalStateException() {
+        GameSession game = new GameSession(3, new Random());
+        game.rollForStartingOrder();
+        game.pickColor(PlayerColor.WHITE);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, game::endTurn);
+
+        assertEquals("Players are still picking colors", exception.getMessage());
+    }
+
+    private static GameSession startedThreePlayerGame() {
+        GameSession game = new GameSession(3, new Random());
+        game.rollForStartingOrder();
+        game.pickColor(PlayerColor.WHITE);
+        game.pickColor(PlayerColor.BLUE);
+        game.pickColor(PlayerColor.ORANGE);
+        return game;
     }
 }

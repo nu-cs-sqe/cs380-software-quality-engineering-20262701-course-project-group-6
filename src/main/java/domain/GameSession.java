@@ -14,9 +14,12 @@ public class GameSession {
     private final Bank bank;
     private final GameBoard board;
     private final StartingRollOff rollOff;
+    private final Dice dice;
     private final int playerCount;
     private List<Integer> pickOrder = List.of();
     private final Map<PlayerColor, Player> players = new LinkedHashMap<>();
+    private int currentTurnIndex;
+    private boolean rolledThisTurn;
 
     public GameSession(int playerCount, Random random) {
         if (playerCount < MIN_PLAYERS || playerCount > MAX_PLAYERS) {
@@ -28,6 +31,7 @@ public class GameSession {
         }
         bank = new Bank(random);
         rollOff = new StartingRollOff(random);
+        dice = new Dice(random);
         this.playerCount = playerCount;
         BeginnerPlacements placements = playerCount == MIN_PLAYERS
                 ? BeginnerPlacements.forThreePlayers()
@@ -67,10 +71,25 @@ public class GameSession {
     }
 
     public PlayerColor getCurrentColor() {
-        if (players.size() < playerCount) {
-            throw new IllegalStateException("Players are still picking colors");
+        requirePlaying();
+        return getTurnOrder().get(currentTurnIndex);
+    }
+
+    public DiceRoll rollDice() {
+        requirePlaying();
+        if (rolledThisTurn) {
+            throw new IllegalStateException(getCurrentColor() + " already rolled this turn");
         }
-        return getTurnOrder().get(0);
+        rolledThisTurn = true;
+        return dice.roll();
+    }
+
+    public void endTurn() {
+        if (!rolledThisTurn) {
+            throw new IllegalStateException(getCurrentColor() + " must roll before ending the turn");
+        }
+        rolledThisTurn = false;
+        currentTurnIndex = (currentTurnIndex + 1) % playerCount;
     }
 
     public List<PlayerColor> getAvailableColors() {
@@ -117,6 +136,12 @@ public class GameSession {
     private static void requireColor(PlayerColor color) {
         if (color == null) {
             throw new IllegalArgumentException("Player color is required");
+        }
+    }
+
+    private void requirePlaying() {
+        if (players.size() < playerCount) {
+            throw new IllegalStateException("Players are still picking colors");
         }
     }
 
