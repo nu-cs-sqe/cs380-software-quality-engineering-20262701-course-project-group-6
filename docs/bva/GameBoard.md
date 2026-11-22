@@ -120,5 +120,5 @@ orange on 13 and 42, blue on 40 and 44, white on 19 and 35. Cities and extra set
 | TC25 | 4 players, `diceTotal` = 8 (ore hex 11: white on 35; lumber hex 12: red on 29, blue on 40) | `{ORE={WHITE=1}, LUMBER={RED=1, BLUE=1}}` | :white_check_mark: |
 | TC26 | 4 players, red's settlement on 10 upgraded to a city, `diceTotal` = 2 | `{WOOL={RED=2}}` | :white_check_mark: |
 | TC27 | 4 players, extra red settlement on 4 (also on wool hex 1), `diceTotal` = 2 | `{WOOL={RED=2}}` (1 + 1) | :white_check_mark: |
-| TC28 | 3 players (no red), `diceTotal` = 2 | empty map (nobody is on wool hex 1) | :x: |
+| TC28 | 3 players (no red), `diceTotal` = 2 | empty map (nobody is on wool hex 1) | :white_check_mark: |
 | TC29 | 4 players, `diceTotal` = 7 | empty map | :x: |

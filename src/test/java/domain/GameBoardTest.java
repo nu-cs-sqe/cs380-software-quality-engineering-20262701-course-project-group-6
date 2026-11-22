@@ -320,6 +320,13 @@ class GameBoardTest {
         assertEquals(Map.of(WOOL, Map.of(RED, 2)), gameBoard.getProduction(2));
     }
 
+    @Test
+    void GetProduction_ThreePlayersTwoRolled_NobodyOnTheHexOwedNothing() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forThreePlayers());
+
+        assertEquals(Map.of(), gameBoard.getProduction(2));
+    }
+
     private TileLayout stubLayoutWithTileCount(int count) {
         Map<Integer, TileSetup> map = new LinkedHashMap<>();
         for (int i = 0; i < count; i++) {
