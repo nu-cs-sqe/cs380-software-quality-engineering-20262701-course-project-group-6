@@ -493,6 +493,18 @@ class GameBoardTest {
         assertEquals(Optional.of(RED), corner.getBuildingColor());
     }
 
+    @Test
+    void BuildCity_OpponentsSettlement_ThrowsIllegalStateException() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> gameBoard.buildCity(13, RED));
+
+        assertEquals("Node 13 is not a legal spot for a RED city", exception.getMessage());
+        assertEquals(Optional.of(ORANGE), gameBoard.getNodes().get(13).getBuildingColor());
+        assertEquals(BuildingType.SETTLEMENT, gameBoard.getNodes().get(13).getBuildingType());
+    }
+
     private TileLayout stubLayoutWithTileCount(int count) {
         Map<Integer, TileSetup> map = new LinkedHashMap<>();
         for (int i = 0; i < count; i++) {

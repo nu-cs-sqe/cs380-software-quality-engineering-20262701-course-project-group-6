@@ -192,6 +192,9 @@ public class GameBoard {
     }
 
     public void buildCity(int nodeId, PlayerColor color) {
+        if (!getCitySpots(color).contains(nodeId)) {
+            throw new IllegalStateException("Node " + nodeId + " is not a legal spot for a " + color + " city");
+        }
         nodes.get(nodeId).placeBuilding(BuildingType.CITY, color);
     }
 
