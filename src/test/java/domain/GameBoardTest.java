@@ -459,6 +459,18 @@ class GameBoardTest {
         assertEquals("Edge -1 is not a legal spot for a RED road", exception.getMessage());
     }
 
+    @Test
+    void BuildSettlement_LegalCorner_PlacesSettlement() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+        gameBoard.getEdges().get(42).setRoadColor(RED);
+
+        gameBoard.buildSettlement(31, RED);
+
+        Node corner = gameBoard.getNodes().get(31);
+        assertEquals(BuildingType.SETTLEMENT, corner.getBuildingType());
+        assertEquals(Optional.of(RED), corner.getBuildingColor());
+    }
+
     private TileLayout stubLayoutWithTileCount(int count) {
         Map<Integer, TileSetup> map = new LinkedHashMap<>();
         for (int i = 0; i < count; i++) {
