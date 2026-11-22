@@ -48,8 +48,8 @@ v               v              v                            v
 
 ### 3.1 GameSession (Orchestrator & Turn Controller)
 Runs one game: sets up the bank and the beginner board (Story 1), lets the players roll for starting order and pick
-colors (Story 2), and then controls the turn order. Turn play (rolling for resources, building, buying and playing
-development cards, the robber, winning) is added in a later PR once `GameBoard` exists.
+colors (Story 2), and then runs the turns: rolling the dice and ending the turn (Story 3, #31). Paying out resources,
+building, buying and playing development cards, the robber, and winning (Stories 3–7) are added once `GameBoard` exists.
 
 * **Responsibilities:**
   * Accept only 3 or 4 players. Create the `Bank` and the `GameBoard` from `BeginnerLayout` and `BeginnerPlacements` (without red for 3 players).
@@ -68,7 +68,9 @@ development cards, the robber, winning) is added in a later PR once `GameBoard` 
   * `private final int playerCount`
   * `private List<Integer> pickOrder` (seat numbers 1..playerCount, empty until rolled)
   * `private final Map<PlayerColor, Player> players` (insertion order = pick order = turn order)
-  * `private int currentTurnIndex`
+  * `private int currentTurnIndex` (place of the current player in the turn order)
+  * `private final Dice dice` (same `Random`)
+  * `private boolean rolledThisTurn`
 * **Key Methods:**
   * `public GameSession(int playerCount, Random random)`: `IllegalArgumentException` unless `playerCount` is 3 or 4,
     or if `random` is `null`. The same `Random` shuffles the deck and rolls the dice, so tests can stub it.
@@ -85,6 +87,11 @@ development cards, the robber, winning) is added in a later PR once `GameBoard` 
     `public int getVictoryPointCount(PlayerColor color)`: for the UI; `IllegalArgumentException` if no player has
     that color.
   * `public int getBankResourceCount(ResourceCardType type)`: for the UI and for Story 2 criterion 6.
+  * `public DiceRoll rollDice()` (Story 3): the current player rolls 2 dice, once per turn; returns both faces and the
+    total for the UI. `IllegalStateException` while players are still picking or if this player already rolled.
+    Paying out resources on the roll is added once `GameBoard` exists; a 7 never pays out (robber, Story 4).
+  * `public void endTurn()` (Story 3): only after rolling; passes the turn to the next color in turn order, wrapping
+    after the last one. `IllegalStateException` while players are still picking or if this player has not rolled.
 
 * **`StartingRollOff`:** rolls for starting order with an injected `Random`, through `Dice`.
   * `public StartingRollOff(Random random)`: `IllegalArgumentException` if `random` is `null`.

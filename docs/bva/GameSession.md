@@ -124,3 +124,54 @@ Checked in TC1, TC12, TC16 and TC18. Only the error cases need their own tests.
 | TC20 | nobody picked `ORANGE`, ask for orange's lumber | `IllegalArgumentException` with a message saying no player has picked orange | :white_check_mark: |
 | TC21 | `color` = `null` in `getVictoryPointCount` | `IllegalArgumentException` with a message saying a color is required | :white_check_mark: |
 | TC22 | `type` = `null` in `getBankResourceCount` | `IllegalArgumentException` with a message saying the resource type is required | :white_check_mark: |
+
+## Story 3: Turn loop (#31)
+
+This part adds rolling the dice and ending the turn. It covers Story 3 criteria 1, 2, 6, and 8. Paying out resources on
+a roll (criteria 3–5, 7) needs `GameBoard` to know which settlements and cities touch a hex, so it comes in a later PR;
+until then a roll pays nothing. Making bought development cards playable at the end of a turn (criterion 9) comes with
+Story 6, since nothing in `GameSession` gives out development cards yet.
+
+New state: the index of the current player in the turn order, and whether that player has rolled this turn.
+
+The dice themselves are tested in `Dice.md` and `DiceRoll.md` with a stubbed `Random`. These tests use a real `Random`,
+so they check that `rollDice()` returns a real roll and enforces the turn rules, not which numbers come up.
+
+Tests set up a 3-player game where the seats pick `WHITE`, `BLUE`, `ORANGE`, so the turn order is
+`WHITE, BLUE, ORANGE`.
+
+### Steps 2–3: Catalog types and boundary values (turn loop)
+
+#### Intervals
+
+| State | Interval | LOW − 1 | LOW | HIGH | HIGH + 1 |
+|---|---|---|---|---|---|
+| current player's place in the turn order | [0, playerCount − 1] | -1: can't set (starts at 0, only goes up) | 0 → TC29 (first player ends turn) | playerCount − 1 → TC30 (last player ends turn) | playerCount: can't set (wraps back to 0, TC30) |
+| rolls this turn | [0, 1] | -1: can't set | 0 → TC25, TC28 | 1 → TC26, TC29 | 2: can't set (second roll throws, TC26) |
+
+#### Cases
+
+| State | Values tested | Why |
+|---|---|---|
+| phase when rolling | picking → TC24 (throws); playing → TC25 | turns start only after everyone has picked |
+| phase when ending the turn | picking → TC31 (throws); playing → TC29 | same |
+| rolled this turn when ending | no → TC28 (throws); yes → TC29 | the player must roll before ending the turn |
+| a new turn | next player rolls after the turn passes → TC27 | the "already rolled" flag resets for the next player |
+
+### Method under test: `rollDice()`
+
+|      | State of the System | Expected output | Implemented? |
+|------|---------------------|-----------------|--------------|
+| TC24 | rolled for order, still picking | `IllegalStateException` with a message saying players are still picking colors | :white_check_mark: |
+| TC25 | `WHITE`'s turn, not rolled yet | a `DiceRoll` with both faces between 1 and 6 and the total equal to their sum; resources unchanged (no payouts yet) | :white_check_mark: |
+| TC26 | `WHITE` already rolled this turn | `IllegalStateException` with a message saying white already rolled this turn | :white_check_mark: |
+| TC27 | `WHITE` rolled and ended the turn; `BLUE` rolls | returns a `DiceRoll` (the flag reset for the new turn) | :white_check_mark: |
+
+### Method under test: `endTurn()`
+
+|      | State of the System | Expected output | Implemented? |
+|------|---------------------|-----------------|--------------|
+| TC28 | `WHITE`'s turn, not rolled yet | `IllegalStateException` with a message saying white must roll before ending the turn; still `WHITE`'s turn | :white_check_mark: |
+| TC29 | `WHITE` rolled | current color is `BLUE` | :white_check_mark: |
+| TC30 | `WHITE`, `BLUE`, `ORANGE` each rolled and ended their turn | current color is `WHITE` again (wraps after the last player) | :white_check_mark: |
+| TC31 | rolled for order, still picking | `IllegalStateException` with a message saying players are still picking colors | :white_check_mark: |

@@ -32,6 +32,10 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.easymock:easymock:5.4.0")
+    // Integration tests (BDD): Cucumber feature files in src/test/resources/features, run through the JUnit Platform.
+    testImplementation("io.cucumber:cucumber-java:7.18.1")
+    testImplementation("io.cucumber:cucumber-junit-platform-engine:7.18.1")
+    testImplementation("org.junit.platform:junit-platform-suite")
 }
 
 java {
