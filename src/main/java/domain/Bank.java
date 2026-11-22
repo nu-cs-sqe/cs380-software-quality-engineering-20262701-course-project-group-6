@@ -43,6 +43,9 @@ public class Bank {
             return Map.of();
         }
         int totalOwed = owed.values().stream().mapToInt(Integer::intValue).sum();
+        if (totalOwed > getResourceCount(type)) {
+            return Map.of();
+        }
         withdrawResource(type, totalOwed);
         return Map.copyOf(owed);
     }
