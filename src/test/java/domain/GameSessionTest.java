@@ -414,6 +414,21 @@ public class GameSessionTest {
         assertEquals(Optional.empty(), game.getBoard().getEdges().get(24).getRoadColor());
     }
 
+    @Test
+    public void BuildRoad_LegalEdgeAndExactCost_PaysBankAndPlacesRoad() {
+        GameSession game = startedThreePlayerGame(diceRolling(3, 4));
+        game.rollDice();
+
+        game.buildRoad(24);
+
+        assertEquals(Optional.of(PlayerColor.WHITE), game.getBoard().getEdges().get(24).getRoadColor());
+        assertEquals(0, game.getResourceCount(PlayerColor.WHITE, ResourceCardType.BRICK));
+        assertEquals(0, game.getResourceCount(PlayerColor.WHITE, ResourceCardType.LUMBER));
+        assertEquals(18, game.getBankResourceCount(ResourceCardType.BRICK));
+        assertEquals(18, game.getBankResourceCount(ResourceCardType.LUMBER));
+        assertEquals(12, game.getRoadsRemaining(PlayerColor.WHITE));
+    }
+
     private static GameSession startedThreePlayerGame() {
         return startedThreePlayerGame(new Dice(new Random()));
     }

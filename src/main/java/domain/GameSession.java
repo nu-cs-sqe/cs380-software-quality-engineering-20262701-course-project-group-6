@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 public class GameSession {
     private static final int MIN_PLAYERS = 3;
     private static final int MAX_PLAYERS = 4;
+    private static final Map<ResourceCardType, Integer> ROAD_COST =
+            Map.of(ResourceCardType.BRICK, 1, ResourceCardType.LUMBER, 1);
 
     private final Bank bank;
     private final GameBoard board;
@@ -107,9 +109,10 @@ public class GameSession {
     }
 
     public void buildRoad(int edgeId) {
-        if (!rolledThisTurn) {
-            throw new IllegalStateException(getCurrentColor() + " must roll before building");
-        }
+        Player player = playerWhoRolled();
+        player.placeRoadPiece();
+        pay(player, ROAD_COST);
+        board.buildRoad(edgeId, player.getColor());
     }
 
     public List<PlayerColor> getAvailableColors() {
@@ -121,6 +124,10 @@ public class GameSession {
 
     public int getResourceCount(PlayerColor color, ResourceCardType type) {
         return playerFor(color).getResourceCount(type);
+    }
+
+    public int getRoadsRemaining(PlayerColor color) {
+        return playerFor(color).getRoadsRemaining();
     }
 
     public int getVictoryPointCount(PlayerColor color) {
@@ -155,6 +162,20 @@ public class GameSession {
     private void payProduction(int diceTotal) {
         board.getProduction(diceTotal).forEach((type, owed) -> bank.payProduction(type, owed)
                 .forEach((color, amount) -> players.get(color).collectResource(type, amount)));
+    }
+
+    private Player playerWhoRolled() {
+        if (!rolledThisTurn) {
+            throw new IllegalStateException(getCurrentColor() + " must roll before building");
+        }
+        return players.get(getCurrentColor());
+    }
+
+    private void pay(Player player, Map<ResourceCardType, Integer> cost) {
+        cost.forEach((type, amount) -> {
+            player.useResource(type, amount);
+            bank.depositResource(type, amount);
+        });
     }
 
     private Player playerFor(PlayerColor color) {
