@@ -122,6 +122,10 @@ public class GameSession {
 
     public void buildSettlement(int nodeId) {
         Player player = playerWhoRolled();
+        if (!board.getSettlementSpots(player.getColor()).contains(nodeId)) {
+            throw new IllegalStateException(
+                    "Node " + nodeId + " is not a legal spot for a " + player.getColor() + " settlement");
+        }
         takePieceAndPay(player, SETTLEMENT_COST, "settlement", player::placeSettlementPiece);
         board.buildSettlement(nodeId, player.getColor());
     }

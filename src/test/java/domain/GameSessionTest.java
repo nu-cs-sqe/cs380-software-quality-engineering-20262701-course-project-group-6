@@ -477,6 +477,16 @@ public class GameSessionTest {
         assertEquals(2, game.getSettlementsRemaining(PlayerColor.WHITE));
     }
 
+    @Test
+    public void BuildSettlement_IllegalCorner_ThrowsIllegalStateException() {
+        GameSession game = startedThreePlayerGame(diceRolling(3, 4));
+        game.rollDice();
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> game.buildSettlement(0));
+
+        assertEquals("Node 0 is not a legal spot for a WHITE settlement", exception.getMessage());
+    }
+
     private static GameSession startedThreePlayerGame() {
         return startedThreePlayerGame(new Dice(new Random()));
     }
