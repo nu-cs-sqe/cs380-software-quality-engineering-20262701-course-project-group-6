@@ -11,6 +11,12 @@ import java.util.stream.Collectors;
 public class GameSession {
     private static final int MIN_PLAYERS = 3;
     private static final int MAX_PLAYERS = 4;
+    private static final Map<ResourceCardType, Integer> ROAD_COST =
+            Map.of(ResourceCardType.BRICK, 1, ResourceCardType.LUMBER, 1);
+    private static final Map<ResourceCardType, Integer> SETTLEMENT_COST = Map.of(ResourceCardType.BRICK, 1,
+            ResourceCardType.LUMBER, 1, ResourceCardType.WOOL, 1, ResourceCardType.GRAIN, 1);
+    private static final Map<ResourceCardType, Integer> CITY_COST =
+            Map.of(ResourceCardType.ORE, 3, ResourceCardType.GRAIN, 2);
 
     private final Bank bank;
     private final GameBoard board;
@@ -106,6 +112,36 @@ public class GameSession {
         currentTurnIndex = (currentTurnIndex + 1) % playerCount;
     }
 
+    public void buildRoad(int edgeId) {
+        Player player = playerWhoRolled();
+        if (!board.getRoadSpots(player.getColor()).contains(edgeId)) {
+            throw new IllegalStateException(
+                    "Edge " + edgeId + " is not a legal spot for a " + player.getColor() + " road");
+        }
+        takePieceAndPay(player, ROAD_COST, "road", player::placeRoadPiece);
+        board.buildRoad(edgeId, player.getColor());
+    }
+
+    public void buildSettlement(int nodeId) {
+        Player player = playerWhoRolled();
+        if (!board.getSettlementSpots(player.getColor()).contains(nodeId)) {
+            throw new IllegalStateException(
+                    "Node " + nodeId + " is not a legal spot for a " + player.getColor() + " settlement");
+        }
+        takePieceAndPay(player, SETTLEMENT_COST, "settlement", player::placeSettlementPiece);
+        board.buildSettlement(nodeId, player.getColor());
+    }
+
+    public void buildCity(int nodeId) {
+        Player player = playerWhoRolled();
+        if (!board.getCitySpots(player.getColor()).contains(nodeId)) {
+            throw new IllegalStateException(
+                    "Node " + nodeId + " is not a legal spot for a " + player.getColor() + " city");
+        }
+        takePieceAndPay(player, CITY_COST, "city", player::placeCityPiece);
+        board.buildCity(nodeId, player.getColor());
+    }
+
     public List<PlayerColor> getAvailableColors() {
         return Arrays.stream(PlayerColor.values())
                 .filter(this::isColorInPlay)
@@ -115,6 +151,18 @@ public class GameSession {
 
     public int getResourceCount(PlayerColor color, ResourceCardType type) {
         return playerFor(color).getResourceCount(type);
+    }
+
+    public int getRoadsRemaining(PlayerColor color) {
+        return playerFor(color).getRoadsRemaining();
+    }
+
+    public int getSettlementsRemaining(PlayerColor color) {
+        return playerFor(color).getSettlementsRemaining();
+    }
+
+    public int getCitiesRemaining(PlayerColor color) {
+        return playerFor(color).getCitiesRemaining();
     }
 
     public int getVictoryPointCount(PlayerColor color) {
@@ -149,6 +197,28 @@ public class GameSession {
     private void payProduction(int diceTotal) {
         board.getProduction(diceTotal).forEach((type, owed) -> bank.payProduction(type, owed)
                 .forEach((color, amount) -> players.get(color).collectResource(type, amount)));
+    }
+
+    private Player playerWhoRolled() {
+        if (!rolledThisTurn) {
+            throw new IllegalStateException(getCurrentColor() + " must roll before building");
+        }
+        return players.get(getCurrentColor());
+    }
+
+    // Checks the cost, then takes the piece (Player throws if none are left), and only then moves the cards, so a
+    // failed build changes nothing.
+    private void takePieceAndPay(Player player, Map<ResourceCardType, Integer> cost, String piece, Runnable takePiece) {
+        boolean affordable = cost.entrySet().stream()
+                .allMatch(entry -> player.getResourceCount(entry.getKey()) >= entry.getValue());
+        if (!affordable) {
+            throw new IllegalStateException(player.getColor() + " cannot afford a " + piece);
+        }
+        takePiece.run();
+        cost.forEach((type, amount) -> {
+            player.useResource(type, amount);
+            bank.depositResource(type, amount);
+        });
     }
 
     private Player playerFor(PlayerColor color) {

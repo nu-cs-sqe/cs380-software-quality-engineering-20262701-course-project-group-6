@@ -202,3 +202,51 @@ Passes on `StartingRollOff.getRounds()` (tested in `StartingRollOff.md`) so the 
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
 | TC35 | 4 players, rolled for starting order | the first round has a roll for each of seats 1–4 | :white_check_mark: |
+
+## Story 5: Building (#33)
+
+`buildRoad(edgeId)`, `buildSettlement(nodeId)` and `buildCity(nodeId)` build for the current player (Story 5 criteria
+1–3 and 6–9). The checks run in this order, and nothing changes unless all of them pass:
+
+1. the player has rolled this turn (Story 4 will add "and the robber is handled");
+2. the spot is legal (`GameBoard.getRoadSpots` and the others, tested in `GameBoard.md`);
+3. the player has every card the piece costs (road: brick, lumber; settlement: brick, lumber, wool, grain;
+   city: 3 ore, 2 grain);
+4. the player has a piece left (`Player.placeRoadPiece` and the others throw without changing anything, tested in
+   `Player.md`).
+
+Then the cards go from the player to the bank, the piece goes on the board, and the player's piece count and points
+change (`Player` counts 1 point per settlement and 2 per city).
+
+All three builds share these steps, so the cost check and the piece check are tested once (on a road). Running out of
+pieces needs 13 more roads and is already tested in `Player.md`, so it has no test here.
+
+Tests use the 3-player game with turn order `WHITE, BLUE, ORANGE` and stubbed dice. White starts with 1 grain, 1 brick,
+1 lumber, settlements on 19 and 35, and roads on edges 25 (18–19) and 37 (24–35).
+
+### Steps 2–3: Catalog types and boundary values
+
+| Input / state | Catalog type | Values tested |
+|---|---|---|
+| phase | Cases | picking → TC44 (throws); playing → TC37 |
+| rolled this turn | Cases | no → TC36 (throws); yes → TC37 |
+| spot | Cases | legal → TC37, TC40, TC42; illegal → TC38, TC41, TC43 (throw, nothing changes) |
+| cards vs. cost | Interval [cost, …] | exactly the cost → TC37, TC40, TC42 (left with 0); one short → TC39 (throws) |
+| piece built | Cases | road → TC37; settlement → TC40; city → TC42 (settlement goes back to the supply) |
+
+### Methods under test: `buildRoad`, `buildSettlement`, `buildCity`
+
+|      | State of the System | Expected output | Implemented? |
+|------|---------------------|-----------------|--------------|
+| TC36 | white's turn, not rolled, `buildRoad(24)` | `IllegalStateException` with a message saying white must roll before building; edge 24 still empty | :white_check_mark: |
+| TC37 | white rolls 7, `buildRoad(24)` (17–18) | edge 24 has a white road; white has 0 brick and 0 lumber; the bank has 18 brick and 18 lumber; white has 12 roads left | :white_check_mark: |
+| TC38 | white rolls 7, `buildRoad(0)` | `IllegalStateException` with a message saying edge 0 is not a legal spot for a white road; white still has 1 brick and 1 lumber | :white_check_mark: |
+| TC39 | white rolls 7, builds a road on 24, then `buildRoad(23)` | `IllegalStateException` with a message saying white cannot afford a road; edge 23 still empty; white still has 12 roads left | :white_check_mark: |
+| TC40 | white rolls 5 (+1 wool) and builds a road on 24; blue rolls 6 (white +1 brick); orange rolls 11 (white +1 lumber); white rolls 7, `buildSettlement(17)` | corner 17 has a white settlement; white has 0 brick, lumber, wool and grain; white has 3 points and 2 settlements left | :white_check_mark: |
+| TC41 | white rolls 7, `buildSettlement(0)` | `IllegalStateException` with a message saying node 0 is not a legal spot for a white settlement | :white_check_mark: |
+| TC42 | white, blue and orange each roll 8 (white +1 ore each time); white rolls 12 (+1 grain), `buildCity(19)` | corner 19 has a white city; white has 0 ore and 0 grain; white has 3 points (city 2 + settlement 1), 3 cities and 4 settlements left; the bank has 17 ore and 17 grain | :white_check_mark: |
+| TC43 | white rolls 7, `buildCity(13)` (orange's settlement) | `IllegalStateException` with a message saying node 13 is not a legal spot for a white city | :white_check_mark: |
+| TC44 | still picking colors, `buildRoad(24)` | `IllegalStateException` with a message saying players are still picking colors | :white_check_mark: |
+
+`getRoadsRemaining`, `getSettlementsRemaining` and `getCitiesRemaining` pass the counts on from `Player` (tested in
+`Player.md`); they are checked in TC37, TC40 and TC42.

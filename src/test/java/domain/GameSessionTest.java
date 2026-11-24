@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import org.easymock.EasyMock;
@@ -403,6 +404,133 @@ public class GameSessionTest {
         assertEquals(Set.of(1, 2, 3, 4), rolls.get(0).keySet());
     }
 
+    @Test
+    public void BuildRoad_NotRolledYet_ThrowsIllegalStateException() {
+        GameSession game = startedThreePlayerGame();
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> game.buildRoad(24));
+
+        assertEquals("WHITE must roll before building", exception.getMessage());
+        assertEquals(Optional.empty(), game.getBoard().getEdges().get(24).getRoadColor());
+    }
+
+    @Test
+    public void BuildRoad_LegalEdgeAndExactCost_PaysBankAndPlacesRoad() {
+        GameSession game = startedThreePlayerGame(diceRolling(3, 4));
+        game.rollDice();
+
+        game.buildRoad(24);
+
+        assertEquals(Optional.of(PlayerColor.WHITE), game.getBoard().getEdges().get(24).getRoadColor());
+        assertEquals(0, game.getResourceCount(PlayerColor.WHITE, ResourceCardType.BRICK));
+        assertEquals(0, game.getResourceCount(PlayerColor.WHITE, ResourceCardType.LUMBER));
+        assertEquals(18, game.getBankResourceCount(ResourceCardType.BRICK));
+        assertEquals(18, game.getBankResourceCount(ResourceCardType.LUMBER));
+        assertEquals(12, game.getRoadsRemaining(PlayerColor.WHITE));
+    }
+
+    @Test
+    public void BuildRoad_IllegalEdge_ThrowsAndKeepsCards() {
+        GameSession game = startedThreePlayerGame(diceRolling(3, 4));
+        game.rollDice();
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> game.buildRoad(0));
+
+        assertEquals("Edge 0 is not a legal spot for a WHITE road", exception.getMessage());
+        assertEquals(1, game.getResourceCount(PlayerColor.WHITE, ResourceCardType.BRICK));
+        assertEquals(1, game.getResourceCount(PlayerColor.WHITE, ResourceCardType.LUMBER));
+        assertEquals(13, game.getRoadsRemaining(PlayerColor.WHITE));
+    }
+
+    @Test
+    public void BuildRoad_OneCardShort_ThrowsAndChangesNothing() {
+        GameSession game = startedThreePlayerGame(diceRolling(3, 4));
+        game.rollDice();
+        game.buildRoad(24);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> game.buildRoad(23));
+
+        assertEquals("WHITE cannot afford a road", exception.getMessage());
+        assertEquals(Optional.empty(), game.getBoard().getEdges().get(23).getRoadColor());
+        assertEquals(12, game.getRoadsRemaining(PlayerColor.WHITE));
+    }
+
+    @Test
+    public void BuildSettlement_CollectedTheCost_PlacesSettlementAndScoresPoint() {
+        GameSession game = startedThreePlayerGame(diceRolling(2, 3, 3, 3, 5, 6, 3, 4));
+        game.rollDice();
+        game.buildRoad(24);
+        game.endTurn();
+        game.rollDice();
+        game.endTurn();
+        game.rollDice();
+        game.endTurn();
+        game.rollDice();
+
+        game.buildSettlement(17);
+
+        Node corner = game.getBoard().getNodes().get(17);
+        assertEquals(BuildingType.SETTLEMENT, corner.getBuildingType());
+        assertEquals(Optional.of(PlayerColor.WHITE), corner.getBuildingColor());
+        assertEquals(0, totalResources(game, PlayerColor.WHITE));
+        assertEquals(3, game.getVictoryPointCount(PlayerColor.WHITE));
+        assertEquals(2, game.getSettlementsRemaining(PlayerColor.WHITE));
+    }
+
+    @Test
+    public void BuildSettlement_IllegalCorner_ThrowsIllegalStateException() {
+        GameSession game = startedThreePlayerGame(diceRolling(3, 4));
+        game.rollDice();
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> game.buildSettlement(0));
+
+        assertEquals("Node 0 is not a legal spot for a WHITE settlement", exception.getMessage());
+    }
+
+    @Test
+    public void BuildCity_CollectedTheCost_UpgradesSettlementAndScoresPoint() {
+        GameSession game = startedThreePlayerGame(diceRolling(2, 6, 2, 6, 2, 6, 6, 6));
+        for (int turn = 0; turn < 3; turn++) {
+            game.rollDice();
+            game.endTurn();
+        }
+        game.rollDice();
+
+        game.buildCity(19);
+
+        Node corner = game.getBoard().getNodes().get(19);
+        assertEquals(BuildingType.CITY, corner.getBuildingType());
+        assertEquals(Optional.of(PlayerColor.WHITE), corner.getBuildingColor());
+        assertEquals(0, game.getResourceCount(PlayerColor.WHITE, ResourceCardType.ORE));
+        assertEquals(0, game.getResourceCount(PlayerColor.WHITE, ResourceCardType.GRAIN));
+        assertEquals(3, game.getVictoryPointCount(PlayerColor.WHITE));
+        assertEquals(3, game.getCitiesRemaining(PlayerColor.WHITE));
+        assertEquals(4, game.getSettlementsRemaining(PlayerColor.WHITE));
+        assertEquals(17, game.getBankResourceCount(ResourceCardType.ORE));
+        assertEquals(17, game.getBankResourceCount(ResourceCardType.GRAIN));
+    }
+
+    @Test
+    public void BuildCity_OpponentsSettlement_ThrowsIllegalStateException() {
+        GameSession game = startedThreePlayerGame(diceRolling(3, 4));
+        game.rollDice();
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> game.buildCity(13));
+
+        assertEquals("Node 13 is not a legal spot for a WHITE city", exception.getMessage());
+    }
+
+    @Test
+    public void BuildRoad_StillPicking_ThrowsIllegalStateException() {
+        GameSession game = new GameSession(3, new Random());
+        game.rollForStartingOrder();
+        game.pickColor(PlayerColor.WHITE);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> game.buildRoad(24));
+
+        assertEquals("Players are still picking colors", exception.getMessage());
+    }
+
     private static GameSession startedThreePlayerGame() {
         return startedThreePlayerGame(new Dice(new Random()));
     }
@@ -416,10 +544,11 @@ public class GameSessionTest {
         return game;
     }
 
-    private static Dice diceRolling(int firstDie, int secondDie) {
+    private static Dice diceRolling(int... dice) {
         Random random = EasyMock.createStrictMock(Random.class);
-        EasyMock.expect(random.nextInt(6)).andReturn(firstDie - 1);
-        EasyMock.expect(random.nextInt(6)).andReturn(secondDie - 1);
+        for (int die : dice) {
+            EasyMock.expect(random.nextInt(6)).andReturn(die - 1);
+        }
         EasyMock.replay(random);
         return new Dice(random);
     }

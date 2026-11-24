@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.List;
 import java.util.Optional;
 import java.util.Map;
+import java.util.Set;
 import java.util.LinkedHashMap;
 import org.junit.jupiter.api.Test;
 
@@ -332,6 +333,176 @@ class GameBoardTest {
         GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
 
         assertEquals(Map.of(), gameBoard.getProduction(7));
+    }
+
+    @Test
+    void GetRoadSpots_Red_EdgesConnectedToRedsPieces() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        assertEquals(Set.of(7, 12, 14, 20, 34, 40, 42, 50), gameBoard.getRoadSpots(RED));
+    }
+
+    @Test
+    void GetRoadSpots_BlueRoadEndsAtWhitesSettlement_CannotContinueThroughIt() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+        gameBoard.getEdges().get(46).setRoadColor(BLUE);
+
+        assertEquals(Set.of(45, 50, 55, 57, 59, 60, 63), gameBoard.getRoadSpots(BLUE));
+    }
+
+    @Test
+    void GetRoadSpots_NullColor_ThrowsIllegalArgumentException() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> gameBoard.getRoadSpots(null));
+
+        assertEquals("Player color is required", exception.getMessage());
+    }
+
+    @Test
+    void GetSettlementSpots_RedAtStart_NoneBecauseEveryReachableCornerIsNextToABuilding() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        assertEquals(Set.of(), gameBoard.getSettlementSpots(RED));
+    }
+
+    @Test
+    void GetSettlementSpots_RedRoadReachesFreeCorner_ThatCornerIsLegal() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+        gameBoard.getEdges().get(42).setRoadColor(RED);
+
+        assertEquals(Set.of(31), gameBoard.getSettlementSpots(RED));
+    }
+
+    @Test
+    void GetSettlementSpots_RedRoadReachesOrangesSettlement_OccupiedCornerNotLegal() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+        gameBoard.getEdges().get(16).setRoadColor(RED);
+
+        assertEquals(Set.of(), gameBoard.getSettlementSpots(RED));
+    }
+
+    @Test
+    void GetSettlementSpots_NullColor_ThrowsIllegalArgumentException() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> gameBoard.getSettlementSpots(null));
+
+        assertEquals("Player color is required", exception.getMessage());
+    }
+
+    @Test
+    void GetCitySpots_Red_RedsSettlements() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        assertEquals(Set.of(10, 29), gameBoard.getCitySpots(RED));
+    }
+
+    @Test
+    void GetCitySpots_RedCityOnTen_OnlyTheOtherSettlement() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+        gameBoard.getNodes().get(10).placeBuilding(BuildingType.CITY, RED);
+
+        assertEquals(Set.of(29), gameBoard.getCitySpots(RED));
+    }
+
+    @Test
+    void GetCitySpots_NullColor_ThrowsIllegalArgumentException() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> gameBoard.getCitySpots(null));
+
+        assertEquals("Player color is required", exception.getMessage());
+    }
+
+    @Test
+    void BuildRoad_LegalEdge_PlacesRoadAndOpensSettlementSpot() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        gameBoard.buildRoad(42, RED);
+
+        assertEquals(Optional.of(RED), gameBoard.getEdges().get(42).getRoadColor());
+        assertEquals(Set.of(31), gameBoard.getSettlementSpots(RED));
+    }
+
+    @Test
+    void BuildRoad_UnconnectedEdge_ThrowsIllegalStateException() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> gameBoard.buildRoad(0, RED));
+
+        assertEquals("Edge 0 is not a legal spot for a RED road", exception.getMessage());
+        assertEquals(Optional.empty(), gameBoard.getEdges().get(0).getRoadColor());
+    }
+
+    @Test
+    void BuildRoad_EdgeAboveMax_ThrowsIllegalStateException() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> gameBoard.buildRoad(72, RED));
+
+        assertEquals("Edge 72 is not a legal spot for a RED road", exception.getMessage());
+    }
+
+    @Test
+    void BuildRoad_NegativeEdge_ThrowsIllegalStateException() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> gameBoard.buildRoad(-1, RED));
+
+        assertEquals("Edge -1 is not a legal spot for a RED road", exception.getMessage());
+    }
+
+    @Test
+    void BuildSettlement_LegalCorner_PlacesSettlement() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+        gameBoard.getEdges().get(42).setRoadColor(RED);
+
+        gameBoard.buildSettlement(31, RED);
+
+        Node corner = gameBoard.getNodes().get(31);
+        assertEquals(BuildingType.SETTLEMENT, corner.getBuildingType());
+        assertEquals(Optional.of(RED), corner.getBuildingColor());
+    }
+
+    @Test
+    void BuildSettlement_CornerNextToABuilding_ThrowsIllegalStateException() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> gameBoard.buildSettlement(11, RED));
+
+        assertEquals("Node 11 is not a legal spot for a RED settlement", exception.getMessage());
+        assertEquals(BuildingType.NONE, gameBoard.getNodes().get(11).getBuildingType());
+    }
+
+    @Test
+    void BuildCity_OwnSettlement_PlacesCity() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        gameBoard.buildCity(10, RED);
+
+        Node corner = gameBoard.getNodes().get(10);
+        assertEquals(BuildingType.CITY, corner.getBuildingType());
+        assertEquals(Optional.of(RED), corner.getBuildingColor());
+    }
+
+    @Test
+    void BuildCity_OpponentsSettlement_ThrowsIllegalStateException() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> gameBoard.buildCity(13, RED));
+
+        assertEquals("Node 13 is not a legal spot for a RED city", exception.getMessage());
+        assertEquals(Optional.of(ORANGE), gameBoard.getNodes().get(13).getBuildingColor());
+        assertEquals(BuildingType.SETTLEMENT, gameBoard.getNodes().get(13).getBuildingType());
     }
 
     private TileLayout stubLayoutWithTileCount(int count) {

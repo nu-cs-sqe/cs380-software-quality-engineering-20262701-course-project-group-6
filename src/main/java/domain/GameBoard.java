@@ -7,6 +7,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class GameBoard {
     private static final int NUM_NODES = 54;
@@ -95,9 +97,7 @@ public class GameBoard {
     }
 
     public List<ResourceCardType> getStartingResources(PlayerColor color) {
-        if (color == null) {
-            throw new IllegalArgumentException("Player color is required");
-        }
+        requireColor(color);
         Integer secondPlacedSettlement = startingResourceNodes.get(color);
         if (secondPlacedSettlement == null) {
             throw new IllegalArgumentException(color + " has no 2nd starting settlement on this board");
@@ -141,6 +141,61 @@ public class GameBoard {
             }
         }
         return owed;
+    }
+
+    public Set<Integer> getRoadSpots(PlayerColor color) {
+        requireColor(color);
+        Set<Integer> spots = new TreeSet<>();
+        for (Edge edge : edges.values()) {
+            if (!edge.isOccupied() && (reaches(edge.getNode1(), color) || reaches(edge.getNode2(), color))) {
+                spots.add(edge.getId());
+            }
+        }
+        return spots;
+    }
+
+    public Set<Integer> getSettlementSpots(PlayerColor color) {
+        requireColor(color);
+        Set<Integer> spots = new TreeSet<>();
+        for (Node corner : nodes.values()) {
+            if (!corner.isOccupied() && !isNextToBuilding(corner) && touchesRoad(corner, color)) {
+                spots.add(corner.getId());
+            }
+        }
+        return spots;
+    }
+
+    public Set<Integer> getCitySpots(PlayerColor color) {
+        requireColor(color);
+        Set<Integer> spots = new TreeSet<>();
+        for (Node corner : nodes.values()) {
+            if (corner.getBuildingType() == BuildingType.SETTLEMENT
+                    && corner.getBuildingColor().equals(Optional.of(color))) {
+                spots.add(corner.getId());
+            }
+        }
+        return spots;
+    }
+
+    public void buildRoad(int edgeId, PlayerColor color) {
+        if (!getRoadSpots(color).contains(edgeId)) {
+            throw new IllegalStateException("Edge " + edgeId + " is not a legal spot for a " + color + " road");
+        }
+        edges.get(edgeId).setRoadColor(color);
+    }
+
+    public void buildSettlement(int nodeId, PlayerColor color) {
+        if (!getSettlementSpots(color).contains(nodeId)) {
+            throw new IllegalStateException("Node " + nodeId + " is not a legal spot for a " + color + " settlement");
+        }
+        nodes.get(nodeId).placeBuilding(BuildingType.SETTLEMENT, color);
+    }
+
+    public void buildCity(int nodeId, PlayerColor color) {
+        if (!getCitySpots(color).contains(nodeId)) {
+            throw new IllegalStateException("Node " + nodeId + " is not a legal spot for a " + color + " city");
+        }
+        nodes.get(nodeId).placeBuilding(BuildingType.CITY, color);
     }
 
     private void validateGenerateInputs(TileLayout layout, BeginnerPlacements placements) {
@@ -231,6 +286,34 @@ public class GameBoard {
             corner.getBuildingColor().ifPresent(color ->
                     owed.computeIfAbsent(resource, type -> new EnumMap<>(PlayerColor.class))
                             .merge(color, amount, Integer::sum));
+        }
+    }
+
+    private boolean reaches(Node corner, PlayerColor color) {
+        Optional<PlayerColor> owner = corner.getBuildingColor();
+        if (owner.isPresent()) {
+            return owner.get() == color;
+        }
+        return touchesRoad(corner, color);
+    }
+
+    private boolean touchesRoad(Node corner, PlayerColor color) {
+        return corner.getIncidentEdges().stream().anyMatch(edge -> edge.getRoadColor().equals(Optional.of(color)));
+    }
+
+    private boolean isNextToBuilding(Node corner) {
+        for (Edge edge : corner.getIncidentEdges()) {
+            Node neighbor = edge.getNode1() == corner ? edge.getNode2() : edge.getNode1();
+            if (neighbor.isOccupied()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static void requireColor(PlayerColor color) {
+        if (color == null) {
+            throw new IllegalArgumentException("Player color is required");
         }
     }
 

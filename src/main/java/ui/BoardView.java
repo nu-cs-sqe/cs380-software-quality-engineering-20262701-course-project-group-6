@@ -1,6 +1,7 @@
 package ui;
 
 import domain.GameSession;
+import domain.PlayerColor;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -11,6 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
 final class BoardView extends BorderPane {
@@ -19,9 +21,13 @@ final class BoardView extends BorderPane {
     private static final Color INK = Color.web("#352820");
     private static final Font TITLE_FONT = Font.font("System", FontWeight.BOLD, 23);
 
+    private final GameSession game;
     private final ResourceBundle messages;
+    private final BoardMap boardMap;
+    private final TurnPanel turnPanel;
 
     BoardView(GameSession game, ResourceBundle messages, Runnable goBack) {
+        this.game = game;
         this.messages = messages;
         setPadding(new Insets(SCREEN_PADDING));
         setStyle("-fx-background-color: #f5ecdc;");
@@ -29,8 +35,9 @@ final class BoardView extends BorderPane {
         HBox header = createHeader(goBack);
         setTop(header);
         setMargin(header, new Insets(0, 0, SECTION_SPACING, 0));
-        setCenter(new BoardMap(game.getBoard(), messages));
-        TurnPanel turnPanel = new TurnPanel(game, messages);
+        boardMap = new BoardMap(game.getBoard(), messages);
+        setCenter(boardMap);
+        turnPanel = new TurnPanel(game, messages, this::chooseBuild, boardMap::clearSpots);
         setRight(turnPanel);
         setMargin(turnPanel, new Insets(0, 0, 0, SECTION_SPACING));
 
@@ -40,6 +47,52 @@ final class BoardView extends BorderPane {
         setBottom(legend);
         setAlignment(legend, Pos.CENTER);
         setMargin(legend, new Insets(SECTION_SPACING, 0, 0, 0));
+    }
+
+    private void chooseBuild(BuildMode mode) {
+        String piece = messages.getString("piece." + mode.name());
+        if (piecesLeft(mode) == 0) {
+            boardMap.clearSpots();
+            turnPanel.showMessage(MessageFormat.format(messages.getString("build.noPieces"),
+                    messages.getString("pieces." + mode.name())));
+        } else if (boardMap.showSpots(mode, game.getCurrentColor(), spot -> build(mode, spot))) {
+            turnPanel.showMessage(MessageFormat.format(messages.getString("build.pick"), piece));
+        } else {
+            String noSpots = MessageFormat.format(messages.getString("build.noSpots"), piece);
+            turnPanel.showMessage(MessageFormat.format(messages.getString("build.withTip"), noSpots,
+                    messages.getString("build.tip." + mode.name())));
+        }
+    }
+
+    // The board offers only legal spots, and chooseBuild already checked for a piece, so a failed build means the
+    // player is short of cards.
+    private void build(BuildMode mode, int spot) {
+        PlayerColor builder = game.getCurrentColor();
+        String piece = messages.getString("piece." + mode.name());
+        try {
+            if (mode == BuildMode.ROAD) {
+                game.buildRoad(spot);
+            } else if (mode == BuildMode.SETTLEMENT) {
+                game.buildSettlement(spot);
+            } else {
+                game.buildCity(spot);
+            }
+            turnPanel.showMessage(MessageFormat.format(messages.getString("build.built"),
+                    messages.getString("color." + builder.name()), piece));
+        } catch (IllegalStateException error) {
+            turnPanel.showMessage(MessageFormat.format(messages.getString("build.noCards"), piece,
+                    messages.getString("build.cost." + mode.name())));
+        }
+        boardMap.clearSpots();
+        turnPanel.refresh();
+    }
+
+    private int piecesLeft(BuildMode mode) {
+        PlayerColor color = game.getCurrentColor();
+        if (mode == BuildMode.ROAD) {
+            return game.getRoadsRemaining(color);
+        }
+        return mode == BuildMode.SETTLEMENT ? game.getSettlementsRemaining(color) : game.getCitiesRemaining(color);
     }
 
     private HBox createHeader(Runnable goBack) {
