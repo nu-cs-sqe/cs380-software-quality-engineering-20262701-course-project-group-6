@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.stream.Collectors;
 import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
 
@@ -103,6 +105,52 @@ public class StartingRollOffTest {
 
         assertEquals(List.of(2, 1), order);
         EasyMock.verify(dice);
+    }
+
+    @Test
+    public void GetRounds_NothingRolled_Empty() {
+        StartingRollOff rollOff = new StartingRollOff(new Random());
+
+        assertEquals(List.of(), rollOff.getRounds());
+    }
+
+    @Test
+    public void GetRounds_TwoSeatsNoTie_OneRoundWithBothDice() {
+        StartingRollOff rollOff = new StartingRollOff(diceRolling(3, 8));
+        rollOff.rollOrder(2);
+
+        List<Map<Integer, DiceRoll>> rounds = rollOff.getRounds();
+
+        assertEquals(1, rounds.size());
+        assertEquals(List.of(1, 2), List.copyOf(rounds.get(0).keySet()));
+        assertEquals(1, rounds.get(0).get(1).getFirstDie());
+        assertEquals(2, rounds.get(0).get(1).getSecondDie());
+        assertEquals(4, rounds.get(0).get(2).getFirstDie());
+        assertEquals(4, rounds.get(0).get(2).getSecondDie());
+    }
+
+    @Test
+    public void GetRounds_OneTie_OnlyTiedSeatsInSecondRound() {
+        StartingRollOff rollOff = new StartingRollOff(diceRolling(8, 5, 8, 4, 10));
+        rollOff.rollOrder(3);
+
+        assertEquals(List.of(Map.of(1, 8, 2, 5, 3, 8), Map.of(1, 4, 3, 10)), totals(rollOff.getRounds()));
+    }
+
+    @Test
+    public void GetRounds_TieTwiceInARow_ThreeRounds() {
+        StartingRollOff rollOff = new StartingRollOff(diceRolling(5, 5, 8, 8, 3, 11));
+        rollOff.rollOrder(2);
+
+        assertEquals(List.of(Map.of(1, 5, 2, 5), Map.of(1, 8, 2, 8), Map.of(1, 3, 2, 11)),
+                totals(rollOff.getRounds()));
+    }
+
+    private static List<Map<Integer, Integer>> totals(List<Map<Integer, DiceRoll>> rounds) {
+        return rounds.stream()
+                .map(round -> round.entrySet().stream()
+                        .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getTotal())))
+                .collect(Collectors.toList());
     }
 
     private static Random diceRolling(int... totals) {

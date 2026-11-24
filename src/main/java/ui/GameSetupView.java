@@ -1,8 +1,6 @@
 package ui;
 
-import domain.BeginnerLayout;
-import domain.BeginnerPlacements;
-import domain.GameBoard;
+import domain.GameSession;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -16,6 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
@@ -26,19 +25,21 @@ final class GameSetupView extends StackPane {
     private static final double SECTION_SPACING = 20;
     private static final double OPTION_SPACING = 8;
     private static final double PLAYER_OPTION_SPACING = 24;
+    private static final int THREE_PLAYERS = 3;
+    private static final int FOUR_PLAYERS = 4;
     private static final Font TITLE_FONT = Font.font("System", FontWeight.BOLD, 24);
 
     private final ResourceBundle messages;
     private final ToggleGroup playerCounts = new ToggleGroup();
 
-    GameSetupView(ResourceBundle messages, Consumer<GameBoard> startGame, Runnable goBack) {
+    GameSetupView(ResourceBundle messages, Consumer<GameSession> startGame, Runnable goBack) {
         this.messages = messages;
         setPadding(new Insets(SCREEN_PADDING));
         setStyle("-fx-background-color: #f5ecdc;");
         getChildren().add(createForm(startGame, goBack));
     }
 
-    private VBox createForm(Consumer<GameBoard> startGame, Runnable goBack) {
+    private VBox createForm(Consumer<GameSession> startGame, Runnable goBack) {
         RadioButton threePlayers = createOption("setup.threePlayers", playerCounts);
         RadioButton fourPlayers = createOption("setup.fourPlayers", playerCounts);
         HBox counts = new HBox(PLAYER_OPTION_SPACING, threePlayers, fourPlayers);
@@ -77,13 +78,15 @@ final class GameSetupView extends StackPane {
     }
 
     private Button createStartButton(RadioButton threePlayers, RadioButton beginner,
-            Consumer<GameBoard> startGame) {
+            Consumer<GameSession> startGame) {
         Button start = new Button(messages.getString("setup.start"));
         start.setDefaultButton(true);
         start.disableProperty().bind(playerCounts.selectedToggleProperty().isNull()
                 .or(beginner.selectedProperty().not()));
-        start.setOnAction(event -> startGame.accept(new GameBoard(new BeginnerLayout(), threePlayers.isSelected()
-                ? BeginnerPlacements.forThreePlayers() : BeginnerPlacements.forFourPlayers())));
+        start.setOnAction(event -> {
+            int players = threePlayers.isSelected() ? THREE_PLAYERS : FOUR_PLAYERS;
+            startGame.accept(new GameSession(players, new Random()));
+        });
         start.setStyle("-fx-background-color: #a51f24; -fx-text-fill: white; -fx-font-weight: bold;");
         return start;
     }

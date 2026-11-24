@@ -185,3 +185,20 @@ Tests set up a 3-player game where the seats pick `WHITE`, `BLUE`, `ORANGE`, so 
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
 | TC32 | `dice` = `null` | `IllegalArgumentException` with a message saying dice are required | :white_check_mark: |
+
+### Method under test: `getBoard()`
+
+Gives `BoardView` the board this game is played on, so the UI draws the same nodes and edges that `GameSession` pays
+out from.
+
+|      | State of the System | Expected output | Implemented? |
+|------|---------------------|-----------------|--------------|
+| TC34 | new 3-player game | the board's starred settlements are orange's, blue's and white's (no red), so it is the 3-player board | :white_check_mark: |
+
+### Method under test: `getStartingRolls()`
+
+Passes on `StartingRollOff.getRounds()` (tested in `StartingRollOff.md`) so the UI can show each seat's dice.
+
+|      | State of the System | Expected output | Implemented? |
+|------|---------------------|-----------------|--------------|
+| TC35 | 4 players, rolled for starting order | the first round has a roll for each of seats 1–4 | :white_check_mark: |

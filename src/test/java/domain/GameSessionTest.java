@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import org.easymock.EasyMock;
@@ -380,6 +381,26 @@ public class GameSessionTest {
                 () -> new GameSession(3, new Random(), null));
 
         assertEquals("Dice are required to start a game", exception.getMessage());
+    }
+
+    @Test
+    public void GetBoard_ThreePlayers_BoardWithoutRed() {
+        GameSession game = new GameSession(3, new Random());
+
+        GameBoard board = game.getBoard();
+
+        assertEquals(Set.of(PlayerColor.ORANGE, PlayerColor.BLUE, PlayerColor.WHITE),
+                board.getStartingResourceNodes().keySet());
+    }
+
+    @Test
+    public void GetStartingRolls_FourPlayersRolled_FirstRoundHasEverySeat() {
+        GameSession game = new GameSession(4, new Random());
+        game.rollForStartingOrder();
+
+        List<Map<Integer, DiceRoll>> rolls = game.getStartingRolls();
+
+        assertEquals(Set.of(1, 2, 3, 4), rolls.get(0).keySet());
     }
 
     private static GameSession startedThreePlayerGame() {
