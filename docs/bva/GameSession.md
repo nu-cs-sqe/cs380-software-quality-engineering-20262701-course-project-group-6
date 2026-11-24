@@ -127,15 +127,16 @@ Checked in TC1, TC12, TC16 and TC18. Only the error cases need their own tests.
 
 ## Story 3: Turn loop (#31)
 
-This part adds rolling the dice and ending the turn. It covers Story 3 criteria 1, 2, 6, and 8. Paying out resources on
-a roll (criteria 3–5, 7) needs `GameBoard` to know which settlements and cities touch a hex, so it comes in a later PR;
-until then a roll pays nothing. Making bought development cards playable at the end of a turn (criterion 9) comes with
+This part adds rolling the dice, paying out resources, and ending the turn. It covers Story 3 criteria 1–8. Who is
+owed what comes from `GameBoard.getProduction` (`GameBoard.md`), and the shortage rule is in `Bank.payProduction`
+(`Bank.md`), so the tests here only check that a roll hands out those cards, and that a 7 hands out nothing. Skipping
+the robber's hex (part of criterion 4) comes with Story 4. Making bought development cards playable at the end of a turn (criterion 9) comes with
 Story 6, since nothing in `GameSession` gives out development cards yet.
 
 New state: the index of the current player in the turn order, and whether that player has rolled this turn.
 
-The dice themselves are tested in `Dice.md` and `DiceRoll.md` with a stubbed `Random`. These tests use a real `Random`,
-so they check that `rollDice()` returns a real roll and enforces the turn rules, not which numbers come up.
+The dice themselves are tested in `Dice.md` and `DiceRoll.md` with a stubbed `Random`. Tests that need a known roll pass
+`new Dice(stub)` to the constructor `GameSession(playerCount, random, dice)`; the rest use a real `Random`.
 
 Tests set up a 3-player game where the seats pick `WHITE`, `BLUE`, `ORANGE`, so the turn order is
 `WHITE, BLUE, ORANGE`.
@@ -153,6 +154,8 @@ Tests set up a 3-player game where the seats pick `WHITE`, `BLUE`, `ORANGE`, so 
 
 | State | Values tested | Why |
 |---|---|---|
+| `dice` (constructor) | `null` → TC32 (throws) | same as `random` (TC5) |
+| roll total | 7 → TC25 (nobody collects); 8 → TC33 (two players collect) | a 7 pays nothing (criterion 6) |
 | phase when rolling | picking → TC24 (throws); playing → TC25 | turns start only after everyone has picked |
 | phase when ending the turn | picking → TC31 (throws); playing → TC29 | same |
 | rolled this turn when ending | no → TC28 (throws); yes → TC29 | the player must roll before ending the turn |
@@ -163,9 +166,10 @@ Tests set up a 3-player game where the seats pick `WHITE`, `BLUE`, `ORANGE`, so 
 |      | State of the System | Expected output | Implemented? |
 |------|---------------------|-----------------|--------------|
 | TC24 | rolled for order, still picking | `IllegalStateException` with a message saying players are still picking colors | :white_check_mark: |
-| TC25 | `WHITE`'s turn, not rolled yet | a `DiceRoll` with both faces between 1 and 6 and the total equal to their sum; resources unchanged (no payouts yet) | :white_check_mark: |
+| TC25 | `WHITE`'s turn, dice stubbed to roll 3 and 4 | a `DiceRoll` of 3 and 4 (total 7); nobody's resources and the bank change | :white_check_mark: |
 | TC26 | `WHITE` already rolled this turn | `IllegalStateException` with a message saying white already rolled this turn | :white_check_mark: |
 | TC27 | `WHITE` rolled and ended the turn; `BLUE` rolls | returns a `DiceRoll` (the flag reset for the new turn) | :white_check_mark: |
+| TC33 | `WHITE`'s turn, dice stubbed to roll 2 and 6 (total 8) | white gets 1 ore (hex 11) and blue 1 lumber (hex 12); bank has 16 ore and 16 lumber | :white_check_mark: |
 
 ### Method under test: `endTurn()`
 
@@ -175,3 +179,9 @@ Tests set up a 3-player game where the seats pick `WHITE`, `BLUE`, `ORANGE`, so 
 | TC29 | `WHITE` rolled | current color is `BLUE` | :white_check_mark: |
 | TC30 | `WHITE`, `BLUE`, `ORANGE` each rolled and ended their turn | current color is `WHITE` again (wraps after the last player) | :white_check_mark: |
 | TC31 | rolled for order, still picking | `IllegalStateException` with a message saying players are still picking colors | :white_check_mark: |
+
+### Method under test: `GameSession(int playerCount, Random random, Dice dice)`
+
+|      | State of the System | Expected output | Implemented? |
+|------|---------------------|-----------------|--------------|
+| TC32 | `dice` = `null` | `IllegalArgumentException` with a message saying dice are required | :white_check_mark: |

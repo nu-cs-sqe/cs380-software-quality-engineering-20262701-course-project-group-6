@@ -3,6 +3,7 @@ package domain;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.Map;
 import java.util.Random;
 import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
@@ -172,6 +173,93 @@ public class BankTest {
 
         assertEquals(DevCardType.KNIGHT, card);
         assertEquals(24, bank.getDevelopmentCardsRemaining());
+    }
+
+    @Test
+    public void PayProduction_BankCoversEveryone_PaysWhatIsOwed() {
+        Bank bank = newBank();
+
+        Map<PlayerColor, Integer> paid = bank.payProduction(ResourceCardType.ORE,
+                Map.of(PlayerColor.RED, 1, PlayerColor.BLUE, 2));
+
+        assertEquals(Map.of(PlayerColor.RED, 1, PlayerColor.BLUE, 2), paid);
+        assertEquals(16, bank.getResourceCount(ResourceCardType.ORE));
+    }
+
+    @Test
+    public void PayProduction_NobodyOwed_PaysNothing() {
+        Bank bank = newBank();
+
+        Map<PlayerColor, Integer> paid = bank.payProduction(ResourceCardType.ORE, Map.of());
+
+        assertEquals(Map.of(), paid);
+        assertEquals(19, bank.getResourceCount(ResourceCardType.ORE));
+    }
+
+    @Test
+    public void PayProduction_OwedExactlyWhatBankHas_PaysEveryone() {
+        Bank bank = newBank();
+        bank.withdrawResource(ResourceCardType.ORE, 16);
+
+        Map<PlayerColor, Integer> paid = bank.payProduction(ResourceCardType.ORE,
+                Map.of(PlayerColor.RED, 1, PlayerColor.BLUE, 2));
+
+        assertEquals(Map.of(PlayerColor.RED, 1, PlayerColor.BLUE, 2), paid);
+        assertEquals(0, bank.getResourceCount(ResourceCardType.ORE));
+    }
+
+    @Test
+    public void PayProduction_OwedOneMoreThanBankHas_PaysNobody() {
+        Bank bank = newBank();
+        bank.withdrawResource(ResourceCardType.ORE, 17);
+
+        Map<PlayerColor, Integer> paid = bank.payProduction(ResourceCardType.ORE,
+                Map.of(PlayerColor.RED, 1, PlayerColor.BLUE, 2));
+
+        assertEquals(Map.of(), paid);
+        assertEquals(2, bank.getResourceCount(ResourceCardType.ORE));
+    }
+
+    @Test
+    public void PayProduction_OnePlayerOwedMoreThanBankHas_GetsWhatIsLeft() {
+        Bank bank = newBank();
+        bank.withdrawResource(ResourceCardType.ORE, 18);
+
+        Map<PlayerColor, Integer> paid = bank.payProduction(ResourceCardType.ORE, Map.of(PlayerColor.RED, 2));
+
+        assertEquals(Map.of(PlayerColor.RED, 1), paid);
+        assertEquals(0, bank.getResourceCount(ResourceCardType.ORE));
+    }
+
+    @Test
+    public void PayProduction_OnePlayerOwedAndBankEmpty_PaysNothing() {
+        Bank bank = newBank();
+        bank.withdrawResource(ResourceCardType.ORE, 19);
+
+        Map<PlayerColor, Integer> paid = bank.payProduction(ResourceCardType.ORE, Map.of(PlayerColor.RED, 1));
+
+        assertEquals(Map.of(), paid);
+        assertEquals(0, bank.getResourceCount(ResourceCardType.ORE));
+    }
+
+    @Test
+    public void PayProduction_NullType_ThrowsIllegalArgumentException() {
+        Bank bank = newBank();
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> bank.payProduction(null, Map.of(PlayerColor.RED, 1)));
+
+        assertEquals("Resource type is required", exception.getMessage());
+    }
+
+    @Test
+    public void PayProduction_NullOwed_ThrowsIllegalArgumentException() {
+        Bank bank = newBank();
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> bank.payProduction(ResourceCardType.ORE, null));
+
+        assertEquals("Amounts owed are required", exception.getMessage());
     }
 
     private static Bank newBank() {

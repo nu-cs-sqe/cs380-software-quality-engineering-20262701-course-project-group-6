@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
 
 public class GameSessionTest {
@@ -278,17 +279,34 @@ public class GameSessionTest {
     }
 
     @Test
-    public void RollDice_WhitesTurn_ReturnsTwoDiceAndPaysNothingYet() {
-        GameSession game = startedThreePlayerGame();
+    public void RollDice_SevenRolled_ReturnsBothDiceAndNobodyCollects() {
+        GameSession game = startedThreePlayerGame(diceRolling(3, 4));
 
         DiceRoll roll = game.rollDice();
 
-        assertTrue(roll.getFirstDie() >= 1 && roll.getFirstDie() <= 6);
-        assertTrue(roll.getSecondDie() >= 1 && roll.getSecondDie() <= 6);
-        assertEquals(roll.getFirstDie() + roll.getSecondDie(), roll.getTotal());
-        assertEquals(1, game.getResourceCount(PlayerColor.WHITE, ResourceCardType.GRAIN));
-        assertEquals(1, game.getResourceCount(PlayerColor.WHITE, ResourceCardType.BRICK));
-        assertEquals(1, game.getResourceCount(PlayerColor.WHITE, ResourceCardType.LUMBER));
+        assertEquals(3, roll.getFirstDie());
+        assertEquals(4, roll.getSecondDie());
+        assertEquals(7, roll.getTotal());
+        for (PlayerColor color : game.getTurnOrder()) {
+            assertEquals(3, totalResources(game, color), color.name());
+        }
+        assertEquals(17, game.getBankResourceCount(ResourceCardType.ORE));
+        assertEquals(17, game.getBankResourceCount(ResourceCardType.LUMBER));
+    }
+
+    @Test
+    public void RollDice_EightRolled_SettlementsOnEightHexesCollect() {
+        GameSession game = startedThreePlayerGame(diceRolling(2, 6));
+
+        game.rollDice();
+
+        assertEquals(1, game.getResourceCount(PlayerColor.WHITE, ResourceCardType.ORE));
+        assertEquals(2, game.getResourceCount(PlayerColor.BLUE, ResourceCardType.LUMBER));
+        assertEquals(4, totalResources(game, PlayerColor.WHITE));
+        assertEquals(4, totalResources(game, PlayerColor.BLUE));
+        assertEquals(3, totalResources(game, PlayerColor.ORANGE));
+        assertEquals(16, game.getBankResourceCount(ResourceCardType.ORE));
+        assertEquals(16, game.getBankResourceCount(ResourceCardType.LUMBER));
     }
 
     @Test
@@ -356,12 +374,40 @@ public class GameSessionTest {
         assertEquals("Players are still picking colors", exception.getMessage());
     }
 
+    @Test
+    public void Constructor_NullDice_ThrowsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> new GameSession(3, new Random(), null));
+
+        assertEquals("Dice are required to start a game", exception.getMessage());
+    }
+
     private static GameSession startedThreePlayerGame() {
-        GameSession game = new GameSession(3, new Random());
+        return startedThreePlayerGame(new Dice(new Random()));
+    }
+
+    private static GameSession startedThreePlayerGame(Dice dice) {
+        GameSession game = new GameSession(3, new Random(), dice);
         game.rollForStartingOrder();
         game.pickColor(PlayerColor.WHITE);
         game.pickColor(PlayerColor.BLUE);
         game.pickColor(PlayerColor.ORANGE);
         return game;
+    }
+
+    private static Dice diceRolling(int firstDie, int secondDie) {
+        Random random = EasyMock.createStrictMock(Random.class);
+        EasyMock.expect(random.nextInt(6)).andReturn(firstDie - 1);
+        EasyMock.expect(random.nextInt(6)).andReturn(secondDie - 1);
+        EasyMock.replay(random);
+        return new Dice(random);
+    }
+
+    private static int totalResources(GameSession game, PlayerColor color) {
+        int total = 0;
+        for (ResourceCardType type : ResourceCardType.values()) {
+            total += game.getResourceCount(color, type);
+        }
+        return total;
     }
 }

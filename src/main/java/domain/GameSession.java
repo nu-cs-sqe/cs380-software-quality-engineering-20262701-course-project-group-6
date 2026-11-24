@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -22,6 +23,10 @@ public class GameSession {
     private boolean rolledThisTurn;
 
     public GameSession(int playerCount, Random random) {
+        this(playerCount, random, diceFor(random));
+    }
+
+    public GameSession(int playerCount, Random random, Dice dice) {
         if (playerCount < MIN_PLAYERS || playerCount > MAX_PLAYERS) {
             throw new IllegalArgumentException(
                     "A game needs " + MIN_PLAYERS + " or " + MAX_PLAYERS + " players (was " + playerCount + ")");
@@ -29,9 +34,12 @@ public class GameSession {
         if (random == null) {
             throw new IllegalArgumentException("Random is required to start a game");
         }
+        if (dice == null) {
+            throw new IllegalArgumentException("Dice are required to start a game");
+        }
         bank = new Bank(random);
         rollOff = new StartingRollOff(random);
-        dice = new Dice(random);
+        this.dice = dice;
         this.playerCount = playerCount;
         BeginnerPlacements placements = playerCount == MIN_PLAYERS
                 ? BeginnerPlacements.forThreePlayers()
@@ -81,7 +89,9 @@ public class GameSession {
             throw new IllegalStateException(getCurrentColor() + " already rolled this turn");
         }
         rolledThisTurn = true;
-        return dice.roll();
+        DiceRoll roll = dice.roll();
+        payProduction(roll.getTotal());
+        return roll;
     }
 
     public void endTurn() {
@@ -111,10 +121,14 @@ public class GameSession {
         return bank.getResourceCount(type);
     }
 
+    private static Dice diceFor(Random random) {
+        return random == null ? null : new Dice(random);
+    }
+
     private boolean isColorInPlay(PlayerColor color) {
         return board.getNodes().stream()
                 .map(Node::getBuildingColor)
-                .anyMatch(optionalColor -> optionalColor.equals(java.util.Optional.of(color)));
+                .anyMatch(optionalColor -> optionalColor.equals(Optional.of(color)));
     }
 
     private void payStartingResources(Player player, PlayerColor color) {
@@ -122,6 +136,11 @@ public class GameSession {
             bank.withdrawResource(type, 1);
             player.collectResource(type, 1);
         }
+    }
+
+    private void payProduction(int diceTotal) {
+        board.getProduction(diceTotal).forEach((type, owed) -> bank.payProduction(type, owed)
+                .forEach((color, amount) -> players.get(color).collectResource(type, amount)));
     }
 
     private Player playerFor(PlayerColor color) {

@@ -2,6 +2,7 @@ package domain;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,10 @@ public class GameBoard {
     private static final int NUM_TILES = 19;
     private static final int MAX_NODE_ID = 53;
     private static final int UNSET_DESERT_ID = -1;
+    private static final int MIN_DICE_TOTAL = 2;
+    private static final int MAX_DICE_TOTAL = 12;
+    private static final int SETTLEMENT_YIELD = 1;
+    private static final int CITY_YIELD = 2;
     private static final int CORNER_0 = 0;
     private static final int CORNER_1 = 1;
     private static final int CORNER_2 = 2;
@@ -124,6 +129,20 @@ public class GameBoard {
         return Map.copyOf(startingResourceNodes);
     }
 
+    public Map<ResourceCardType, Map<PlayerColor, Integer>> getProduction(int diceTotal) {
+        if (diceTotal < MIN_DICE_TOTAL || diceTotal > MAX_DICE_TOTAL) {
+            throw new IllegalArgumentException("Dice total must be between " + MIN_DICE_TOTAL + " and "
+                    + MAX_DICE_TOTAL + " (was " + diceTotal + ")");
+        }
+        Map<ResourceCardType, Map<PlayerColor, Integer>> owed = new EnumMap<>(ResourceCardType.class);
+        for (Tile tile : tiles.values()) {
+            if (tile.getDiceNumber() == diceTotal) {
+                tile.getResourceProduced().ifPresent(resource -> addOwed(owed, resource, tile));
+            }
+        }
+        return owed;
+    }
+
     private void validateGenerateInputs(TileLayout layout, BeginnerPlacements placements) {
         if (layout == null) {
             throw new IllegalArgumentException("layout cannot be null");
@@ -203,6 +222,15 @@ public class GameBoard {
     private void addTileResourceIfAdjacent(Tile tile, Node targetNode, List<ResourceCardType> resources) {
         if (tile.getCornerNodes().contains(targetNode)) {
             tile.getResourceProduced().ifPresent(resources::add);
+        }
+    }
+
+    private void addOwed(Map<ResourceCardType, Map<PlayerColor, Integer>> owed, ResourceCardType resource, Tile tile) {
+        for (Node corner : tile.getCornerNodes()) {
+            int amount = corner.getBuildingType() == BuildingType.CITY ? CITY_YIELD : SETTLEMENT_YIELD;
+            corner.getBuildingColor().ifPresent(color ->
+                    owed.computeIfAbsent(resource, type -> new EnumMap<>(PlayerColor.class))
+                            .merge(color, amount, Integer::sum));
         }
     }
 

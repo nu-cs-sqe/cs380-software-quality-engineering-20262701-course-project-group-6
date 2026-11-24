@@ -38,6 +38,27 @@ public class Bank {
         resources.put(type, count + amount);
     }
 
+    public Map<PlayerColor, Integer> payProduction(ResourceCardType type, Map<PlayerColor, Integer> owed) {
+        if (owed == null) {
+            throw new IllegalArgumentException("Amounts owed are required");
+        }
+        if (owed.isEmpty()) {
+            return Map.of();
+        }
+        int totalOwed = owed.values().stream().mapToInt(Integer::intValue).sum();
+        int available = getResourceCount(type);
+        if (totalOwed > available) {
+            if (owed.size() > 1 || available == 0) {
+                return Map.of();
+            }
+            PlayerColor onlyColor = owed.keySet().iterator().next();
+            withdrawResource(type, available);
+            return Map.of(onlyColor, available);
+        }
+        withdrawResource(type, totalOwed);
+        return Map.copyOf(owed);
+    }
+
     public int getResourceCount(ResourceCardType type) {
         ResourceArguments.requireType(type);
         return resources.get(type);

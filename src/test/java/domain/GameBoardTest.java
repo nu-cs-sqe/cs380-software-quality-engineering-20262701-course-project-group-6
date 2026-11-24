@@ -261,6 +261,79 @@ class GameBoardTest {
         assertEquals(Map.of(ORANGE, 42, BLUE, 40, WHITE, 19), gameBoard.getStartingResourceNodes());
     }
 
+    @Test
+    void GetProduction_TwoRolled_RedOwedOneWool() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        assertEquals(Map.of(WOOL, Map.of(RED, 1)), gameBoard.getProduction(2));
+    }
+
+    @Test
+    void GetProduction_TwelveRolled_WhiteOwedOneGrain() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        assertEquals(Map.of(GRAIN, Map.of(WHITE, 1)), gameBoard.getProduction(12));
+    }
+
+    @Test
+    void GetProduction_TotalBelowTwo_ThrowsIllegalArgumentException() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> gameBoard.getProduction(1));
+
+        assertEquals("Dice total must be between 2 and 12 (was 1)", exception.getMessage());
+    }
+
+    @Test
+    void GetProduction_TotalAboveTwelve_ThrowsIllegalArgumentException() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> gameBoard.getProduction(13));
+
+        assertEquals("Dice total must be between 2 and 12 (was 13)", exception.getMessage());
+    }
+
+    @Test
+    void GetProduction_EightRolled_TwoHexesPayThreeSettlements() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        Map<ResourceCardType, Map<PlayerColor, Integer>> production = gameBoard.getProduction(8);
+
+        assertEquals(Map.of(ORE, Map.of(WHITE, 1), LUMBER, Map.of(RED, 1, BLUE, 1)), production);
+    }
+
+    @Test
+    void GetProduction_RedCityOnWoolHex_RedOwedTwoWool() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+        gameBoard.getNodes().get(10).placeBuilding(BuildingType.CITY, RED);
+
+        assertEquals(Map.of(WOOL, Map.of(RED, 2)), gameBoard.getProduction(2));
+    }
+
+    @Test
+    void GetProduction_TwoRedSettlementsOnWoolHex_AmountsAddUp() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+        gameBoard.getNodes().get(4).placeBuilding(BuildingType.SETTLEMENT, RED);
+
+        assertEquals(Map.of(WOOL, Map.of(RED, 2)), gameBoard.getProduction(2));
+    }
+
+    @Test
+    void GetProduction_ThreePlayersTwoRolled_NobodyOnTheHexOwedNothing() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forThreePlayers());
+
+        assertEquals(Map.of(), gameBoard.getProduction(2));
+    }
+
+    @Test
+    void GetProduction_SevenRolled_DesertOwesNothing() {
+        GameBoard gameBoard = new GameBoard(new BeginnerLayout(), BeginnerPlacements.forFourPlayers());
+
+        assertEquals(Map.of(), gameBoard.getProduction(7));
+    }
+
     private TileLayout stubLayoutWithTileCount(int count) {
         Map<Integer, TileSetup> map = new LinkedHashMap<>();
         for (int i = 0; i < count; i++) {
